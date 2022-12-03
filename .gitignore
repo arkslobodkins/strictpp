@@ -1,0 +1,9 @@
+*build*
+
+# CLion files.
+.idea/
+cmake-build*
+
+# VSCode files.
+.vscode/
+.history/
