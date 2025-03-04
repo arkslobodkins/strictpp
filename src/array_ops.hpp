@@ -290,18 +290,18 @@ template <typename Base, typename F>
 STRICT_CONSTEXPR void for_each(Base&& A, F f);
 
 
-template <OneDimRealBaseType Base, typename F>
+template <RealBaseType Base, typename F>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && detail::SortableArgs<Base, F>
             && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort(Base&& A, F f);
 
 
-template <OneDimRealBaseType Base>
+template <RealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_increasing(Base&& A);
 
 
-template <OneDimRealBaseType Base>
+template <RealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_decreasing(Base&& A);
 
@@ -833,7 +833,7 @@ STRICT_CONSTEXPR void for_each(Base&& A, F f) {
 }
 
 
-template <OneDimRealBaseType Base, typename F>
+template <RealBaseType Base, typename F>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && detail::SortableArgs<Base, F>
             && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort(Base&& A, F f) {
@@ -841,14 +841,14 @@ STRICT_CONSTEXPR void sort(Base&& A, F f) {
 }
 
 
-template <OneDimRealBaseType Base>
+template <RealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_increasing(Base&& A) {
    std::sort(A.begin(), A.end(), [](const auto& a, const auto& b) { return a < b; });
 }
 
 
-template <OneDimRealBaseType Base>
+template <RealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_decreasing(Base&& A) {
    std::sort(A.begin(), A.end(), [](const auto& a, const auto& b) { return a > b; });
