@@ -237,9 +237,9 @@ template <OneDimBaseType Base>
 STRICT_CONSTEXPR auto StrictArrayBase1D<Base>::view2D(ImplicitInt nrows, ImplicitInt ncols) & {
    ASSERT_STRICT_ALWAYS(nrows.get() * ncols.get() == Base::size());
    if constexpr(detail::NonConstBaseType<StrictArrayBase1D>) {
-      return convert2D(*this, nrows, ncols);
+      return detail::convert2D(*this, nrows, ncols);
    } else {
-      return const_convert2D(*this, nrows, ncols);
+      return detail::const_convert2D(*this, nrows, ncols);
    }
 }
 
@@ -247,7 +247,7 @@ STRICT_CONSTEXPR auto StrictArrayBase1D<Base>::view2D(ImplicitInt nrows, Implici
 template <OneDimBaseType Base>
 STRICT_CONSTEXPR auto StrictArrayBase1D<Base>::view2D(ImplicitInt nrows, ImplicitInt ncols) const& {
    ASSERT_STRICT_ALWAYS(nrows.get() * ncols.get() == Base::size());
-   return const_convert2D(*this, nrows, ncols);
+   return detail::const_convert2D(*this, nrows, ncols);
 }
 
 
@@ -264,9 +264,9 @@ template <TwoDimBaseType Base>
 STRICT_CONSTEXPR auto StrictArrayBase2D<Base>::view2D(ImplicitInt nrows, ImplicitInt ncols) & {
    ASSERT_STRICT_ALWAYS(nrows.get() * ncols.get() == Base::size());
    if constexpr(detail::NonConstBaseType<StrictArrayBase2D>) {
-      return convert2D(*this, nrows, ncols);
+      return detail::convert2D(*this, nrows, ncols);
    } else {
-      return const_convert2D(*this, nrows, ncols);
+      return detail::const_convert2D(*this, nrows, ncols);
    }
 }
 
@@ -274,7 +274,7 @@ STRICT_CONSTEXPR auto StrictArrayBase2D<Base>::view2D(ImplicitInt nrows, Implici
 template <TwoDimBaseType Base>
 STRICT_CONSTEXPR auto StrictArrayBase2D<Base>::view2D(ImplicitInt nrows, ImplicitInt ncols) const& {
    ASSERT_STRICT_ALWAYS(nrows.get() * ncols.get() == Base::size());
-   return const_convert2D(*this, nrows, ncols);
+   return detail::const_convert2D(*this, nrows, ncols);
 }
 
 

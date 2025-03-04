@@ -245,7 +245,7 @@ std::istream& operator>>(std::istream& is, Strict<T>& x) {
 
 template <Quadruple T>
 std::ostream& operator<<(std::ostream& os, T x) {
-   char buf[128];  // Not declared static since it is not thread safe.
+   static thread_local char buf[128];
    if(format.scientific_) {
       std::string frmt = "%+-#*." + std::to_string(format.precision_[3]) + std::string("QE");
       int width = format.precision_[3] + 7;
