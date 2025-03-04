@@ -290,24 +290,24 @@ template <typename Base, typename F>
 STRICT_CONSTEXPR void for_each(Base&& A, F f);
 
 
-template <typename Base, typename F>
+template <OneDimRealBaseType Base, typename F>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && detail::SortableArgs<Base, F>
             && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort(Base&& A, F f);
 
 
-template <typename Base>
+template <OneDimRealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_increasing(Base&& A);
 
 
-template <typename Base>
+template <OneDimRealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_decreasing(Base&& A);
 
 
 template <typename Base>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
+   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayTypeRvalue<Base>)
 void shuffle(Base&& A);
 
 
@@ -833,7 +833,7 @@ STRICT_CONSTEXPR void for_each(Base&& A, F f) {
 }
 
 
-template <typename Base, typename F>
+template <OneDimRealBaseType Base, typename F>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && detail::SortableArgs<Base, F>
             && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort(Base&& A, F f) {
@@ -841,14 +841,14 @@ STRICT_CONSTEXPR void sort(Base&& A, F f) {
 }
 
 
-template <typename Base>
+template <OneDimRealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_increasing(Base&& A) {
    std::sort(A.begin(), A.end(), [](const auto& a, const auto& b) { return a < b; });
 }
 
 
-template <typename Base>
+template <OneDimRealBaseType Base>
    requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_decreasing(Base&& A) {
    std::sort(A.begin(), A.end(), [](const auto& a, const auto& b) { return a > b; });
@@ -856,7 +856,7 @@ STRICT_CONSTEXPR void sort_decreasing(Base&& A) {
 
 
 template <typename Base>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
+   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayTypeRvalue<Base>)
 void shuffle(Base&& A) {
    std::mt19937 g{std::random_device{}()};
    std::shuffle(A.begin(), A.end(), g);
