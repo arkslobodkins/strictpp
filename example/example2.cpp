@@ -3,15 +3,10 @@
 
 using namespace spp;
 
-void f(){}
-
-template <typename T> concept Good
-    =  SameAs<int, BuiltinTypeOf<T>>;
-
 // example 2 puts more emphasis on slicing features of 1-d array class.
 int main() {
    Array1D<double> A = random(Size{10}, Low{-1._sd}, High{1._sd});
-   std::cout << A.remove(last - 1) << std::endl;
+   A.remove(last - 1);
 
    auto slice_1A = A(seq(First{0}, Endmost{2}));
    auto slice_1B = A(seq(0, 2));
@@ -44,9 +39,6 @@ int main() {
                                                        slice_6,
                                                        dst1,
                                                        dst2);
-
-//   std::cout << expr::UnaryOperation<int, decltype(f)> << std::endl;
-   std::cout << Good<int> << std::endl;
    return EXIT_SUCCESS;
 }
 
