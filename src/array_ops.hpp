@@ -290,19 +290,21 @@ template <typename Base, typename F>
 STRICT_CONSTEXPR void for_each(Base&& A, F f);
 
 
-template <RealBaseType Base, typename F>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && detail::SortableArgs<Base, F>
-            && !detail::ArrayRealTypeRvalue<Base>)
+template <typename Base, typename F>
+   requires(RealBaseType<RemoveRef<Base>> && detail::NonConstBaseType<RemoveRef<Base>>
+            && detail::SortableArgs<Base, F> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort(Base&& A, F f);
 
 
-template <RealBaseType Base>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
+template <typename Base>
+   requires(RealBaseType<RemoveRef<Base>> && detail::NonConstBaseType<RemoveRef<Base>>
+            && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_increasing(Base&& A);
 
 
-template <RealBaseType Base>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
+template <typename Base>
+   requires(RealBaseType<RemoveRef<Base>> && detail::NonConstBaseType<RemoveRef<Base>>
+            && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_decreasing(Base&& A);
 
 
@@ -833,23 +835,25 @@ STRICT_CONSTEXPR void for_each(Base&& A, F f) {
 }
 
 
-template <RealBaseType Base, typename F>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && detail::SortableArgs<Base, F>
-            && !detail::ArrayRealTypeRvalue<Base>)
+template <typename Base, typename F>
+   requires(RealBaseType<RemoveRef<Base>> && detail::NonConstBaseType<RemoveRef<Base>>
+            && detail::SortableArgs<Base, F> && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort(Base&& A, F f) {
    std::sort(A.begin(), A.end(), f);
 }
 
 
-template <RealBaseType Base>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
+template <typename Base>
+   requires(RealBaseType<RemoveRef<Base>> && detail::NonConstBaseType<RemoveRef<Base>>
+            && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_increasing(Base&& A) {
    std::sort(A.begin(), A.end(), [](const auto& a, const auto& b) { return a < b; });
 }
 
 
-template <RealBaseType Base>
-   requires(detail::NonConstBaseType<RemoveRef<Base>> && !detail::ArrayRealTypeRvalue<Base>)
+template <typename Base>
+   requires(RealBaseType<RemoveRef<Base>> && detail::NonConstBaseType<RemoveRef<Base>>
+            && !detail::ArrayRealTypeRvalue<Base>)
 STRICT_CONSTEXPR void sort_decreasing(Base&& A) {
    std::sort(A.begin(), A.end(), [](const auto& a, const auto& b) { return a > b; });
 }
