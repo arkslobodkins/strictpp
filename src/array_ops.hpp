@@ -27,23 +27,19 @@ namespace detail {
 
 
 template <typename Base, typename F> concept ForCallable
-    = std::invocable<F, ValueTypeOf<Base>>
-   && SameAs<void, decltype(std::declval<F>()(ValueTypeOf<Base>{}))>;
+    = SameAs<void, std::invoke_result_t<F, ValueTypeOf<Base>>>;
 
 
 template <typename Base, typename F> concept CallableArgs1
-    = std::invocable<F, ValueTypeOf<Base>>
-   && SameAs<StrictBool, decltype(std::declval<F>()(ValueTypeOf<Base>{}))>;
+    = SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base>>>;
 
 
 template <typename Base1, typename Base2, typename F> concept CallableArgs2
-    = std::invocable<F, ValueTypeOf<Base1>, ValueTypeOf<Base2>>
-   && SameAs<StrictBool, decltype(std::declval<F>()(ValueTypeOf<Base1>{}, ValueTypeOf<Base2>{}))>;
+    = SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base1>, ValueTypeOf<Base2>>>;
 
 
 template <typename Base, typename F> concept SortableArgs
-    = std::invocable<F, ValueTypeOf<Base>, ValueTypeOf<Base>>
-   && SameAs<StrictBool, decltype(std::declval<F>()(ValueTypeOf<Base>{}, ValueTypeOf<Base>{}))>;
+    = SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base>, ValueTypeOf<Base>>>;
 
 
 }  // namespace detail
