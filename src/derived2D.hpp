@@ -558,7 +558,7 @@ public:
    template <IndexType Index1, IndexType Index2>
    STRICT_CONSTEXPR auto blockN(Index1 first_row, Index2 first_col, ImplicitInt nrows,
                                 ImplicitInt ncols) &&
-      requires(!detail::ArrayTwoDimType< StrictArrayBase2D>)
+      requires(!detail::ArrayTwoDimType<StrictArrayBase2D>)
    {
       return this->blockN(first_row, first_col, nrows, ncols);
    }
