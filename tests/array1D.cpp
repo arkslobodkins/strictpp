@@ -29,11 +29,11 @@ template <Builtin T>
 void run_constr_size_value(ImplicitInt n) {
    Array1D<T> A1(n, One<T>);
    ASSERT(A1.size() == n.get());
-   ASSERT(all_of(A1, One<T>));
+   ASSERT(all_of(A1, One<T>, true_sb));
 
    Array1D<T> A2(Size{n.get()}, Value{One<T>});
    ASSERT(A2.size() == n.get());
-   ASSERT(all_of(A2, One<T>));
+   ASSERT(all_of(A2, One<T>, true_sb));
 }
 
 
@@ -281,7 +281,7 @@ void run_insert_value_front(auto X) {
    auto Y = X;
 
    X.insert_front(z);
-   ASSERT(merge(z, Y) == X);
+   ASSERT(X == merge(z, Y));
 }
 
 
@@ -290,31 +290,30 @@ void run_insert_value_back(auto X) {
    auto Y = X;
 
    X.insert_back(z);
-   ASSERT(merge(Y, z) == X);
+   ASSERT(X == merge(Y, z));
 }
 
 
 void run_insert_array(auto X, Pos pos) {
    using namespace place;
    auto Y = X;
-   auto Z = X;
 
    X.insert(pos, Y);
-   ASSERT(X == merge(Z(firstN(pos.get())), Y, Z(lastN(X.size() - Y.size() - pos.get()))));
+   ASSERT(X == merge(Y(firstN(pos.get())), Y, Y(lastN(X.size() - Y.size() - pos.get()))));
 }
 
 
 void run_insert_array_front(auto X) {
    const auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
    X.insert_front(Y);
-   ASSERT(merge(Y, X(place::lastN(X.size() / 2_sl))) == X);
+   ASSERT(X == merge(Y, X(place::lastN(X.size() / 2_sl))));
 }
 
 
 void run_insert_array_back(auto X) {
    const auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
    X.insert_back(Y);
-   ASSERT(merge(X(place::firstN(X.size() / 2_sl)), Y) == X);
+   ASSERT(X == merge(X(place::firstN(X.size() / 2_sl)), Y));
 }
 
 
@@ -414,12 +413,14 @@ void array_insert() {
    run_insert_value(A, Pos{0});
    run_insert_value(A, Pos{10});
    run_insert_value(A, Pos{99});
+   run_insert_value(A, Pos{100});
    run_insert_value_front(A);
    run_insert_value_back(A);
 
    run_insert_array(A, Pos{0});
    run_insert_array(A, Pos{10});
    run_insert_array(A, Pos{99});
+   run_insert_array(A, Pos{100});
    run_insert_array_front(A);
    run_insert_array_back(A);
 
@@ -435,8 +436,8 @@ void array_data() {
 
    Strict<T>* a_ptr = A1.data();
    const Strict<T>* b_ptr = A2.data();
-   ASSERT(std::all_of(a_ptr, a_ptr + n.val(), [](auto x) { return Strict{x} == One<T>; }));
-   ASSERT(std::all_of(b_ptr, b_ptr + n.val(), [](auto x) { return Strict{x} == One<T>; }));
+   ASSERT(std::all_of(a_ptr, a_ptr + n.val(), [](auto x) { return x == One<T>; }));
+   ASSERT(std::all_of(b_ptr, b_ptr + n.val(), [](auto x) { return x == One<T>; }));
 
    T* a_blas_ptr = A1.blas_data();
    const T* b_blas_ptr = A2.blas_data();
