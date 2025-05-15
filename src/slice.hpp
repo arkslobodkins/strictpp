@@ -626,6 +626,16 @@ private:
 };
 
 
+template <typename T>
+STRICT_CONSTEXPR auto default_wrapper() {
+   if constexpr(SameAs<T, seqN>) {
+      return SliceArrayWrapper<seqN>{seqN{0, 0}};
+   } else {
+      return SliceArrayWrapper<std::vector<ImplicitInt>>{{}};
+   }
+}
+
+
 }  // namespace detail
 
 

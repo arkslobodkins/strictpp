@@ -25,6 +25,9 @@ echo -e "\nRUNNING FIXED ARRAY 2D TESTS"
 echo -e "\nRUNNING ARRAY 1D TESTS"
 ./array1D.x
 
+echo -e "\nRUNNING ARRAY 2D TESTS"
+./array2D.x
+
 echo -e "\nRUNNING ARRAY STABLE OPERATIONS TESTS"
 ./array_stable_ops.x
 

@@ -57,8 +57,11 @@ STRICT_NODISCARD_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>::SliceArrayBase2D(Ba
       slw2_{std::move(sl2)} {
    ASSERT_STRICT_DEBUG(slw1_.valid_first(A_));
    ASSERT_STRICT_DEBUG(slw2_.valid_second(A_));
-   // Must be either both empty or non-empty.
-   ASSERT_STRICT_DEBUG(!((slw1_.size() == 0_sl) ^ (slw2_.size() == 0_sl)));
+   if(slw1_.size() == 0_sl) {
+      slw2_ = default_wrapper<Sl2>();
+   } else if(slw2_.size() == 0_sl) {
+      slw1_ = default_wrapper<Sl1>();
+   }
 }
 
 
@@ -118,17 +121,15 @@ STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(Impl
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i,
-                                                                            ImplicitInt j)
-    -> value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(
+    ImplicitInt i, ImplicitInt j) -> value_type& {
    return A_.un(slw1_.map(i), slw2_.map(j));
 }
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i,
-                                                                            ImplicitInt j) const
-    -> const value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(
+    ImplicitInt i, ImplicitInt j) const -> const value_type& {
    return A_.un(slw1_.map(i), slw2_.map(j));
 }
 
@@ -206,8 +207,11 @@ STRICT_NODISCARD_CONSTEXPR ConstSliceArrayBase2D<Base, Sl1, Sl2>::ConstSliceArra
       slw2_{std::move(sl2)} {
    ASSERT_STRICT_DEBUG(slw1_.valid_first(A_));
    ASSERT_STRICT_DEBUG(slw2_.valid_second(A_));
-   // Must be either both empty or non-empty.
-   ASSERT_STRICT_DEBUG(!((slw1_.size() == 0_sl) ^ (slw2_.size() == 0_sl)));
+   if(slw1_.size() == 0_sl) {
+      slw2_ = default_wrapper<Sl2>();
+   } else if(slw2_.size() == 0_sl) {
+      slw1_ = default_wrapper<Sl1>();
+   }
 }
 
 
