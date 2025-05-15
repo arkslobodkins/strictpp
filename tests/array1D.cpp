@@ -20,19 +20,22 @@ void run_constr_default() {
 
 template <Builtin T>
 void run_constr_size(ImplicitInt n) {
-   ASSERT(Array1D<T>(n).size() == n.get());
-   ASSERT(Array1D<T>(Size{n.get()}).size() == n.get());
+   auto N = n.get();
+   ASSERT(Array1D<T>(N).size() == N);
+   ASSERT(Array1D<T>(Size{N}).size() == N);
 }
 
 
 template <Builtin T>
 void run_constr_size_value(ImplicitInt n) {
-   Array1D<T> A1(n, One<T>);
-   ASSERT(A1.size() == n.get());
+   auto N = n.get();
+
+   Array1D<T> A1(N, One<T>);
+   ASSERT(A1.size() == N);
    ASSERT(all_of(A1, One<T>, true_sb));
 
-   Array1D<T> A2(Size{n.get()}, Value{One<T>});
-   ASSERT(A2.size() == n.get());
+   Array1D<T> A2(Size{N}, Value{One<T>});
+   ASSERT(A2.size() == N);
    ASSERT(all_of(A2, One<T>, true_sb));
 }
 
@@ -212,6 +215,7 @@ void run_resize_assign_move(auto X1, auto X2) {
 }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void run_remove(auto X, Pos pos, Count count) {
    auto Y = X;
    X.remove(pos, count);
