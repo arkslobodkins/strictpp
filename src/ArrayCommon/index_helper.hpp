@@ -5,6 +5,7 @@
 
 
 #include <utility>
+#include <vector>
 
 #include "../StrictCommon/auxiliary_types.hpp"
 #include "../StrictCommon/common_traits.hpp"
@@ -102,4 +103,29 @@ STRICT_CONSTEXPR_INLINE std::pair<index_t, index_t> index_map_one_to_two_dim(
 
 
 }  // namespace spp::detail
+
+
+namespace spp {
+
+
+STRICT_CONSTEXPR_INLINE auto implicit_vector_sequence(ImplicitInt size,
+                                                      ImplicitInt start = Strict<int>{},
+                                                      ImplicitInt incr = Strict<int>{1}) {
+   ASSERT_STRICT_DEBUG(size.get() > -1_sl);
+   std::vector<ImplicitInt> indexes(to_size_t(size.get()));
+   for(auto i = 0_sl; i < size.get(); ++i) {
+      indexes[to_size_t(i)] = start.get() + i * incr.get();
+   }
+   return indexes;
+}
+
+
+template <Integer T>
+STRICT_CONSTEXPR_INLINE auto implicit_vector_sequence(Size size, Start<T> start = Start<T>{},
+                                                      Incr<T> incr = Incr{T(1)}) {
+   return implicit_vector_sequence(size.get(), start.get(), incr.get());
+}
+
+
+}  // namespace spp
 

@@ -214,22 +214,16 @@ void run_resize_assign_move(auto X1, auto X2) {
 void run_remove_rows(auto X, Pos pos, Count count) {
    auto Y = X;
    X.remove_rows(pos, count);
-   std::vector<ImplicitInt> indexes(to_size_t(count.get()));
-   for(auto i = 0_sl; i < count.get(); ++i) {
-      indexes[to_size_t(i)] = pos.get() + i;
-   }
-   ASSERT(X == Y(place::complement(indexes), place::all));
+   auto indexes = implicit_vector_sequence(Size{count.get()}, Start{pos.get()});
+   ASSERT(X == Y(place::complement{indexes}, place::all));
 }
 
 
 void run_remove_cols(auto X, Pos pos, Count count) {
    auto Y = X;
    X.remove_cols(pos, count);
-   std::vector<ImplicitInt> indexes(to_size_t(count.get()));
-   for(auto i = 0_sl; i < count.get(); ++i) {
-      indexes[to_size_t(i)] = pos.get() + i;
-   }
-   ASSERT(X == Y(place::all, place::complement(indexes)));
+   auto indexes = implicit_vector_sequence(Size{count.get()}, Start{pos.get()});
+   ASSERT(X == Y(place::all, place::complement{indexes}));
 }
 
 

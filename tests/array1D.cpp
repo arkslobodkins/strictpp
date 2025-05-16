@@ -226,14 +226,14 @@ void run_remove(auto X, Pos pos, Count count) {
 void run_remove_front(auto X, Count count) {
    auto Y = X;
    X.remove_front(count);
-   ASSERT(X == Y(place::lastN(X.size())));
+   ASSERT(X == Y(place::lastN{Y.size() - count.get()}));
 }
 
 
 void run_remove_back(auto X, Count count) {
    auto Y = X;
    X.remove_back(count);
-   ASSERT(X == Y(place::firstN(X.size())));
+   ASSERT(X == Y(place::firstN{Y.size() - count.get()}));
 }
 
 
@@ -247,7 +247,7 @@ void run_remove_last(auto X) {
 void run_remove_vec(auto X, std::vector<ImplicitInt> indexes) {
    auto Y = X;
    X.remove(indexes);
-   ASSERT(X == Y(place::complement(indexes)));
+   ASSERT(X == Y(place::complement{indexes}));
 }
 
 
@@ -300,24 +300,26 @@ void run_insert_value_back(auto X) {
 
 void run_insert_array(auto X, Pos pos) {
    using namespace place;
-   auto Y = X;
-
-   X.insert(pos, Y);
-   ASSERT(X == merge(Y(firstN(pos.get())), Y, Y(lastN(X.size() - Y.size() - pos.get()))));
+   auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
+   auto Z = X;
+   Z.insert(pos, Y);
+   ASSERT(Z == merge(X(firstN{pos.get()}), Y, X(lastN{X.size() - pos.get()})));
 }
 
 
 void run_insert_array_front(auto X) {
-   const auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
-   X.insert_front(Y);
-   ASSERT(X == merge(Y, X(place::lastN(X.size() / 2_sl))));
+   auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
+   auto Z = X;
+   Z.insert_front(Y);
+   ASSERT(Z == merge(Y, X));
 }
 
 
 void run_insert_array_back(auto X) {
-   const auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
-   X.insert_back(Y);
-   ASSERT(X == merge(X(place::firstN(X.size() / 2_sl)), Y));
+   auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
+   auto Z = X;
+   Z.insert_back(Y);
+   ASSERT(Z == merge(X, Y));
 }
 
 
