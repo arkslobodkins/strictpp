@@ -6,6 +6,7 @@
 
 
 using namespace spp;
+using namespace spp::place;
 
 
 #define BUILTIN_TYPE_OF(A) spp::BuiltinTypeOf<decltype(A)>
@@ -170,7 +171,7 @@ void run_assign_copy_fail() {
 template <Builtin T>
 void run_assign_copy_other_fail() {
    Array2D<T> A1(3, 2), A2(2, 2);
-   REQUIRE_THROW(A2 = A1(place::all, place::all));
+   REQUIRE_THROW(A2 = A1(all, all));
 }
 
 
@@ -215,7 +216,7 @@ void run_remove_rows(auto X, Pos pos, Count count) {
    auto Y = X;
    X.remove_rows(pos, count);
    auto indexes = implicit_vector_sequence(Size{count.get()}, Start{pos.get()});
-   ASSERT(X == Y(place::complement{indexes}, place::all));
+   ASSERT(X == Y(complement{indexes}, all));
 }
 
 
@@ -223,49 +224,49 @@ void run_remove_cols(auto X, Pos pos, Count count) {
    auto Y = X;
    X.remove_cols(pos, count);
    auto indexes = implicit_vector_sequence(Size{count.get()}, Start{pos.get()});
-   ASSERT(X == Y(place::all, place::complement{indexes}));
+   ASSERT(X == Y(all, complement{indexes}));
 }
 
 
 void run_remove_rows_front(auto X, Count count) {
    auto Y = X;
    X.remove_rows_front(count);
-   ASSERT(X == Y(place::lastN{Y.rows() - count.get()}, place::all));
+   ASSERT(X == Y(lastN{Y.rows() - count.get()}, all));
 }
 
 
 void run_remove_cols_front(auto X, Count count) {
    auto Y = X;
    X.remove_cols_front(count);
-   ASSERT(X == Y(place::all, place::lastN{Y.cols() - count.get()}));
+   ASSERT(X == Y(all, lastN{Y.cols() - count.get()}));
 }
 
 
 void run_remove_rows_back(auto X, Count count) {
    auto Y = X;
    X.remove_rows_back(count);
-   ASSERT(X == Y(place::firstN{Y.rows() - count.get()}, place::all));
+   ASSERT(X == Y(firstN{Y.rows() - count.get()}, all));
 }
 
 
 void run_remove_cols_back(auto X, Count count) {
    auto Y = X;
    X.remove_cols_back(count);
-   ASSERT(X == Y(place::all, place::firstN{Y.cols() - count.get()}));
+   ASSERT(X == Y(all, firstN{Y.cols() - count.get()}));
 }
 
 
 void run_remove_rows_vec(auto X, std::vector<ImplicitInt> indexes) {
    auto Y = X;
    X.remove_rows(indexes);
-   ASSERT(X == Y(place::complement{indexes}, place::all));
+   ASSERT(X == Y(complement{indexes}, all));
 }
 
 
 void run_remove_cols_vec(auto X, std::vector<ImplicitInt> indexes) {
    auto Y = X;
    X.remove_cols(indexes);
-   ASSERT(X == Y(place::all, place::complement{indexes}));
+   ASSERT(X == Y(all, complement{indexes}));
 }
 
 
@@ -293,50 +294,36 @@ void run_remove_fail() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void run_insert_rows(auto X, Pos pos, auto Y) {
-   using namespace place;
-   auto p = pos.get();
-
    auto Z = X;
-   Z.insert_rows(p, Y);
-   ASSERT(Z(firstN{p}, all) == X(firstN{p}, all));
-   ASSERT(Z(seqN{p, Y.rows()}, all) == Y);
-   ASSERT(Z(lastN{X.rows() - p}, all) == X(lastN{X.rows() - p}, all));
+   Z.insert_rows(pos, Y);
+   ASSERT(Z == merge_vertical(X(firstN{pos.get()}, all), Y, X(lastN{X.rows() - pos.get()}, all)));
 }
 
 
 void run_insert_cols(auto X, Pos pos, auto Y) {
-   using namespace place;
-   auto p = pos.get();
-
    auto Z = X;
-   Z.insert_cols(p, Y);
-   ASSERT(Z(all, firstN{p}) == X(all, firstN{p}));
-   ASSERT(Z(all, seqN{p, Y.cols()}) == Y);
-   ASSERT(Z(all, lastN{X.cols() - p}) == X(all, lastN{X.cols() - p}));
+   Z.insert_cols(pos, Y);
+   ASSERT(Z == merge_horizontal(X(all, firstN{pos.get()}), Y, X(all, lastN{X.cols() - pos.get()})));
 }
 
 
 void run_insert_row(auto X, Pos pos, auto Y) {
-   using namespace place;
-   auto p = pos.get();
-
    auto Z = X;
-   Z.insert_row(p, Y);
-   ASSERT(Z(firstN{p}, all) == X(firstN{p}, all));
-   ASSERT(Z.row(p) == Y);
-   ASSERT(Z(lastN{X.rows() - p}, all) == X(lastN{X.rows() - p}, all));
+   Z.insert_row(pos, Y);
+   ASSERT(Z
+          == merge_vertical(X(firstN{pos.get()}, all),
+                            Y.view2D(1, Y.size()),
+                            X(lastN{X.rows() - pos.get()}, all)));
 }
 
 
 void run_insert_col(auto X, Pos pos, auto Y) {
-   using namespace place;
-   auto p = pos.get();
-
    auto Z = X;
-   Z.insert_col(p, Y);
-   ASSERT(Z(all, firstN{p}) == X(all, firstN{p}));
-   ASSERT(Z.col(p) == Y);
-   ASSERT(Z(all, lastN{X.cols() - p}) == X(all, lastN{X.cols() - p}));
+   Z.insert_col(pos, Y);
+   ASSERT(Z
+          == merge_horizontal(X(all, firstN{pos.get()}),
+                              Y.view2D(Y.size(), 1),
+                              X(all, lastN{X.cols() - pos.get()})));
 }
 
 

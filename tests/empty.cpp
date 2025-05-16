@@ -3,6 +3,7 @@
 #include "test.hpp"
 
 using namespace spp;
+using namespace spp::place;
 
 
 void empty_array_ops() {
@@ -94,14 +95,14 @@ void empty_util_ops() {
 
 void empty_slice_ops() {
    Array1D<float> A;
-   REQUIRE_NOT_THROW(A(place::all));
-   REQUIRE_NOT_THROW(A(place::even));
-   REQUIRE_NOT_THROW(A(place::odd));
-   REQUIRE_NOT_THROW(A(place::firstN{0}));
-   REQUIRE_NOT_THROW(A(place::lastN{0}));
-   REQUIRE_NOT_THROW(A(place::reverse));
-   REQUIRE_NOT_THROW(A(place::skipN{1}));
-   REQUIRE_NOT_THROW(A(place::complement{{}}));
+   REQUIRE_NOT_THROW(A(all));
+   REQUIRE_NOT_THROW(A(even));
+   REQUIRE_NOT_THROW(A(odd));
+   REQUIRE_NOT_THROW(A(firstN{0}));
+   REQUIRE_NOT_THROW(A(lastN{0}));
+   REQUIRE_NOT_THROW(A(reverse));
+   REQUIRE_NOT_THROW(A(skipN{1}));
+   REQUIRE_NOT_THROW(A(complement{{}}));
    REQUIRE_NOT_THROW(A(std::vector<ImplicitInt>{}));
    REQUIRE_NOT_THROW(A({}));
 
@@ -109,14 +110,14 @@ void empty_slice_ops() {
    REQUIRE_THROW(A(seq{0, 0}));
 
    Array2D<float> B;
-   REQUIRE_NOT_THROW(B(place::all, place::all));
-   REQUIRE_NOT_THROW(B(place::even, place::even));
-   REQUIRE_NOT_THROW(B(place::odd, place::odd));
-   REQUIRE_NOT_THROW(B(place::firstN{0}, place::firstN{0}));
-   REQUIRE_NOT_THROW(B(place::lastN{0}, place::lastN{0}));
-   REQUIRE_NOT_THROW(B(place::reverse, place::reverse));
-   REQUIRE_NOT_THROW(B(place::skipN{1}, place::skipN{1}));
-   REQUIRE_NOT_THROW(B(place::complement{{}}, place::complement{{}}));
+   REQUIRE_NOT_THROW(B(all, all));
+   REQUIRE_NOT_THROW(B(even, even));
+   REQUIRE_NOT_THROW(B(odd, odd));
+   REQUIRE_NOT_THROW(B(firstN{0}, firstN{0}));
+   REQUIRE_NOT_THROW(B(lastN{0}, lastN{0}));
+   REQUIRE_NOT_THROW(B(reverse, reverse));
+   REQUIRE_NOT_THROW(B(skipN{1}, skipN{1}));
+   REQUIRE_NOT_THROW(B(complement{{}}, complement{{}}));
    REQUIRE_NOT_THROW(B(std::vector<ImplicitInt>{}, std::vector<ImplicitInt>{}));
    REQUIRE_NOT_THROW(B({}, {}));
 

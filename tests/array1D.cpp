@@ -6,6 +6,7 @@
 
 
 using namespace spp;
+using namespace spp::place;
 
 
 #define BUILTIN_TYPE_OF(A) spp::BuiltinTypeOf<decltype(A)>
@@ -175,7 +176,7 @@ void run_assign_copy_fail() {
 template <Builtin T>
 void run_assign_copy_other_fail() {
    Array1D<T> A1(4), A2(5);
-   REQUIRE_THROW(A2 = A1(place::all));
+   REQUIRE_THROW(A2 = A1(all));
 }
 
 
@@ -226,14 +227,14 @@ void run_remove(auto X, Pos pos, Count count) {
 void run_remove_front(auto X, Count count) {
    auto Y = X;
    X.remove_front(count);
-   ASSERT(X == Y(place::lastN{Y.size() - count.get()}));
+   ASSERT(X == Y(lastN{Y.size() - count.get()}));
 }
 
 
 void run_remove_back(auto X, Count count) {
    auto Y = X;
    X.remove_back(count);
-   ASSERT(X == Y(place::firstN{Y.size() - count.get()}));
+   ASSERT(X == Y(firstN{Y.size() - count.get()}));
 }
 
 
@@ -247,7 +248,7 @@ void run_remove_last(auto X) {
 void run_remove_vec(auto X, std::vector<ImplicitInt> indexes) {
    auto Y = X;
    X.remove(indexes);
-   ASSERT(X == Y(place::complement{indexes}));
+   ASSERT(X == Y(complement{indexes}));
 }
 
 
@@ -299,7 +300,6 @@ void run_insert_value_back(auto X) {
 
 
 void run_insert_array(auto X, Pos pos) {
-   using namespace place;
    auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
    auto Z = X;
    Z.insert(pos, Y);

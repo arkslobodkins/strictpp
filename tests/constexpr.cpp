@@ -4,6 +4,7 @@
 #include "test.hpp"
 
 using namespace spp;
+using namespace spp::place;
 
 
 // For these tests, sufficiently small array sizes should be used,
@@ -408,26 +409,26 @@ consteval void slice_ops_1D() {
    x(seqN{0, 2});
    xc(seqN{0, 2});
 
-   x(place::skipN{2});
-   xc(place::skipN{2});
+   x(skipN{2});
+   xc(skipN{2});
 
-   x(place::firstN{2});
-   xc(place::firstN{2});
+   x(firstN{2});
+   xc(firstN{2});
 
-   x(place::lastN{2});
-   xc(place::lastN{2});
+   x(lastN{2});
+   xc(lastN{2});
 
-   x(place::complement({0}));
-   xc(place::complement({0}));
+   x(complement({0}));
+   xc(complement({0}));
 
-   x(place::even);
-   xc(place::even);
+   x(even);
+   xc(even);
 
-   x(place::odd);
-   xc(place::odd);
+   x(odd);
+   xc(odd);
 
-   x(place::reverse);
-   xc(place::reverse);
+   x(reverse);
+   xc(reverse);
 }
 
 
@@ -450,26 +451,26 @@ consteval void slice_ops_2D() {
    x(seqN{0, 2}, seqN{0, 2});
    xc(seqN{0, 2}, seqN{0, 2});
 
-   x(place::skipN{2}, place::skipN{2});
-   xc(place::skipN{2}, place::skipN{2});
+   x(skipN{2}, skipN{2});
+   xc(skipN{2}, skipN{2});
 
-   x(place::firstN{2}, place::firstN{2});
-   xc(place::firstN{2}, place::firstN{2});
+   x(firstN{2}, firstN{2});
+   xc(firstN{2}, firstN{2});
 
-   x(place::lastN{2}, place::lastN{2});
-   xc(place::lastN{2}, place::lastN{2});
+   x(lastN{2}, lastN{2});
+   xc(lastN{2}, lastN{2});
 
-   x(place::complement{{0}}, place::complement{{0}});
-   xc(place::complement{{0}}, place::complement{{0}});
+   x(complement{{0}}, complement{{0}});
+   xc(complement{{0}}, complement{{0}});
 
-   x(place::even, place::even);
-   xc(place::even, place::even);
+   x(even, even);
+   xc(even, even);
 
-   x(place::odd, place::odd);
-   xc(place::odd, place::odd);
+   x(odd, odd);
+   xc(odd, odd);
 
-   x(place::reverse, place::reverse);
-   xc(place::reverse, place::reverse);
+   x(reverse, reverse);
+   xc(reverse, reverse);
 
    x.row(0);
    xc.row(0);
