@@ -27,7 +27,7 @@ namespace detail {
 
 
 template <typename Base, typename F> concept ForCallable
-    = SameAs<void, std::invoke_result_t<F, ValueTypeOf<Base>>>;
+    = SameAs<void, std::invoke_result_t<F, std::add_lvalue_reference_t<ValueTypeOf<Base>>>>;
 
 
 template <typename Base, typename F> concept CallableArgs1
@@ -587,7 +587,7 @@ STRICT_CONSTEXPR_2026 ValueTypeOf<Base1> gpolynomial(const Base1& coeffs, const 
 
    ValueTypeOf<Base1> z{};
    for(index_t i = 0_sl; i < X.size(); ++i) {
-      z += coeffs.un(i) * pows_int(X.un(i), powers.un(i));
+      z += coeffs.un(i) * pows(X.un(i), value_type_cast<Base2>(powers.un(i)));
    }
    return z;
 }
