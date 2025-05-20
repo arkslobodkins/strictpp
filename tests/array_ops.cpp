@@ -352,6 +352,50 @@ void range_ops() {
 }
 
 
+void empty_ops() {
+   Array1D<float> A;
+   auto z = sequence<int>(5);
+   for_each(z, [](auto&& x) { });
+   ASSERT(sum(A) == 0._sf);
+   ASSERT(prod(A) == 0._sf);
+   ASSERT(mean(A) == 0._sf);
+   ASSERT(min(A) == 0._sf);
+   ASSERT(max(A) == 0._sf);
+
+   ASSERT(min_index(A).first == -1_sl);
+   ASSERT(min_index(A).second == 0._sf);
+   ASSERT(max_index(A).first == -1_sl);
+   ASSERT(max_index(A).second == 0._sf);
+
+   ASSERT(all_finite(A));
+   ASSERT(!has_inf(A));
+   ASSERT(!has_nan(A));
+
+   ASSERT(dot_prod(A, A) == 0._sf);
+   ASSERT(norm_inf(A) == 0._sf);
+   ASSERT(norm1(A) == 0._sf);
+   ASSERT(norm1_scaled(A) == 0._sf);
+   ASSERT(norm2(A) == 0._sf);
+   ASSERT(norm2_scaled(A) == 0._sf);
+   ASSERT(norm_lp(A, 3) == 0._sf);
+   ASSERT(norm_lp_scaled(A, 3) == 0._sf);
+
+   ASSERT(!has_zero(A));
+   ASSERT(!all_zeros(A));
+   ASSERT(!all_pos(A));
+   ASSERT(!all_neg(A));
+   ASSERT(!all_non_pos(A));
+   ASSERT(!all_non_neg(A));
+
+   ASSERT(!none_of(A, 0._sf));
+   ASSERT(!any_of(A, 0._sf));
+   ASSERT(!all_of(A, 0._sf));
+   ASSERT(!none_of(A, [](auto) { return true_sb; }));
+   ASSERT(!any_of(A, [](auto) { return true_sb; }));
+   ASSERT(!all_of(A, [](auto) { return true_sb; }));
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
    TEST_NON_TYPE(standard_ops);
@@ -360,5 +404,6 @@ int main() {
    TEST_NON_TYPE(poly_ops);
    TEST_NON_TYPE(bool_ops);
    TEST_NON_TYPE(range_ops);
+   TEST_NON_TYPE(empty_ops);
    return EXIT_SUCCESS;
 }
