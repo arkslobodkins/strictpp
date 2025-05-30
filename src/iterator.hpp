@@ -415,9 +415,9 @@ public:
    // ImplicitInt for similar reasons.
    using difference_type = long int;
    using value_type = RemoveCVRef<decltype(std::declval<F>()(0))>;
-   using pointer = value_type*;
+   using pointer = const value_type*;
    using const_pointer = const value_type*;
-   using reference = value_type&;
+   using reference = const value_type&;
    using const_reference = const value_type&;
    // Contiguous if Base owns the data and iterates over indexes(not rows and not columns).
    using iterator_category
