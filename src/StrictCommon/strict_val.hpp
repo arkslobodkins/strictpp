@@ -454,6 +454,12 @@ STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator==(Strict<T> x, Strict<T> y
 
 
 template <Builtin T>
+STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool equal(Strict<T> x, Strict<T> y) {
+   return StrictBool{T{x} == T{y}};
+}
+
+
+template <Builtin T>
 STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator!=(Strict<T> x, Strict<T> y) {
    return StrictBool{T{x} != T{y}};
 }
