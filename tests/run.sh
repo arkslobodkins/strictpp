@@ -34,6 +34,9 @@ echo -e "\nRUNNING SLICEARRAY TESTS"
 echo -e "\nRUNNING EXPRESSION TEMPLATE TESTS"
 ./expr.x
 
+echo -e "\nRUNNING ITERATOR TESTS"
+./iterator.x
+
 echo -e "\nRUNNING ARRAY OPERATIONS TESTS"
 ./array_ops.x
 

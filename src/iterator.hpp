@@ -414,7 +414,7 @@ public:
    // Similarly, operators + += - -=, and [] have difference_type as a parameter instead of
    // ImplicitInt for similar reasons.
    using difference_type = long int;
-   using value_type = RemoveRef<decltype(std::declval<F>()(0))>;
+   using value_type = RemoveCVRef<decltype(std::declval<F>()(0))>;
    using pointer = value_type*;
    using const_pointer = const value_type*;
    using reference = value_type&;
@@ -589,7 +589,11 @@ template <BaseType Base, typename F>
 STRICT_NODISCARD_CONSTEXPR auto ConstIterator<Base, F>::operator->() const -> const_pointer {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    ASSERT_STRICT_RANGE_DEBUG(pos_ > -1_sl && pos_ < f_.size());
-   return &(f_(pos_));
+   if constexpr(std::is_lvalue_reference_v<decltype(f_(pos_))>) {
+      return &(f_(pos_));
+   } else {
+      static_assert(false, "Taking the address of a temporary object.");
+   }
 }
 
 
