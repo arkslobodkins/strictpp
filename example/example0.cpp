@@ -3,7 +3,6 @@
 #include <iostream>
 #include <iterator>
 #include <numeric>
-
 #include <strict.hpp>
 
 

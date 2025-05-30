@@ -53,8 +53,7 @@ void run_within_tol_rel_fail() {
    using Array = Array1D<T>;
    REQUIRE_THROW(within_tol_rel(Array(1), Array(2)));
    REQUIRE_THROW(within_tol_rel(Array(1), Array(1), -constants::epsilon<T>));
-   REQUIRE_THROW(
-       within_tol_rel(Array(1), Array(1), constants::epsilon<T>, -constants::epsilon<T>));
+   REQUIRE_THROW(within_tol_rel(Array(1), Array(1), constants::epsilon<T>, -constants::epsilon<T>));
 
    REQUIRE_NOT_THROW(within_tol_rel(Array(1), Array(1), constants::epsilon<T>));
    REQUIRE_NOT_THROW(

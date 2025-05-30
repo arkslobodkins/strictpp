@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-
 #include <strict.hpp>
 
 
@@ -16,7 +15,7 @@ int main() {
    constexpr auto its{10'000_si};
    Array1D<float64> C(100);
 
-   for([[maybe_unused]]auto i : irange(its)) {
+   for([[maybe_unused]] auto i : irange(its)) {
       const Strict64 x = rands(-1._SD, 1._SD);
       random(C, -1._SD, 1._SD);
 

@@ -1,8 +1,7 @@
 #include <cstdlib>
 #include <stdexcept>
-#include <tuple>
-
 #include <strict.hpp>
+#include <tuple>
 
 using namespace spp;
 

@@ -1,8 +1,7 @@
 #include <cassert>
 #include <cstdlib>
-#include <utility>
-
 #include <strict.hpp>
+#include <utility>
 
 using namespace spp;
 
