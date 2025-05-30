@@ -44,7 +44,7 @@ void run_unary_exp() {
    auto f1 = Strict{std::exp(-1.f)};
    auto f2 = Strict{std::exp(0.f)};
    auto f3 = Strict{std::exp(1.f)};
-   ASSERT(within_tol_rel(exp(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(exp(A), {f1, f2, f3}));
 }
 
 
@@ -53,7 +53,7 @@ void run_unary_log() {
    auto f1 = Strict{std::log(1.f)};
    auto f2 = Strict{std::log(2.f)};
    auto f3 = Strict{std::log(3.f)};
-   ASSERT(within_tol_rel(log(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(log(A), {f1, f2, f3}));
 }
 
 
@@ -62,7 +62,7 @@ void run_unary_log2() {
    auto f1 = Strict{std::log2(1.f)};
    auto f2 = Strict{std::log2(2.f)};
    auto f3 = Strict{std::log2(3.f)};
-   ASSERT(within_tol_rel(log2(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(log2(A), {f1, f2, f3}));
 }
 
 
@@ -71,7 +71,7 @@ void run_unary_log10() {
    auto f1 = Strict{std::log10(1.f)};
    auto f2 = Strict{std::log10(2.f)};
    auto f3 = Strict{std::log10(3.f)};
-   ASSERT(within_tol_rel(log10(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(log10(A), {f1, f2, f3}));
 }
 
 
@@ -80,7 +80,7 @@ void run_unary_sqrt() {
    auto f1 = Strict{std::sqrt(1.f)};
    auto f2 = Strict{std::sqrt(2.f)};
    auto f3 = Strict{std::sqrt(3.f)};
-   ASSERT(within_tol_rel(sqrt(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(sqrt(A), {f1, f2, f3}));
 }
 
 
@@ -89,7 +89,7 @@ void run_unary_cbrt() {
    auto f1 = Strict{std::cbrt(1.f)};
    auto f2 = Strict{std::cbrt(2.f)};
    auto f3 = Strict{std::cbrt(3.f)};
-   ASSERT(within_tol_rel(cbrt(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(cbrt(A), {f1, f2, f3}));
 }
 
 
@@ -98,7 +98,7 @@ void run_unary_sin() {
    auto f1 = Strict{std::sin(1.f)};
    auto f2 = Strict{std::sin(2.f)};
    auto f3 = Strict{std::sin(3.f)};
-   ASSERT(within_tol_rel(sin(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(sin(A), {f1, f2, f3}));
 }
 
 
@@ -107,7 +107,7 @@ void run_unary_cos() {
    auto f1 = Strict{std::cos(1.f)};
    auto f2 = Strict{std::cos(2.f)};
    auto f3 = Strict{std::cos(3.f)};
-   ASSERT(within_tol_rel(cos(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(cos(A), {f1, f2, f3}));
 }
 
 
@@ -116,7 +116,7 @@ void run_unary_tan() {
    auto f1 = Strict{std::tan(1.f)};
    auto f2 = Strict{std::tan(2.f)};
    auto f3 = Strict{std::tan(3.f)};
-   ASSERT(within_tol_rel(tan(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(tan(A), {f1, f2, f3}));
 }
 
 
@@ -125,7 +125,7 @@ void run_unary_pow() {
    auto f1 = Strict{std::pow(1.f, 4.f)};
    auto f2 = Strict{std::pow(2.f, 4.f)};
    auto f3 = Strict{std::pow(3.f, 4.f)};
-   ASSERT(within_tol_rel(pow(A, 4._sf), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(pow(A, 4._sf), {f1, f2, f3}));
 }
 
 
@@ -134,7 +134,7 @@ void run_unary_pow_int() {
    auto f1 = Strict{std::pow(1.f, 4.f)};
    auto f2 = Strict{std::pow(2.f, 4.f)};
    auto f3 = Strict{std::pow(3.f, 4.f)};
-   ASSERT(within_tol_rel(pow_int(A, 4), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(pow_int(A, 4), {f1, f2, f3}));
 }
 
 
@@ -143,7 +143,7 @@ void run_unary_fast_pow_int() {
    auto f1 = Strict{std::pow(1.f, 4.f)};
    auto f2 = Strict{std::pow(2.f, 4.f)};
    auto f3 = Strict{std::pow(3.f, 4.f)};
-   ASSERT(within_tol_rel(fast_pow_int(A, 4), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(fast_pow_int(A, 4), {f1, f2, f3}));
 }
 
 
@@ -152,7 +152,7 @@ void run_unary_inv() {
    auto f1 = Strict{1.f};
    auto f2 = Strict{1.f / 2.f};
    auto f3 = Strict{1.f / 3.f};
-   ASSERT(within_tol_rel(inv(A), Array1D<float>{f1, f2, f3}));
+   ASSERT(within_tol_rel(inv(A), {f1, f2, f3}));
 }
 
 
@@ -264,6 +264,106 @@ void run_binary_xor() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+void run_merge() {
+   auto A = sequence<int>(3);
+   ASSERT(equal(merge(A, 3_si, 4_si), sequence<int>(5)));
+   ASSERT(equal(merge(-2_si, -1_si, A), sequence<int>(5, -2_si)));
+   ASSERT(equal(merge(A, A), {0_si, 1_si, 2_si, 0_si, 1_si, 2_si}));
+}
+
+
+void run_merge_horizontal() {
+   auto A = sequence<int>(4).view2D(2, 2);
+   ASSERT(equal(merge_horizontal(A, const2D<int>(2, 1, 1_si)),
+                {{0_si, 1_si, 1_si}, {2_si, 3_si, 1_si}}));
+   ASSERT(equal(merge_horizontal(A, const2D<int>(2, 1, 1_si), const2D<int>(2, 1, 2_si)),
+                {{0_si, 1_si, 1_si, 2_si}, {2_si, 3_si, 1_si, 2_si}}));
+}
+
+
+void run_merge_vertical() {
+   auto A = sequence<int>(4).view2D(2, 2);
+   ASSERT(equal(merge_vertical(A, const2D<int>(1, 2, 1_si)),
+                {{0_si, 1_si}, {2_si, 3_si}, {1_si, 1_si}}));
+   ASSERT(equal(merge_vertical(A, const2D<int>(1, 2, 1_si), const2D<int>(1, 2, 2_si)),
+                {{0_si, 1_si}, {2_si, 3_si}, {1_si, 1_si}, {2_si, 2_si}}));
+}
+
+
+void run_exclude() {
+   auto A = sequence<int>(4);
+   ASSERT(equal(exclude(A, last), sequence<int>(3)));
+   ASSERT(equal(exclude(A, 0), sequence<int>(3, 1_si)));
+   ASSERT(equal(exclude(A, Pos{0}, Count{2}), sequence<int>(2, 2_si)));
+}
+
+
+void run_sequence() {
+   ASSERT(equal(sequence<int>(Size{4}), {0_si, 1_si, 2_si, 3_si}));
+   ASSERT(equal(sequence<int>(Size{4}, Start{1}), {1_si, 2_si, 3_si, 4_si}));
+   ASSERT(equal(sequence<int>(Size{4}, Start{1}, Incr{2}), {1_si, 3_si, 5_si, 7_si}));
+}
+
+
+void run_linspace() {
+   ASSERT(within_tol_rel(linspace<float>(Size{5}, Start{0.f}, End{-1.f}),
+                         sequence<float>(Size{5}, Start{0._sf}, Incr{-0.25_sf})));
+}
+
+
+void run_irange() {
+   auto A1 = sequence<float>(4);
+   ASSERT(equal(irange(A1), {0_sl, 1_sl, 2_sl, 3_sl}));
+   ASSERT(equal(irange_m1(A1), {0_sl, 1_sl, 2_sl}));
+
+   auto A2 = sequence<float>(6).view2D(3, 2);
+   ASSERT(equal(irange_row(A2), {0_sl, 1_sl, 2_sl}));
+   ASSERT(equal(irange_row_m1(A2), {0_sl, 1_sl}));
+   ASSERT(equal(irange_col(A2), {0_sl, 1_sl}));
+   ASSERT(equal(irange_col_m1(A2), {0_sl}));
+}
+
+
+void run_e_unit() {
+   ASSERT(equal(e_unit<int>(Index{2}, Size{5}), {0_si, 0_si, 1_si, 0_si, 0_si}));
+}
+
+
+void run_identity() {
+   ASSERT(equal(identity<int>(2), {{1_si, 0_si}, {0_si, 1_si}}));
+}
+
+
+void run_transpose() {
+   auto A = sequence<int>(6).view2D(3, 2);
+   ASSERT(equal(transpose(A), {{0_si, 2_si, 4_si}, {1_si, 3_si, 5_si}}));
+}
+
+
+void run_const() {
+   auto A1 = const1D(Size{3}, Value{1});
+   ASSERT(equal(A1, {1_si, 1_si, 1_si}));
+
+   auto A2 = const2D(Rows{2}, Cols{3}, Value{1});
+   ASSERT(equal(A2, {{1_si, 1_si, 1_si}, {1_si, 1_si, 1_si}}));
+}
+
+
+void run_row_reduce() {
+   auto A1 = sequence<int>(6).view2D(2, 3);
+   auto A2 = row_reduce(A1, [](auto row) { return sum(row); });
+   ASSERT(equal(A2, {3_si, 12_si}));
+}
+
+
+void run_col_reduce() {
+   auto A1 = sequence<int>(6).view2D(2, 3);
+   auto A2 = col_reduce(A1, [](auto col) { return sum(col); });
+   ASSERT(equal(A2, {3_si, 5_si, 7_si}));
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void unary() {
    run_unary_plus();
    run_unary_minus();
@@ -310,9 +410,27 @@ void binary() {
 }
 
 
+void special() {
+   run_merge();
+   run_merge_horizontal();
+   run_merge_vertical();
+   run_exclude();
+   run_sequence();
+   run_linspace();
+   run_irange();
+   run_e_unit();
+   run_identity();
+   run_transpose();
+   run_const();
+   run_row_reduce();
+   run_col_reduce();
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
    TEST_NON_TYPE(unary);
    TEST_NON_TYPE(binary);
+   TEST_NON_TYPE(special);
    return EXIT_SUCCESS;
 }
