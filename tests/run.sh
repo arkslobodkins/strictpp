@@ -31,6 +31,9 @@ echo -e "\nRUNNING ARRAY 2D TESTS"
 echo -e "\nRUNNING SLICEARRAY TESTS"
 ./slicearray.x
 
+echo -e "\nRUNNING EXPRESSION TEMPLATE TESTS"
+./expr.x
+
 echo -e "\nRUNNING ARRAY OPERATIONS TESTS"
 ./array_ops.x
 
