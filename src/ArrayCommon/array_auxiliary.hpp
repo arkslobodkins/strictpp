@@ -84,5 +84,12 @@ STRICT_CONSTEXPR StrictBool operator!=(const Base1& A1, const Base2& A2) {
 }
 
 
+template <BaseType Base1, BaseType Base2>
+   requires(same_dimension_b<Base1, Base2>())
+STRICT_CONSTEXPR StrictBool equal(const Base1& A1, const Base2& A2) {
+   return A1 == A2;
+}
+
+
 }  // namespace spp
 

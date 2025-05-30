@@ -202,6 +202,10 @@ public:
    STRICT_NODISCARD_CONSTEXPR explicit complement(std::vector<ImplicitInt> v) : v_{std::move(v)} {
    }
 
+   STRICT_NODISCARD_CONSTEXPR explicit complement(std::initializer_list<ImplicitInt> list)
+       : v_{list} {
+   }
+
    STRICT_NODISCARD_CONSTEXPR const std::vector<ImplicitInt>& get() const {
       return v_;
    }

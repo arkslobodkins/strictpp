@@ -102,7 +102,7 @@ void empty_slice_ops() {
    REQUIRE_NOT_THROW(A(lastN{0}));
    REQUIRE_NOT_THROW(A(reverse));
    REQUIRE_NOT_THROW(A(skipN{1}));
-   REQUIRE_NOT_THROW(A(complement{{}}));
+   REQUIRE_NOT_THROW(A(complement{}));
    REQUIRE_NOT_THROW(A(std::vector<ImplicitInt>{}));
    REQUIRE_NOT_THROW(A({}));
 
@@ -117,7 +117,7 @@ void empty_slice_ops() {
    REQUIRE_NOT_THROW(B(lastN{0}, lastN{0}));
    REQUIRE_NOT_THROW(B(reverse, reverse));
    REQUIRE_NOT_THROW(B(skipN{1}, skipN{1}));
-   REQUIRE_NOT_THROW(B(complement{{}}, complement{{}}));
+   REQUIRE_NOT_THROW(B(complement{}, complement{}));
    REQUIRE_NOT_THROW(B(std::vector<ImplicitInt>{}, std::vector<ImplicitInt>{}));
    REQUIRE_NOT_THROW(B({}, {}));
 

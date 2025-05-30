@@ -9,9 +9,6 @@ using namespace spp;
 using namespace spp::place;
 
 
-#define BUILTIN_TYPE_OF(A) spp::BuiltinTypeOf<decltype(A)>
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <Builtin T>
 void run_constr_default() {

@@ -28,6 +28,9 @@ echo -e "\nRUNNING ARRAY 1D TESTS"
 echo -e "\nRUNNING ARRAY 2D TESTS"
 ./array2D.x
 
+echo -e "\nRUNNING SLICEARRAY TESTS"
+./slicearray.x
+
 echo -e "\nRUNNING ARRAY OPERATIONS TESTS"
 ./array_ops.x
 

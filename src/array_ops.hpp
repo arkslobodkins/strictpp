@@ -27,7 +27,8 @@ namespace detail {
 
 
 template <typename Base, typename F> concept ForCallable
-    = SameAs<void, std::invoke_result_t<F, std::add_lvalue_reference_t<ValueTypeOf<Base>>>>;
+    = SameAs<void, std::invoke_result_t<F, std::add_lvalue_reference_t<ValueTypeOf<Base>>>>
+   || SameAs<void, std::invoke_result_t<F, ValueTypeOf<Base>>>;
 
 
 template <typename Base, typename F> concept CallableArgs1

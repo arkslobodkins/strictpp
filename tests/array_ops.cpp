@@ -354,8 +354,6 @@ void range_ops() {
 
 void empty_ops() {
    Array1D<float> A;
-   auto z = sequence<int>(5);
-   for_each(z, [](auto&& x) { });
    ASSERT(sum(A) == 0._sf);
    ASSERT(prod(A) == 0._sf);
    ASSERT(mean(A) == 0._sf);
