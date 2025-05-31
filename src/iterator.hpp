@@ -174,6 +174,8 @@ public:
    // concept is true and for better compatibility with algorithms from the standard library.
    // Similarly, operators + += - -=, and [] have difference_type as a parameter instead of
    // ImplicitInt for similar reasons.
+   // Constantness does not need to be removed from value_type because
+   // NonConstBaseType indexing returns non constant lvalues.
    using difference_type = long int;
    using value_type = RemoveRef<decltype(std::declval<F>()(0))>;
    using pointer = value_type*;
@@ -416,9 +418,7 @@ public:
    using difference_type = long int;
    using value_type = RemoveCVRef<decltype(std::declval<F>()(0))>;
    using pointer = const value_type*;
-   using const_pointer = const value_type*;
    using reference = const value_type&;
-   using const_reference = const value_type&;
    // Contiguous if Base owns the data and iterates over indexes(not rows and not columns).
    using iterator_category
        = std::conditional_t<ReferenceStorable<Base> && LinearIteratorType<IteratorTag<Base, F>>,
@@ -443,7 +443,7 @@ public:
    STRICT_NODISCARD_CONSTEXPR decltype(auto) operator*() const;
    // Only works for iterators over indexes, since rows and
    // columns are returned by value and appear as rvalues.
-   STRICT_NODISCARD_CONSTEXPR const_pointer operator->() const;
+   STRICT_NODISCARD_CONSTEXPR auto operator->() const;
 
    // bool is used rather than StrictBool so that std::random_access_iterator concept is true
    // and for better compatibility with algorithms from the standard library.
@@ -586,13 +586,14 @@ STRICT_NODISCARD_CONSTEXPR decltype(auto) ConstIterator<Base, F>::operator*() co
 
 
 template <BaseType Base, typename F>
-STRICT_NODISCARD_CONSTEXPR auto ConstIterator<Base, F>::operator->() const -> const_pointer {
+STRICT_NODISCARD_CONSTEXPR auto ConstIterator<Base, F>::operator->() const {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    ASSERT_STRICT_RANGE_DEBUG(pos_ > -1_sl && pos_ < f_.size());
    if constexpr(std::is_lvalue_reference_v<decltype(f_(pos_))>) {
       return &(f_(pos_));
    } else {
       static_assert(false, "Taking the address of a temporary object.");
+      return;
    }
 }
 
@@ -741,7 +742,7 @@ public:
       requires(!std::is_same_v<RemoveCVRef<decltype(A)>, RowIt>)
        : A_{std::forward<decltype(A)>(A)} {
       static_assert(std::is_lvalue_reference_v<decltype(A)>);
-      // avoid implicit conversions from slice and expression templates to constant arrays.
+      // Avoid implicit conversions from slice and expression templates to constant arrays.
       static_assert(std::is_same_v<BaseRef, decltype(A)>);
    }
 
@@ -832,7 +833,7 @@ public:
       requires(!std::is_same_v<RemoveCVRef<decltype(A)>, ColIt>)
        : A_{std::forward<decltype(A)>(A)} {
       static_assert(std::is_lvalue_reference_v<decltype(A)>);
-      // avoid implicit conversions from slice and expression templates to constant arrays.
+      // Avoid implicit conversions from slice and expression templates to constant arrays.
       static_assert(std::is_same_v<BaseRef, decltype(A)>);
    }
 
