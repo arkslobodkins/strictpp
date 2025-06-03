@@ -47,10 +47,12 @@ int main() {
    auto D = const1D(Size{n}, Value{0.1});
    auto DQ = array_cast<float128>(D);
    output_results(norm_lp(D, 3), stable_norm_lp(D, 3), norm_lp(DQ, 3), "3-norm");
+
+   return EXIT_SUCCESS;
 }
 
 
-void output_results(Strict64 x, Strict64 y, Strict128 z, std::string op) {
+void output_results(Strict64 x, Strict64 y, Strict128 z, const std::string& op) {
    spp::format.precision(16);
    using std::cout, std::endl;
    std::string st_op = "stable " + op;

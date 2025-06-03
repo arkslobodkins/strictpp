@@ -20,7 +20,7 @@ std::optional<std::pair<VT, index_t>> jacobi(const MT& A, const VT& b, Strict<T>
    const index_t max_its = 100_sl * N;
    VT xprev{};
    VT xnext{};
-   // Static arrays are of correct size, whereas dynamic arrays are empty by default.
+   // Static arrays are of the correct size, whereas dynamic arrays are empty by default.
    if constexpr(VT::is_dynamic()) {
       xprev.resize(N);
       xnext.resize(N);
