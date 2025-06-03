@@ -7,7 +7,7 @@
 using namespace spp;
 
 
-void output_results(Strict64 x, Strict64 y, Strict128 z, std::string op);
+void output_results(Strict64 x, Strict64 y, Strict128 z, const std::string& op);
 
 
 // example3 performs product, sum, and dot product on ill-conditioned problems

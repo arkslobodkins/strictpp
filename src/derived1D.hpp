@@ -411,13 +411,13 @@ public:
 
 template <OneDimBaseType Base>
 STRICT_CONSTEXPR StrictBool equal(const Base& A1, const use::List1D<BuiltinTypeOf<Base>>& A2) {
-   return A1 == Array1D<BuiltinTypeOf<Base>>{A2};
+   return A1 == Array1D<BuiltinTypeOf<Base>>(A2);
 }
 
 
 template <OneDimBaseType Base>
 STRICT_CONSTEXPR StrictBool equal(const use::List1D<BuiltinTypeOf<Base>>& A1, const Base& A2) {
-   return Array1D<BuiltinTypeOf<Base>>{A1} == A2;
+   return Array1D<BuiltinTypeOf<Base>>(A1) == A2;
 }
 
 

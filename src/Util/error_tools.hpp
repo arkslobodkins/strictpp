@@ -93,7 +93,7 @@ STRICT_CONSTEXPR StrictBool within_tol_abs(const Base& A1,
                                            ValueTypeOf<Base> tol
                                            = DefaultTol<RealTypeOf<Base>>::value,
                                            StrictBool empty_default = false_sb) {
-   return within_tol_abs(A1, Array1D<BuiltinTypeOf<Base>>{A2}, tol, empty_default);
+   return within_tol_abs(A1, Array1D<BuiltinTypeOf<Base>>(A2), tol, empty_default);
 }
 
 
@@ -103,7 +103,7 @@ STRICT_CONSTEXPR StrictBool within_tol_abs(const use::List1D<BuiltinTypeOf<Base>
                                            ValueTypeOf<Base> tol
                                            = DefaultTol<RealTypeOf<Base>>::value,
                                            StrictBool empty_default = false_sb) {
-   return within_tol_abs(Array1D<BuiltinTypeOf<Base>>{A1}, A2, tol, empty_default);
+   return within_tol_abs(Array1D<BuiltinTypeOf<Base>>(A1), A2, tol, empty_default);
 }
 
 
@@ -113,7 +113,7 @@ STRICT_CONSTEXPR StrictBool within_tol_abs(const Base& A1,
                                            ValueTypeOf<Base> tol
                                            = DefaultTol<RealTypeOf<Base>>::value,
                                            StrictBool empty_default = false_sb) {
-   return within_tol_abs(A1, Array2D<BuiltinTypeOf<Base>>{A2}, tol, empty_default);
+   return within_tol_abs(A1, Array2D<BuiltinTypeOf<Base>>(A2), tol, empty_default);
 }
 
 
@@ -123,7 +123,7 @@ STRICT_CONSTEXPR StrictBool within_tol_abs(const use::List2D<BuiltinTypeOf<Base>
                                            ValueTypeOf<Base> tol
                                            = DefaultTol<RealTypeOf<Base>>::value,
                                            StrictBool empty_default = false_sb) {
-   return within_tol_abs(Array2D<BuiltinTypeOf<Base>>{A1}, A2, tol, empty_default);
+   return within_tol_abs(Array2D<BuiltinTypeOf<Base>>(A1), A2, tol, empty_default);
 }
 
 
@@ -133,7 +133,7 @@ within_tol_rel(const Base& A1, const use::List1D<BuiltinTypeOf<Base>>& A2,
                ValueTypeOf<Base> tol = DefaultTol<RealTypeOf<Base>>::value,
                ValueTypeOf<Base> near_zero = DefaultTol<RealTypeOf<Base>>::value,
                StrictBool empty_default = false_sb) {
-   return within_tol_rel(A1, Array1D<BuiltinTypeOf<Base>>{A2}, tol, near_zero, empty_default);
+   return within_tol_rel(A1, Array1D<BuiltinTypeOf<Base>>(A2), tol, near_zero, empty_default);
 }
 
 
@@ -143,7 +143,7 @@ within_tol_rel(const use::List1D<BuiltinTypeOf<Base>>& A1, const Base& A2,
                ValueTypeOf<Base> tol = DefaultTol<RealTypeOf<Base>>::value,
                ValueTypeOf<Base> near_zero = DefaultTol<RealTypeOf<Base>>::value,
                StrictBool empty_default = false_sb) {
-   return within_tol_rel(Array1D<BuiltinTypeOf<Base>>{A1}, A2, tol, near_zero, empty_default);
+   return within_tol_rel(Array1D<BuiltinTypeOf<Base>>(A1), A2, tol, near_zero, empty_default);
 }
 
 
@@ -153,7 +153,7 @@ within_tol_rel(const Base& A1, const use::List2D<BuiltinTypeOf<Base>>& A2,
                ValueTypeOf<Base> tol = DefaultTol<RealTypeOf<Base>>::value,
                ValueTypeOf<Base> near_zero = DefaultTol<RealTypeOf<Base>>::value,
                StrictBool empty_default = false_sb) {
-   return within_tol_rel(A1, Array2D<BuiltinTypeOf<Base>>{A2}, tol, near_zero, empty_default);
+   return within_tol_rel(A1, Array2D<BuiltinTypeOf<Base>>(A2), tol, near_zero, empty_default);
 }
 
 
@@ -163,7 +163,7 @@ within_tol_rel(const use::List2D<BuiltinTypeOf<Base>>& A1, const Base& A2,
                ValueTypeOf<Base> tol = DefaultTol<RealTypeOf<Base>>::value,
                ValueTypeOf<Base> near_zero = DefaultTol<RealTypeOf<Base>>::value,
                StrictBool empty_default = false_sb) {
-   return within_tol_rel(Array2D<BuiltinTypeOf<Base>>{A1}, A2, tol, near_zero, empty_default);
+   return within_tol_rel(Array2D<BuiltinTypeOf<Base>>(A1), A2, tol, near_zero, empty_default);
 }
 
 
