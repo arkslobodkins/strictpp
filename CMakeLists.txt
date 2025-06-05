@@ -11,5 +11,3 @@ if(NOT DEFINED strictpp_FIND_QUIETLY)
    message(STATUS "Found strictpp: ${CMAKE_CURRENT_LIST_DIR}")
 endif()
 
-
-
