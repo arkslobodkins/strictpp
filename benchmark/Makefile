@@ -4,7 +4,7 @@ all: array1D fixedarray1D
 
 CXXFLAGS = -std=c++20 -O3 -no-pie
 LFLAGS = -lm -lbenchmark -lpthread
-IPATH = -I ../src/
+IPATH = -I ../strictpp/
 
 ifeq ($(compiler), gcc)
 CXX = g++

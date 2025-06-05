@@ -10,7 +10,7 @@ LFLAGS1 = -lm
 CXXFLAGS2 = -std=gnu++20 -Wconversion -Wnarrowing -DSTRICT_QUAD_PRECISION
 LFLAGS2 = -lm -lquadmath
 
-IPATH = -I ../src/
+IPATH = -I ../strictpp/
 
 ifeq ($(debug), 0)
 CXXFLAGS1 += -DSTRICT_DEBUG_OFF

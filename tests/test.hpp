@@ -6,7 +6,7 @@
 
 #define STRICT_ERROR_EXCEPTIONS
 #define STRICT_REMOVE_NODISCARD
-#include "../src/strict.hpp"
+#include "../strictpp/strict.hpp"
 
 
 namespace spp {
