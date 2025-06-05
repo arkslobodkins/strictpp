@@ -8,7 +8,7 @@ target_include_directories(strictpp INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_
 add_compile_definitions("$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
 
 if(NOT DEFINED strictpp_FIND_QUIETLY)
-   message(STATUS "Found strictpp: ${CMAKE_CURRENT_LIST_DIR}.")
+   message(STATUS "Found strictpp: ${CMAKE_CURRENT_LIST_DIR}")
 endif()
 
 
