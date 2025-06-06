@@ -1,6 +1,6 @@
 #include <cassert>
 #include <cstdlib>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 #include <utility>
 
 using namespace spp;

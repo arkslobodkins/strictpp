@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 
 
 // example4 generates random generalized polynomials and evaluates them

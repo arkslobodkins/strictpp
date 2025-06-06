@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <optional>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 #include <utility>
 
 using namespace spp;

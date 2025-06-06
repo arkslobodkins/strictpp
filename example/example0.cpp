@@ -3,7 +3,7 @@
 #include <iostream>
 #include <iterator>
 #include <numeric>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 
 
 // example0 demonstrates how Strict arithmetic types can help

@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <iostream>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 #include <string>
 
 

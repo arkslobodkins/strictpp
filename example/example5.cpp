@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <stdexcept>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 #include <tuple>
 
 using namespace spp;

@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 
 using namespace spp;
 
