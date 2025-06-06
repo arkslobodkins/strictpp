@@ -6,7 +6,3 @@ add_library(strictpp::strictpp ALIAS strictpp)
 target_compile_features(strictpp INTERFACE cxx_std_20)
 target_include_directories(strictpp INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 add_compile_definitions("$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
-
-if(NOT DEFINED strictpp_FIND_QUIETLY)
-   message(STATUS "Found strictpp fetch: ${CMAKE_CURRENT_SOURCE_DIR}")
-endif()
