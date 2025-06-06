@@ -137,7 +137,7 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 }
 
 
-// Handles empty initializer list case as well.
+// Handles an empty initializer list case as well.
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
     use::List1D<builtin_type> list) {

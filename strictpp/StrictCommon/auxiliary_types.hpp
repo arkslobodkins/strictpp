@@ -206,7 +206,7 @@ constexpr inline Last last{0};
 using place::last;
 
 
-// Note that plus operator is allowed from both sides bot not minus.
+// Note that plus operator is allowed from both sides but not minus.
 STRICT_NODISCARD_CONSTEXPR_INLINE Last operator+(Last lst, ImplicitInt i) {
    return Last{ImplicitInt{lst.get() - i.get()}};
 }

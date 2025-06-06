@@ -88,7 +88,7 @@ auto pow_prod(const Base1& A1, const Base2& A2);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Deleted overloads.
-// Its seems that checking for the first set of conditions, namely:
+// It seems that checking for the first set of conditions, namely:
 // (RealBaseType<RemoveRef<Base1>> && RealBaseType<RemoveRef<Base2>>)
 // is redundant, but removing it would lead to ambiguities instead of selecting
 // a deleted overload in some cases, such as Array1D<double>(3) + 1._sd.
@@ -170,7 +170,7 @@ auto pow_prod(Base1&& A1, Base2&& A2) = delete;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Binary operations(scalars on the left).
+// Binary operations (scalars on the left).
 template <RealBaseType Base>
 STRICT_CONSTEXPR auto operator+(ValueTypeOf<Base> x, const Base& A);
 
@@ -291,7 +291,7 @@ STRICT_CONSTEXPR auto operator^(ValueTypeOf<Base> x, Base&& A) = delete;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Binary operations(scalars on the right).
+// Binary operations (scalars on the right).
 template <RealBaseType Base>
 STRICT_CONSTEXPR auto operator+(const Base& A, ValueTypeOf<Base> x);
 
@@ -706,7 +706,7 @@ STRICT_CONSTEXPR auto operator^(const Base& A, ValueTypeOf<Base> x) {
 template <TwoDimRealBaseType Base1, OneDimRealBaseType Base2>
 STRICT_CONSTEXPR auto matvec_prod(const Base1& A, const Base2& x) {
    ASSERT_STRICT_DEBUG(A.cols() == x.size());
-   // Re-implement dot product function here so that array_ops header does not need
+   // Re-implement the dot product function here so that the array_ops header does not need
    // to be included. It is also implemented slightly differently.
    auto dot = [](const auto& x1, const auto& x2) {
       ValueTypeOf<Base1> s{};

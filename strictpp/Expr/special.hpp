@@ -129,9 +129,9 @@ STRICT_CONSTEXPR auto irange_col_m1(const Base& A);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Generates standard unit vector on the fly.
+// Generates a standard unit vector on the fly.
 // Involves redundant work if assigned to arrays that only contain zeros.
-// Empty objects are not allowed(must be of at least size 1).
+// Empty objects are not allowed (must be of at least size 1).
 template <Real T>
 STRICT_CONSTEXPR auto e_unit(ImplicitInt unit_index, ImplicitInt size);
 

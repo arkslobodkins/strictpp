@@ -169,7 +169,7 @@ template <Builtin T, AlignmentFlag AF>
 std::istream& istream_base_read(std::istream& is, Array2D<T, AF>& A) {
    std::string line{};
    Array2D<T, AF> tmp;
-   // Important to test tmp.empty() first, otherwise get off-by-1 error.
+   // Important to test tmp.empty() first, otherwise get an off-by-1 error.
    while(tmp.empty() && std::getline(is, line)) {
       get_first_row<T>(line, tmp);
    }

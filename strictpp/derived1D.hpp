@@ -291,7 +291,7 @@ public:
    STRICT_NODISCARD_CONSTEXPR StrictArrayMutable1D(const StrictArrayMutable1D&) = default;
    STRICT_NODISCARD_CONSTEXPR StrictArrayMutable1D(StrictArrayMutable1D&&) = default;
 
-   // Assignments are not inherited because it returns reference to base class.
+   // Assignments are not inherited because it returns reference to the base class.
    STRICT_CONSTEXPR StrictArrayMutable1D& operator=(const StrictArrayMutable1D& A) {
       return static_cast<StrictArrayMutable1D&>(Base::operator=(A));
    }
@@ -348,7 +348,7 @@ public:
    STRICT_NODISCARD_CONSTEXPR StrictArray1D(const StrictArray1D&) = default;
    STRICT_NODISCARD_CONSTEXPR StrictArray1D(StrictArray1D&&) = default;
 
-   // Assignments are not inherited because it returns reference to base class.
+   // Assignments are not inherited because it returns reference to the base class.
    // Further, for Arrays that own data lvalue qualifier for assignment is preferred.
    STRICT_CONSTEXPR StrictArray1D& operator=(const StrictArray1D& A) & {
       return static_cast<StrictArray1D&>(Base::operator=(A));

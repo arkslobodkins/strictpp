@@ -125,7 +125,7 @@ public:
    STRICT_NODISCARD_CONSTEXPR strict_convert_slice2D(const strict_convert_slice2D&) = default;
 
    // SliceArrayBase2D does not implement assignment based on the assignment of its members,
-   // thus the following assignment is not strictly necessary, but might be useful for other
+   // thus the following assignment is not strictly necessary but might be useful for other
    // purposes.
    STRICT_NODISCARD_CONSTEXPR strict_convert_slice2D& operator=(const strict_convert_slice2D& S) {
       ASSERT_STRICT_DEBUG(same_size(*this, S));

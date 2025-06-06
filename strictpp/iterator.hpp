@@ -85,8 +85,8 @@ public:
    STRICT_CONSTEXPR explicit ConstIndexFlag(const Base* A) : A_{A} {
    }
 
-   // Const iterator only needs const indexing(A_ is a pointer to const).
-   // May return either by const reference or by value, as it the case
+   // Const iterator only needs const indexing (A_ is a pointer to const).
+   // May return either by const reference or by value, as it is the case
    // with expression templates.
    STRICT_CONSTEXPR decltype(auto) operator()(ImplicitInt i) const {
       return (*A_).un(i);
@@ -142,7 +142,7 @@ private:
 class LinearIterator {};
 
 
-// Second condition is added so that it works for reverse iterators as well.
+// A second condition is added so that it works for reverse iterators as well.
 template <typename T> concept LinearIteratorType
     = BaseOf<LinearIterator, T> || BaseOf<LinearIterator, typename T::iterator_type>;
 
@@ -170,17 +170,17 @@ public:
    // it would not work for one-dimensional indexing and potentially cause other issues.
    static_assert(!IsConst<Base>);
 
-   // difference_type is long int instead of index_t so that std::random_access_iterator
+   // difference_type is long int instead of index_t so that the std::random_access_iterator
    // concept is true and for better compatibility with algorithms from the standard library.
    // Similarly, operators + += - -=, and [] have difference_type as a parameter instead of
    // ImplicitInt for similar reasons.
    // Constantness does not need to be removed from value_type because
-   // NonConstBaseType indexing returns non constant lvalues.
+   // NonConstBaseType indexing returns non-constant lvalues.
    using difference_type = long int;
    using value_type = RemoveRef<decltype(std::declval<F>()(0))>;
    using pointer = value_type*;
    using reference = value_type&;
-   // Contiguous if Base owns the data and iterates over indexes(not rows and not columns).
+   // Contiguous if Base owns the data and iterates over indexes (not rows and not columns).
    using iterator_category
        = std::conditional_t<ReferenceStorable<Base> && LinearIteratorType<IteratorTag<Base, F>>,
                             std::contiguous_iterator_tag, std::random_access_iterator_tag>;
@@ -207,7 +207,7 @@ public:
    // columns are returned by value and appear as rvalues.
    STRICT_NODISCARD_CONSTEXPR pointer operator->() const;
 
-   // bool is used rather than StrictBool so that std::random_access_iterator concept is true
+   // bool is used rather than StrictBool so that the std::random_access_iterator concept is true
    // and for better compatibility with algorithms from the standard library.
    STRICT_NODISCARD_CONSTEXPR bool operator==(const Iterator& it) const;
    STRICT_NODISCARD_CONSTEXPR bool operator!=(const Iterator& it) const;
@@ -411,7 +411,7 @@ STRICT_NODISCARD_CONSTEXPR StrictBool Iterator<Base, F>::points_somewhere() cons
 template <BaseType Base, typename F = ConstIndexFlag<Base>>
 class STRICT_NODISCARD ConstIterator : private IteratorTag<Base, F> {
 public:
-   // difference_type is long int instead of index_t so that std::random_access_iterator
+   // difference_type is long int instead of index_t so that the std::random_access_iterator
    // concept is true and for better compatibility with algorithms from the standard library.
    // Similarly, operators + += - -=, and [] have difference_type as a parameter instead of
    // ImplicitInt for similar reasons.
@@ -419,7 +419,7 @@ public:
    using value_type = RemoveCVRef<decltype(std::declval<F>()(0))>;
    using pointer = const value_type*;
    using reference = const value_type&;
-   // Contiguous if Base owns the data and iterates over indexes(not rows and not columns).
+   // Contiguous if Base owns the data and iterates over indexes (not rows and not columns).
    using iterator_category
        = std::conditional_t<ReferenceStorable<Base> && LinearIteratorType<IteratorTag<Base, F>>,
                             std::contiguous_iterator_tag, std::random_access_iterator_tag>;
@@ -445,7 +445,7 @@ public:
    // columns are returned by value and appear as rvalues.
    STRICT_NODISCARD_CONSTEXPR auto operator->() const;
 
-   // bool is used rather than StrictBool so that std::random_access_iterator concept is true
+   // bool is used rather than StrictBool so that the std::random_access_iterator concept is true
    // and for better compatibility with algorithms from the standard library.
    STRICT_NODISCARD_CONSTEXPR bool operator==(const ConstIterator& it) const;
    STRICT_NODISCARD_CONSTEXPR bool operator!=(const ConstIterator& it) const;
@@ -758,7 +758,7 @@ public:
       }
    }
 
-   // Iterator member functions are not ref-qualified since constructor ensures that A is lvalue.
+   // Iterator member functions are not ref-qualified since the constructor ensures that A is lvalue.
    // Calling them with rvalue RowIt objects is allowed and even encouraged.
    STRICT_NODISCARD_CONSTEXPR auto begin() const {
       using namespace detail;
@@ -840,7 +840,7 @@ public:
    STRICT_NODISCARD_CONSTEXPR ColIt(const ColIt&) = default;
    STRICT_CONSTEXPR ColIt& operator=(const ColIt&) = delete;
 
-   // Iterator member functions are not ref-qualified since constructor ensures that A is lvalue.
+   // Iterator member functions are not ref-qualified since the constructor ensures that A is lvalue.
    // Calling them with rvalue ColIt objects is allowed and even encouraged.
    STRICT_NODISCARD_CONSTEXPR auto begin() {
       using namespace detail;

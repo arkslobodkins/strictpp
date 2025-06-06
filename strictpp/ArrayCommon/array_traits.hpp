@@ -29,7 +29,7 @@ class TwoDimArrayBase : protected ArrayBase {};
 
 
 // BaseType returns false for references; referenceness is not removed to prevent
-// a possibility of dangling references and other misuses in generic code.
+// the possibility of dangling references and other misuses in generic code.
 template <typename T> concept BaseType = BaseOf<detail::DimBase, T>;
 template <typename T> concept RealBaseType = BaseType<T> && Real<typename T::builtin_type>;
 template <typename T> concept BooleanBaseType = BaseType<T> && Boolean<typename T::builtin_type>;
@@ -62,7 +62,7 @@ struct ConstSliceBase {};
 template <typename T> concept ConstSliceBaseType = BaseType<T> && BaseOf<ConstSliceBase, T>;
 
 
-// Objects of type Array or slices of Array with non-constant semantics. Expression templates are
+// Objects of the type Array or slices of Array with non-constant semantics. Expression templates are
 // excluded since they return by value and thus std::is_lvalue_reference_v evaluates to false.
 template <typename T> concept NonConstBaseType
     = BaseType<T> && (requires(T A) {
@@ -105,7 +105,7 @@ struct CopyOrReferenceExpr<T> {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Requires clause avoids out of bound access. Offset is moved to the right hand
+// Requires clause avoids out-of-bound access. Offset is moved to the right-hand
 // side to avoid subtraction for unsigned integers.
 template <std::size_t offset, typename... Args>
    requires(offset > 0) && (sizeof...(Args) >= offset)

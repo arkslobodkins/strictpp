@@ -821,7 +821,7 @@ STRICT_CONSTEXPR auto in_cond_range(Base&& A, F f) {
 
 
 // !IsConst is not used since A might not be modified.
-// Removed NonConstBaseType requirement so that for each can be
+// Removed the NonConstBaseType requirement so that for each can be
 // called for expression templates as well or other constant objects.
 template <typename Base, typename F>
    requires(detail::ForCallable<Base, F>)

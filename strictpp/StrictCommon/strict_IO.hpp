@@ -160,7 +160,7 @@ private:
    StrictBool scientific_{true};
    int precision_[4]{float_precision, double_precision, long_double_precision, quad_precision};
 
-   // Originally a templated lambda inside << operator, but changed to private member
+   // Originally a templated lambda inside << operator, but changed to a private member
    // function since CUDA(even CUDA 12.6) does not seem to support templated lambdas.
    template <StandardFloating T>
    auto set_float_precision() const {
