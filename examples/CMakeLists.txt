@@ -1,4 +1,4 @@
-if(CMAKE_CXX_COMPILER_ID NOT STREQUAL "GNU")
+if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
    message(FATAL_ERROR "GCC compiler is required to compile examples")
 endif()
 
