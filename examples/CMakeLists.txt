@@ -1,3 +1,7 @@
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+   message(FATAL_ERROR "GCC compiler is required to compile examples")
+endif()
+
 file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 foreach(CPPFILE ${CPPFILES})
