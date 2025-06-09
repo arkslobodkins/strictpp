@@ -15,11 +15,7 @@ FetchContent_Declare(benchmark
 
 FetchContent_MakeAvailable(Eigen3 benchmark)
 
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
-   if(NOT CMAKE_BUILD_TYPE)
-      set(CMAKE_BUILD_TYPE "Release")
-   endif()
-endif()
+set(CMAKE_BUILD_TYPE "Release")
 
 foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
