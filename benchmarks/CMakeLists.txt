@@ -21,6 +21,8 @@ if(NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
    endif()
 endif()
 
+   unset(CMAKE_BUILD_TYPE)
+
 foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
