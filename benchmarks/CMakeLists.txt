@@ -1,5 +1,7 @@
 file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
+# Always run benchmarks in release mode, since we are primarily interested
+# in benchmarking optimized versions of strictpp and Eigen.
 set(CMAKE_BUILD_TYPE "Release")
 
 include(FetchContent)
@@ -10,7 +12,8 @@ FetchContent_Declare(
     GIT_TAG master)
 
 set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE INTERNAL "")
-set(BENCHMARK_ENABLE_ASSEMBLY_TESTS OFF CACHE INTERNAL "")
+# Disable assembly tests to suppress warnings related to assembly tests.
+#set(BENCHMARK_ENABLE_ASSEMBLY_TESTS OFF CACHE INTERNAL "")
 FetchContent_Declare(benchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
         GIT_TAG main)
