@@ -9,14 +9,16 @@ include(FetchContent)
 FetchContent_Declare(
     Eigen3
     GIT_REPOSITORY https://gitlab.com/libeigen/eigen
-    GIT_TAG master)
+    GIT_TAG master
+    GIT_PROGRESS ON)
 
 set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE INTERNAL "")
 # Disable assembly tests to suppress warnings related to "possibly broken assembly tests".
 set(BENCHMARK_ENABLE_ASSEMBLY_TESTS OFF CACHE INTERNAL "")
 FetchContent_Declare(benchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
-        GIT_TAG main)
+        GIT_TAG main
+        GIT_PROGRESS ON)
 
 FetchContent_MakeAvailable(Eigen3 benchmark)
 
