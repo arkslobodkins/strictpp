@@ -31,7 +31,7 @@ foreach(CPPFILE ${CPPFILES})
 
    check_cxx_compiler_flag(-march=native HAVE_NATIVE)
    if(HAVE_NATIVE)
-      target_compile_options(${CPPNAME} PRIVATE "-march=native>")
+      target_compile_options(${CPPNAME} PRIVATE "-march=native")
    endif()
 
    if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
