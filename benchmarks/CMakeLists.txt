@@ -1,5 +1,7 @@
 file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
+set(CMAKE_BUILD_TYPE "Release")
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -14,8 +16,6 @@ FetchContent_Declare(benchmark
         GIT_TAG main)
 
 FetchContent_MakeAvailable(Eigen3 benchmark)
-
-set(CMAKE_BUILD_TYPE "Release")
 
 foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
