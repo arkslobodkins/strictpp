@@ -12,7 +12,7 @@ FetchContent_Declare(
     GIT_TAG master)
 
 set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE INTERNAL "")
-# Disable assembly tests to suppress warnings related to possibly broken assembly tests.
+# Disable assembly tests to suppress warnings related to "possibly broken assembly tests".
 set(BENCHMARK_ENABLE_ASSEMBLY_TESTS OFF CACHE INTERNAL "")
 FetchContent_Declare(benchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
