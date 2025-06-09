@@ -15,6 +15,12 @@ FetchContent_Declare(benchmark
 
 FetchContent_MakeAvailable(Eigen3 benchmark)
 
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
+   if(NOT CMAKE_BUILD_TYPE)
+      set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+   endif()
+endif()
+
 foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
@@ -22,8 +28,6 @@ foreach(CPPFILE ${CPPFILES})
    target_link_libraries(${CPPNAME} PRIVATE strictpp Eigen3::Eigen benchmark::benchmark)
 
    target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG STRICT_DEBUG_OFF)
-   target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-O1>")
-   target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Release>:-O2>")
 
    check_cxx_compiler_flag(-march=native HAVE_NATIVE)
    if(HAVE_NATIVE)
