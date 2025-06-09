@@ -17,8 +17,13 @@ FetchContent_MakeAvailable(Eigen3 benchmark)
 
 SET(CMAKE_CXX_FLAGS_DEBUG  "")
 SET(CMAKE_CXX_FLAGS_RELEASE  "")
-SET(CMAKE_CXX_FLAGS  "-Ofast -DNDEBUG -std=c++20 -march=native -fpic -ftree-vectorize")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
+SET(CMAKE_CXX_FLAGS  "-O3 -DNDEBUG")
 
+check_cxx_compiler_flag(-march=native HAVE_NATIVE)
+if(HAVE_NATIVE)
+SET(CMAKE_CXX_FLAGS "-march=native")
+endif()
 
 foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
@@ -28,11 +33,6 @@ foreach(CPPFILE ${CPPFILES})
 
    target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG STRICT_DEBUG_OFF)
    target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-O1>")
-
-   check_cxx_compiler_flag(-march=native HAVE_NATIVE)
-   if(HAVE_NATIVE)
-      target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Release>:-march=native>")
-   endif()
 
    if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
       target_compile_options(${CPPNAME} PRIVATE "-fp-model=precise")
