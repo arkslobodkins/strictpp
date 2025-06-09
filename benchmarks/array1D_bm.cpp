@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 
 #include <Eigen/Dense>
-#include <strict.hpp>
+#include <strictpp/strict.hpp>
 #include <tuple>
 
 

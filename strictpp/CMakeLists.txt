@@ -7,11 +7,11 @@ set(STRICT_DEBUG "DEFAULT" CACHE STRING "Available options are ON, OFF, or DEFAU
       Defaults to false in release build and defaults to true in all other builds.
       ON or OFF overrides these defaults.")
 if(STRICT_DEBUG STREQUAL "DEFAULT")
-   add_compile_definitions("$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
+   target_compile_definitions(strictpp INTERFACE "$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
 elseif(STRICT_DEBUG STREQUAL "ON")
    # Nothing to be done.
 elseif(STRICT_DEBUG STREQUAL "OFF")
-   add_compile_definitions(STRICT_DEBUG_OFF)
+   target_compile_definitions(strictpp INTERFACE STRICT_DEBUG_OFF)
 else()
    message(FATAL_ERROR "Invalid debug configuration. Available options are ON, OFF, or DEFAULT.")
 endif()
