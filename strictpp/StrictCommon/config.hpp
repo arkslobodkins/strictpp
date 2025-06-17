@@ -127,7 +127,7 @@ constexpr inline void print_stacktrace() {
 namespace spp {
 
 
-inline void config_info() {
+inline void print_config_info() {
 #ifndef STRICT_DEBUG_OFF
    std::cout << "compute mode: DEBUG" << '\n';
 #else

@@ -51,7 +51,7 @@ Array1D<float128> ode_exact(StrictLong nsteps, Strict128 h, Strict128 t_init, St
 
 
 int main() {
-   config_info();
+   print_config_info();
 
    auto [nsteps, h, t_init, y_init] = ode_init();
    auto y = ode_solve(nsteps, h, t_init, y_init);
