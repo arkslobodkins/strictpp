@@ -21,6 +21,7 @@ set(STRICTPP_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/strictpp-${PROJECT_
 install(TARGETS ${PROJECT_NAME} EXPORT strictppTargets)
 
 install(EXPORT strictppTargets
+        FILE strictppTargets.cmake
         DESTINATION ${STRICTPP_INSTALL_CONFIGDIR}
         NAMESPACE strictpp::)
 
@@ -31,8 +32,8 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/strictpp DESTINATION ${CMAKE_INSTALL_INC
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-   "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
-   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
    INSTALL_DESTINATION ${STRICTPP_INSTALL_CONFIGDIR})
 
 write_basic_package_version_file(
