@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(strictpp LANGUAGES CXX)
+project(strictpp VERSION 1.0 LANGUAGES CXX)
 
 add_subdirectory(strictpp)
 
@@ -12,3 +12,34 @@ option(STRICT_BUILD_BENCHMARKS "Enable the compilation of benchmarks." OFF)
 if(STRICT_BUILD_BENCHMARKS)
    add_subdirectory(benchmarks)
 endif()
+
+include(GNUInstallDirs)
+
+set(STRICTPP_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/strictpp-${PROJECT_VERSION})
+
+# Install strictpp interface library.
+install(TARGETS ${PROJECT_NAME} EXPORT strictppTargets)
+
+install(EXPORT strictppTargets
+        DESTINATION ${STRICTPP_INSTALL_CONFIGDIR}
+        NAMESPACE strictpp::)
+
+# Install headers.
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/strictpp DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        COMPONENT headers PATTERN "CMakeLists.txt" EXCLUDE)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+   "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+   INSTALL_DESTINATION ${STRICTPP_INSTALL_CONFIGDIR})
+
+write_basic_package_version_file(
+   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake VERSION ${PROJECT_VERSION}
+   COMPATIBILITY SameMajorVersion)
+
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION ${STRICTPP_INSTALL_CONFIGDIR})
