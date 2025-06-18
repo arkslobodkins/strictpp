@@ -20,10 +20,8 @@ set(STRICTPP_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/strictpp-${PROJECT_
 # Install strictpp interface library.
 install(TARGETS ${PROJECT_NAME} EXPORT strictppTargets)
 
-install(EXPORT strictppTargets
-        FILE strictppTargets.cmake
-        DESTINATION ${STRICTPP_INSTALL_CONFIGDIR}
-        NAMESPACE strictpp::)
+install(EXPORT strictppTargets FILE strictppTargets.cmake
+        DESTINATION ${STRICTPP_INSTALL_CONFIGDIR} NAMESPACE strictpp::)
 
 # Install headers.
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/strictpp DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -37,10 +35,9 @@ configure_package_config_file(
    INSTALL_DESTINATION ${STRICTPP_INSTALL_CONFIGDIR})
 
 write_basic_package_version_file(
-   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake VERSION ${PROJECT_VERSION}
-   COMPATIBILITY SameMajorVersion)
+   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+   VERSION ${PROJECT_VERSION} COMPATIBILITY SameMajorVersion)
 
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-    DESTINATION ${STRICTPP_INSTALL_CONFIGDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+        DESTINATION ${STRICTPP_INSTALL_CONFIGDIR})

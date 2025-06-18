@@ -1,11 +1,11 @@
 add_library(strictpp INTERFACE)
 add_library(strictpp::strictpp ALIAS strictpp)
+
 target_include_directories(
    strictpp INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
                       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-set(STRICT_DEBUG
-    "DEFAULT"
+set(STRICT_DEBUG "DEFAULT"
     CACHE STRING "Available options are ON, OFF, or DEFAULT.
       Defaults to false in release build and defaults to true in all other builds.
       ON or OFF overrides these defaults.")
