@@ -1,10 +1,12 @@
 add_library(strictpp INTERFACE)
 add_library(strictpp::strictpp ALIAS strictpp)
 
+##########################################################################################
 target_include_directories(
    strictpp INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
                       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
+##########################################################################################
 set(STRICT_DEBUG "DEFAULT"
     CACHE STRING "Available options are ON, OFF, or DEFAULT.
       Defaults to false in release build and defaults to true in all other builds.
@@ -21,12 +23,14 @@ else()
          "Invalid debug configuration. Available options are ON, OFF, or DEFAULT.")
 endif()
 
+##########################################################################################
 option(STRICT_ERROR_EXCEPTIONS "Enable use of exceptions rather than assertions for
       error handling throughout strictpp." OFF)
 if(STRICT_ERROR_EXCEPTIONS)
    target_compile_definitions(strictpp INTERFACE STRICT_ERROR_EXCEPTIONS)
 endif()
 
+##########################################################################################
 option(STRICT_STACKTRACE "Enable strictpp stacktrace support." OFF)
 if(STRICT_ERROR_EXCEPTIONS AND STRICT_STACKTRACE)
    message(WARNING "Both exceptions and stacktrace are enabled, but stacktrace
@@ -44,6 +48,7 @@ else()
    target_compile_features(strictpp INTERFACE cxx_std_20)
 endif()
 
+##########################################################################################
 option(STRICT_NODISCARD "Enable extensive support of [[nodiscard]] throughout strictpp."
        ON)
 if(NOT STRICT_NODISCARD)

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(strictpp VERSION 1.0 LANGUAGES CXX)
 
+##########################################################################################
 set(DEFAULT_BUILD_TYPE "Debug")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
    message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.
@@ -12,6 +13,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
                                                 "RelWithDebInfo")
 endif()
 
+##########################################################################################
 add_subdirectory(strictpp)
 
 option(STRICT_BUILD_EXAMPLES "Enable the compilation of the example files." OFF)
@@ -24,6 +26,7 @@ if(STRICT_BUILD_BENCHMARKS)
    add_subdirectory(benchmarks)
 endif()
 
+##########################################################################################
 include(GNUInstallDirs)
 
 set(STRICTPP_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/strictpp-${PROJECT_VERSION})
@@ -38,6 +41,7 @@ install(EXPORT strictppTargets FILE strictppTargets.cmake
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/strictpp DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         COMPONENT headers PATTERN "CMakeLists.txt" EXCLUDE)
 
+##########################################################################################
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
