@@ -24,7 +24,7 @@ foreach(CPPFILE ${CPPFILES})
                                                CXX_EXTENSIONS OFF)
    target_link_libraries(${CPPNAME} PRIVATE strictpp Eigen3::Eigen benchmark::benchmark)
 
-   target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG)
+   target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG STRICT_DEBUG_OFF)
 
    check_cxx_compiler_flag(-march=native HAVE_NATIVE)
    if(HAVE_NATIVE)
