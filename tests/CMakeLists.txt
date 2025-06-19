@@ -10,7 +10,7 @@ foreach(CPPFILE ${CPPFILES})
    add_executable(${CPPNAME} ${CPPFILE})
    add_test(NAME ${CPPNAME} COMMAND ${CPPNAME})
 
-   # Include testing quadruple precision on GCC.
+   # Enable testing quadruple precision on GCC.
    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
                                                   CXX_EXTENSIONS ON)
@@ -38,14 +38,15 @@ foreach(CPPFILE ${CPPFILES})
                                                 -Wsign-conversion)
    endif()
 
-   # Add -march=native in release mode if it is available.
+   # Add -march=native in release mode if available.
    include(CheckCXXCompilerFlag)
    check_cxx_compiler_flag(-march=native HAVE_NATIVE)
    if(HAVE_NATIVE)
       target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Release>:-march=native>")
    endif()
 
-   # Add address sanitizer in debug mode if it is available.
+   # Add address sanitizer in debug mode if available.
+   # From https://github.com/autodiff/autodiff/blob/main/tests/CMakeLists.txt.
    set(CMAKE_REQUIRED_FLAGS "-fsanitize=address")
    check_cxx_compiler_flag(-fsanitize=address HAVE_SANITIZER)
    unset(CMAKE_REQUIRED_FLAGS)

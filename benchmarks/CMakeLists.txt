@@ -4,8 +4,7 @@ set(CMAKE_CXX_FLAGS "")
 # optimized versions of strictpp and Eigen.
 set(CMAKE_BUILD_TYPE "Release")
 
-file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
-
+##########################################################################################
 include(FetchContent)
 
 FetchContent_Declare(Eigen3 GIT_REPOSITORY https://gitlab.com/libeigen/eigen
@@ -19,6 +18,9 @@ FetchContent_Declare(benchmark GIT_REPOSITORY https://github.com/google/benchmar
 
 FetchContent_MakeAvailable(Eigen3 benchmark)
 
+##########################################################################################
+file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+
 foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
@@ -27,8 +29,10 @@ foreach(CPPFILE ${CPPFILES})
                             RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/benchmarks)
    target_link_libraries(${CPPNAME} PRIVATE Eigen3::Eigen benchmark::benchmark)
 
+   # Disable assertions.
    target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG STRICT_DEBUG_OFF)
 
+   # Add -march=native in release mode if available.
    include(CheckCXXCompilerFlag)
    check_cxx_compiler_flag(-march=native HAVE_NATIVE)
    if(HAVE_NATIVE)

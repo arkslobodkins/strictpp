@@ -19,7 +19,7 @@ consteval auto ode_init() {
 }
 
 
-Array1D<float128> ode_solve(StrictLong nsteps, Strict128 h, Strict128 t_init, Strict128 y_init) {
+Array1D<float128> ode_solve(StrictLong nsteps, Strict128 h, Strict128 y_init) {
    ASSERT_STRICT_DEBUG(nsteps > 0_sl);
    ASSERT_STRICT_DEBUG(h > 0._sq);
 
@@ -54,7 +54,7 @@ int main() {
    print_config_info();
 
    auto [nsteps, h, t_init, y_init] = ode_init();
-   auto y = ode_solve(nsteps, h, t_init, y_init);
+   auto y = ode_solve(nsteps, h, y_init);
    auto y_exact = ode_exact(nsteps, h, t_init, y_init);
 
    if(auto rel_error = max_rel_error(y, y_exact)) {

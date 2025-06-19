@@ -7,6 +7,8 @@ endif()
 
 file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
+find_package(OpenMP QUIET)
+
 foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
@@ -16,4 +18,11 @@ foreach(CPPFILE ${CPPFILES})
    target_link_libraries(${CPPNAME} PRIVATE quadmath)
    target_compile_definitions(${CPPNAME} PRIVATE STRICT_QUAD_PRECISION
                                                  "$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
+   target_compile_options(${CPPNAME} PRIVATE -Wall -Wextra -Wdeprecated -Wconversion
+                                             -Wsign-conversion)
+
+   # example5 uses OpenMP if available.
+   if(OpenMP_CXX_FOUND AND CPPNAME STREQUAL "example5")
+      target_link_libraries(${CPPNAME} PRIVATE OpenMP::OpenMP_CXX)
+   endif()
 endforeach()
