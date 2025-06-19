@@ -82,6 +82,7 @@ static inline void reset_output() {
          spp::set_red_output();                                 \
          std::cout << e.what() << std::endl;                    \
          spp::reset_output();                                   \
+         std::abort();                                          \
       }                                                         \
    } while(false)
 
