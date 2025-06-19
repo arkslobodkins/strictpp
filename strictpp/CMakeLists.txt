@@ -72,7 +72,7 @@ if(STRICT_QUAD_PRECISION)
    target_compile_definitions(strictpp INTERFACE STRICT_QUAD_PRECISION)
    target_link_libraries(strictpp INTERFACE quadmath)
 
-   if(CXX_EXTENSIONS EQUAL OFF)
+   if(${CXX_EXTENSIONS} EQUAL OFF)
       message(FATAL_ERROR "CXX_EXTENSIONS ON required to use quadruple precision.")
    endif()
    set_target_properties(strictpp PROPERTIES CXX_EXTENSIONS ON)
