@@ -1,4 +1,4 @@
-# Avoid inheriting flags specified by the user for other targets.
+# Avoid inheriting flags specified by the user with CMAKE_CXX_FLAGS.
 set(CMAKE_CXX_FLAGS "")
 
 file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
