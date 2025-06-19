@@ -20,11 +20,21 @@ foreach(CPPFILE ${CPPFILES})
       set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
                                                   CXX_EXTENSIONS OFF)
    endif()
+
    set_target_properties(${CPPNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                                ${CMAKE_BINARY_DIR}/bin/tests)
 
+   # Enable precise floating-point mode on Intel.
    if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR CMAKE_CXX_COMPILER_ID STREQUAL
                                                     "Intel")
       target_compile_options(${CPPNAME} PRIVATE "-fp-model=precise")
+   endif()
+
+   # Set warning flags.
+   if(MSVC)
+      target_compile_options(${CPPNAME} PRIVATE "/W4")
+   else()
+      target_compile_options(${CPPNAME} PRIVATE -Wall -Wextra -Wdeprecated -Wconversion
+                                                -Wsign-conversion)
    endif()
 endforeach()

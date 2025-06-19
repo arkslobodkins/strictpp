@@ -34,6 +34,7 @@ foreach(CPPFILE ${CPPFILES})
       target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Release>:-march=native>")
    endif()
 
+   # Enable precise floating-point mode on Intel.
    if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR CMAKE_CXX_COMPILER_ID STREQUAL
                                                     "Intel")
       target_compile_options(${CPPNAME} PRIVATE "-fp-model=precise")
