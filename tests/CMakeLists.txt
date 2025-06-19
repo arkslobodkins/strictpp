@@ -38,7 +38,7 @@ foreach(CPPFILE ${CPPFILES})
                                                 -Wsign-conversion)
    endif()
 
-   # Exclude -pedantic flag from GNU since it is tested with extensions.
+   # -pedantic flag is not used for GNU since it is tested with extensions.
    if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND NOT CMAKE_CXX_COMPILER_ID STREQUAL
                                                     "GNU")
       target_compile_options(${CPPNAME} PRIVATE -pedantic)
