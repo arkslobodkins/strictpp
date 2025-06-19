@@ -18,6 +18,7 @@ FetchContent_Declare(benchmark GIT_REPOSITORY https://github.com/google/benchmar
 FetchContent_MakeAvailable(Eigen3 benchmark)
 
 foreach(CPPFILE ${CPPFILES})
+   set(STRICT_QUAD_PRECISION OFF)
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
    set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
