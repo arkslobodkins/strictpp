@@ -1,11 +1,10 @@
 # Avoid inheriting flags specified by the user with CMAKE_CXX_FLAGS.
 set(CMAKE_CXX_FLAGS "")
-
-file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
-
 # Always run benchmarks in release mode, since we are primarily interested in benchmarking
 # optimized versions of strictpp and Eigen.
 set(CMAKE_BUILD_TYPE "Release")
+
+file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 include(FetchContent)
 
@@ -25,7 +24,7 @@ foreach(CPPFILE ${CPPFILES})
    add_executable(${CPPNAME} ${CPPFILE})
    set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
                                                CXX_EXTENSIONS OFF)
-   target_link_libraries(${CPPNAME} PRIVATE strictpp Eigen3::Eigen benchmark::benchmark)
+   target_link_libraries(${CPPNAME} PRIVATE Eigen3::Eigen benchmark::benchmark)
 
    target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG STRICT_DEBUG_OFF)
 

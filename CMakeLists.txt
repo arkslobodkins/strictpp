@@ -26,6 +26,11 @@ if(STRICT_BUILD_BENCHMARKS)
    add_subdirectory(benchmarks)
 endif()
 
+option(STRICT_BUILD_TESTS "Enable the compilation of tests." OFF)
+if(STRICT_BUILD_TESTS)
+   add_subdirectory(tests)
+endif()
+
 ##########################################################################################
 include(GNUInstallDirs)
 

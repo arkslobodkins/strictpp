@@ -12,6 +12,7 @@ foreach(CPPFILE ${CPPFILES})
    add_executable(${CPPNAME} ${CPPFILE})
    set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
                                                CXX_EXTENSIONS ON)
-   target_link_libraries(${CPPNAME} PRIVATE strictpp quadmath)
-   target_compile_definitions(${CPPNAME} PRIVATE STRICT_QUAD_PRECISION)
+   target_link_libraries(${CPPNAME} PRIVATE quadmath)
+   target_compile_definitions(${CPPNAME} PRIVATE STRICT_QUAD_PRECISION
+                                                 "$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
 endforeach()
