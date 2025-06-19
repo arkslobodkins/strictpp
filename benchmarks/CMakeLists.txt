@@ -3,7 +3,6 @@ file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 # Always run benchmarks in release mode, since we are primarily interested in benchmarking
 # optimized versions of strictpp and Eigen.
 set(CMAKE_BUILD_TYPE "Release")
-   set(STRICT_QUAD_PRECISION OFF)
 
 include(FetchContent)
 
@@ -19,6 +18,7 @@ FetchContent_Declare(benchmark GIT_REPOSITORY https://github.com/google/benchmar
 FetchContent_MakeAvailable(Eigen3 benchmark)
 
 foreach(CPPFILE ${CPPFILES})
+   set(STRICT_QUAD_PRECISION OFF CACHE BOOL "" FORCE)
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
    set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
