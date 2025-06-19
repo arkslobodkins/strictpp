@@ -2,12 +2,19 @@ add_library(strictpp INTERFACE)
 add_library(strictpp::strictpp ALIAS strictpp)
 
 ##########################################################################################
+find_library(MATH_LIBRARY m)
+if(MATH_LIBRARY)
+   target_link_libraries(strictpp INTERFACE ${MATH_LIBRARY})
+endif()
+
+##########################################################################################
 target_include_directories(
    strictpp INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
                       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 ##########################################################################################
-set(STRICT_DEBUG "DEFAULT"
+set(STRICT_DEBUG
+    "DEFAULT"
     CACHE STRING "Available options are ON, OFF, or DEFAULT.
       Defaults to false in release build and defaults to true in all other builds.
       ON or OFF overrides these defaults.")
@@ -53,4 +60,16 @@ option(STRICT_NODISCARD "Enable extensive support of [[nodiscard]] throughout st
        ON)
 if(NOT STRICT_NODISCARD)
    target_compile_definitions(strictpp INTERFACE STRICT_REMOVE_NODISCARD)
+endif()
+
+##########################################################################################
+option(STRICT_QUAD_PRECISION "Enable strictpp quadruple precision." OFF)
+if(STRICT_QUAD_PRECISION)
+   if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      message(FATAL_ERROR "GCC compiler is required to use quadruple precision.")
+   endif()
+
+   target_compile_definitions(strictpp INTERFACE STRICT_QUAD_PRECISION)
+   target_link_libraries(strictpp INTERFACE quadmath)
+   set_target_properties(strictpp PROPERTIES CXX_EXTENSIONS ON)
 endif()
