@@ -20,4 +20,6 @@ foreach(CPPFILE ${CPPFILES})
       set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
                                                   CXX_EXTENSIONS OFF)
    endif()
+   set_target_properties(${CPPNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
+                                               ${CMAKE_BINARY_DIR}/bin/tests)
 endforeach()
