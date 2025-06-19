@@ -31,11 +31,17 @@ foreach(CPPFILE ${CPPFILES})
    endif()
 
    # Set warning flags.
-   if(MSVC)
+   if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
       target_compile_options(${CPPNAME} PRIVATE "/W4")
    else()
       target_compile_options(${CPPNAME} PRIVATE -Wall -Wextra -Wdeprecated -Wconversion
                                                 -Wsign-conversion)
+   endif()
+
+   # Exclude -pedantic flag from GNU since it is tested with extensions.
+   if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND NOT CMAKE_CXX_COMPILER_ID STREQUAL
+                                                    "GNU")
+      target_compile_options(${CPPNAME} PRIVATE -pedantic)
    endif()
 
    # Add -march=native in release mode if available.
@@ -45,8 +51,8 @@ foreach(CPPFILE ${CPPFILES})
       target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Release>:-march=native>")
    endif()
 
-   # Add address sanitizer in debug mode if available.
-   # From https://github.com/autodiff/autodiff/blob/main/tests/CMakeLists.txt.
+   # Add address sanitizer in debug mode if available. From
+   # https://github.com/autodiff/autodiff/blob/main/tests/CMakeLists.txt.
    set(CMAKE_REQUIRED_FLAGS "-fsanitize=address")
    check_cxx_compiler_flag(-fsanitize=address HAVE_SANITIZER)
    unset(CMAKE_REQUIRED_FLAGS)
