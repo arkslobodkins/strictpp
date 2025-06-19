@@ -1,3 +1,5 @@
+set(CMAKE_CXX_FLAGS "")
+
 if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
    message(FATAL_ERROR "GCC compiler is required to compile examples.")
 endif()
