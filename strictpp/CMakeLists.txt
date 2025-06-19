@@ -73,7 +73,7 @@ if(STRICT_QUAD_PRECISION)
    target_link_libraries(strictpp INTERFACE quadmath)
 
    get_property(EXTENSIONS_ENABLED GLOBAL PROPERTY CXX_EXTENSIONS)
-   message($EXTENSIONS_ENABLED)
+   message(${EXTENSIONS_ENABLED})
    if(NOT ${EXTENSIONS_ENABLED} EQUAL ON)
       message(FATAL_ERROR "CXX_EXTENSIONS ON required to use quadruple precision.")
    endif()
