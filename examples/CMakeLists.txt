@@ -1,3 +1,4 @@
+# Avoid inheriting flags specified by the user for other targets.
 set(CMAKE_CXX_FLAGS "")
 
 if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")

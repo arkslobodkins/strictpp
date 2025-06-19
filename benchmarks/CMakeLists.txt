@@ -1,3 +1,6 @@
+# Avoid inheriting flags specified by the user for other targets.
+set(CMAKE_CXX_FLAGS "")
+
 file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 # Always run benchmarks in release mode, since we are primarily interested in benchmarking
