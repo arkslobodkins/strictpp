@@ -29,6 +29,7 @@ foreach(CPPFILE ${CPPFILES})
 
    target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG STRICT_DEBUG_OFF)
 
+   include(CheckCXXCompilerFlag)
    check_cxx_compiler_flag(-march=native HAVE_NATIVE)
    if(HAVE_NATIVE)
       target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Release>:-march=native>")

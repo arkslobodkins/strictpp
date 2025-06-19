@@ -37,4 +37,21 @@ foreach(CPPFILE ${CPPFILES})
       target_compile_options(${CPPNAME} PRIVATE -Wall -Wextra -Wdeprecated -Wconversion
                                                 -Wsign-conversion)
    endif()
+
+   # Add -march=native in release mode if it is available.
+   include(CheckCXXCompilerFlag)
+   check_cxx_compiler_flag(-march=native HAVE_NATIVE)
+   if(HAVE_NATIVE)
+      target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Release>:-march=native>")
+   endif()
+
+   # Add address sanitizer in debug mode if it is available.
+   set(CMAKE_REQUIRED_FLAGS "-fsanitize=address")
+   check_cxx_compiler_flag(-fsanitize=address HAVE_SANITIZER)
+   unset(CMAKE_REQUIRED_FLAGS)
+   if(HAVE_SANITIZER)
+      target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
+      target_link_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
+   endif()
+
 endforeach()
