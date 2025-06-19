@@ -22,4 +22,9 @@ foreach(CPPFILE ${CPPFILES})
    endif()
    set_target_properties(${CPPNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                                ${CMAKE_BINARY_DIR}/bin/tests)
+
+   if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR CMAKE_CXX_COMPILER_ID STREQUAL
+                                                    "Intel")
+      target_compile_options(${CPPNAME} PRIVATE "-fp-model=precise")
+   endif()
 endforeach()
