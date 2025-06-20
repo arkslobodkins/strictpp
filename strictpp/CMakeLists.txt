@@ -14,14 +14,14 @@ target_include_directories(
 
 ##########################################################################################
 set(STRICT_DEBUG
-    "DEFAULT"
-    CACHE STRING "Available options are ON, OFF, or DEFAULT.
-      Defaults to false in release build and defaults to true in all other builds.
+    "SMART_DEFAULT"
+    CACHE STRING "Available options are ON, OFF, or SMART_DEFAULT, which
+      defaults to false in release build and defaults to true in all other builds.
       ON or OFF overrides these defaults.")
 # Set the possible values for cmake-gui.
-set_property(CACHE STRICT_DEBUG PROPERTY STRINGS "DEFAULT" "ON" "OFF")
+set_property(CACHE STRICT_DEBUG PROPERTY STRINGS "ON" "OFF", "SMART_DEFAULT")
 
-if(STRICT_DEBUG STREQUAL "DEFAULT")
+if(STRICT_DEBUG STREQUAL "SMART_DEFAULT")
    target_compile_definitions(strictpp INTERFACE "$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
 elseif(STRICT_DEBUG STREQUAL "ON")
    # Nothing to be done.
@@ -30,7 +30,7 @@ elseif(STRICT_DEBUG STREQUAL "OFF")
 else()
    message(
       FATAL_ERROR
-         "Invalid debug configuration. Available options are ON, OFF, or DEFAULT.")
+         "Invalid debug configuration. Available options are ON, OFF, or SMART_DEFAULT.")
 endif()
 
 ##########################################################################################
