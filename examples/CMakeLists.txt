@@ -18,8 +18,13 @@ foreach(CPPFILE ${CPPFILES})
    target_link_libraries(${CPPNAME} PRIVATE quadmath)
    target_compile_definitions(${CPPNAME} PRIVATE STRICT_QUAD_PRECISION
                                                  "$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")
-   target_compile_options(${CPPNAME} PRIVATE -Wall -Wextra -Wdeprecated -Wconversion
-                                             -Wsign-conversion)
+   # Set warning flags.
+   if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+      target_compile_options(${CPPNAME} PRIVATE "/W4")
+   else()
+      target_compile_options(${CPPNAME} PRIVATE -Wall -Wextra -Wdeprecated -Wconversion
+                                                -Wsign-conversion)
+   endif()
 
    # example5 uses OpenMP if available.
    if(OpenMP_CXX_FOUND AND CPPNAME STREQUAL "example5")
