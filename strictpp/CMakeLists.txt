@@ -19,7 +19,7 @@ set(STRICT_DEBUG
       defaults to false in release build and defaults to true in all other builds.
       ON or OFF overrides these defaults.")
 # Set the possible values for cmake-gui.
-set_property(CACHE STRICT_DEBUG PROPERTY STRINGS "ON" "OFF", "SMART_DEFAULT")
+set_property(CACHE STRICT_DEBUG PROPERTY STRINGS "ON" "OFF" "SMART_DEFAULT")
 
 if(STRICT_DEBUG STREQUAL "SMART_DEFAULT")
    target_compile_definitions(strictpp INTERFACE "$<$<CONFIG:Release>:STRICT_DEBUG_OFF>")

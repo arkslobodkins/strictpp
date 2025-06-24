@@ -22,7 +22,7 @@ foreach(CPPFILE ${CPPFILES})
    endif()
 
    set_target_properties(${CPPNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
-                                               ${CMAKE_BINARY_DIR}/bin/tests)
+                                               ${CMAKE_BINARY_DIR}/bin/strictpp/tests)
 
    # Enable precise floating-point mode on Intel.
    if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR CMAKE_CXX_COMPILER_ID STREQUAL
