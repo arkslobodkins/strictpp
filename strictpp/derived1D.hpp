@@ -399,12 +399,12 @@ public:
       return this->bytes().sd() / cubes(1024_sl).sd();
    }
 
-   STRICT_CONSTEXPR static StrictBool is_fixed() {
-      return !StrictBool{detail::has_resize<Base>::value};
+   STRICT_CONSTEXPR static StrictBool is_dynamic() {
+      return StrictBool{detail::has_resize<Base>::value};
    }
 
-   STRICT_CONSTEXPR static StrictBool is_dynamic() {
-      return !is_fixed();
+   STRICT_CONSTEXPR static StrictBool is_fixed() {
+      return !is_dynamic();
    }
 };
 
