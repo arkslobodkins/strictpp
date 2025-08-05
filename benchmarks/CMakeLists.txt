@@ -46,4 +46,5 @@ foreach(CPPFILE ${CPPFILES})
       target_compile_options(${CPPNAME} PRIVATE "-fp-model=precise")
    endif()
 
+   target_link_libraries(${CPPNAME} PRIVATE strictpp::strictpp)
 endforeach()
