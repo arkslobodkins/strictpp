@@ -61,4 +61,5 @@ foreach(CPPFILE ${CPPFILES})
       target_link_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
    endif()
 
+   target_link_libraries(${CPPNAME} PRIVATE strictpp::strictpp)
 endforeach()
