@@ -118,7 +118,6 @@ STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::o
 }
 
 
-// Handles an empty initializer list case as well.
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::operator=(
     use::List2D<T> list) {
