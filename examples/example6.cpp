@@ -8,7 +8,7 @@
 using namespace spp;
 
 
-// example6 solves N x N linear system of equations using unoptimized implementation of Jacobi
+// example6 solves an N x N linear system of equations using unoptimized implementation of Jacobi
 // method. Two-dimensional array class is introduced.
 
 
@@ -52,8 +52,7 @@ int main() {
    // Ensure A is diagonally dominant for convergence.
    A.diag() += Strict{T(2)} * row_reduce(A, [](auto row) { return sum(row); });
 
-   auto x_opt = jacobi(A, b, tol);
-   if(x_opt) {
+   if(auto x_opt = jacobi(A, b, tol)) {
       std::cout << "converged in " << x_opt->second << " iterations." << std::endl;
    } else {
       std::cout << "Jacobi method did not converge" << std::endl;

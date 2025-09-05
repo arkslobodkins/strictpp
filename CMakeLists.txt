@@ -29,6 +29,7 @@ endif()
 
 option(STRICT_BUILD_TESTS "Enable the compilation of tests." OFF)
 if(STRICT_BUILD_TESTS)
+   enable_testing()
    add_subdirectory(tests)
 endif()
 

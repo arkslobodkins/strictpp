@@ -1,5 +1,3 @@
-enable_testing()
-
 # Avoid inheriting flags specified by the user with CMAKE_CXX_FLAGS.
 set(CMAKE_CXX_FLAGS "")
 
@@ -9,6 +7,7 @@ foreach(CPPFILE ${CPPFILES})
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
    add_test(NAME ${CPPNAME} COMMAND ${CPPNAME})
+   set_tests_properties(${CPPNAME} PROPERTIES PASS 0)
 
    # Enable testing quadruple precision on GCC.
    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
