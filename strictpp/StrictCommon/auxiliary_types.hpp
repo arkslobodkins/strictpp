@@ -160,7 +160,7 @@ public:
       return x_;
    }
 
-   // Using index_t type instead of long int would make it
+   // Using the index_t type instead of long int would make it
    // unusable in templates as it contains non-public members.
    long int x_;
 };
@@ -206,7 +206,7 @@ constexpr inline Last last{0};
 using place::last;
 
 
-// Note that plus operator is allowed from both sides but not minus.
+// Note that the plus operator is allowed from both sides but not minus.
 STRICT_NODISCARD_CONSTEXPR_INLINE Last operator+(Last lst, ImplicitInt i) {
    return Last{ImplicitInt{lst.get() - i.get()}};
 }

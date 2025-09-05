@@ -228,7 +228,7 @@ std::istream& operator>>(std::istream& is, T& x) {
    const char* s = str.c_str();
    char* p_end;
    x = strtoflt128(s, &p_end);
-   ASSERT_STRICT_ALWAYS(p_end - s == (std::ptrdiff_t)std::strlen(s));
+   ASSERT_STRICT_ALWAYS(p_end - s == static_cast<std::ptrdiff_t>(std::strlen(s)));
 
    return is;
 }
