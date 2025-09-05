@@ -26,7 +26,7 @@ int main() {
 
    // 2.
    n = Million<long>;
-   Array1D<double> B(n);
+   Array1D<float64> B(n);
    random(B(even), 0._sd, 10._sd);
    B(odd) = -B(even) + 1.E-16_sd;
    auto BQ = array_cast<float128>(B);
@@ -34,7 +34,7 @@ int main() {
 
 
    // 3.
-   Array1D<double> C1(n), C2(n);
+   Array1D<float64> C1(n), C2(n);
    random(C1(even), C2(even), 0._sd, 10._sd);
    C1(odd) = C1(even) + 1.E-8_sd;
    C2(odd) = -C2(even) + 1.E-8_sd;
@@ -53,7 +53,9 @@ int main() {
 
 
 void output_results(Strict64 x, Strict64 y, Strict128 z, const std::string& op) {
-   spp::format.precision(16);
+   format.reset();
+   format.precision(format.precision<float64>());
+
    using std::cout, std::endl;
    std::string st_op = "stable " + op;
    cout << op + " using double precision:        " << x << endl;
