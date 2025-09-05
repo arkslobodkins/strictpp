@@ -20,7 +20,7 @@ int main() {
    cout << "long double initialized with 2.2:   " << ld_bad << '\n';
    cout << "long double initialized with 2.2L:  " << ld_good << "\n\n";
 
-   Strict<long double> sl{2.2L};
+   [[maybe_unused]] Strict<long double> sl{2.2L};
    // Strict<long double> s3{2.2}; // Won't compile!
 
 

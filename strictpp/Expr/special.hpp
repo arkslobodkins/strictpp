@@ -176,6 +176,14 @@ template <TwoDimBaseType Base, typename Op>
 STRICT_CONSTEXPR auto col_reduce(const Base& A, Op op);
 
 
+template <OneDimBaseType Base>
+STRICT_CONSTEXPR auto row_broadcast(const Base& A);
+
+
+template <OneDimBaseType Base>
+STRICT_CONSTEXPR auto col_broadcast(const Base& A);
+
+
 namespace detail {
 
 
@@ -236,6 +244,16 @@ STRICT_CONSTEXPR auto row_reduce(Base&& A, Op op) = delete;
 template <typename Base, typename Op>
    requires detail::ArrayTwoDimTypeRvalue<Base>
 STRICT_CONSTEXPR auto col_reduce(Base&& A, Op op) = delete;
+
+
+template <typename Base>
+   requires detail::ArrayOneDimTypeRvalue<Base>
+STRICT_CONSTEXPR auto row_broadcast(Base&& A) = delete;
+
+
+template <typename Base>
+   requires detail::ArrayOneDimTypeRvalue<Base>
+STRICT_CONSTEXPR auto col_broadcast(Base&& A) = delete;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -539,6 +557,20 @@ template <TwoDimBaseType Base, typename Op>
 STRICT_CONSTEXPR auto col_reduce(const Base& A, Op op) {
    using E = detail::ReduceExpr<Base, Op, false>;
    return StrictArrayBase1D<E>{A, op};
+}
+
+
+template <OneDimBaseType Base>
+STRICT_CONSTEXPR auto row_broadcast(const Base& A) {
+   using E = detail::BroadCastExpr<Base, true>;
+   return StrictArrayBase2D<E>{A};
+}
+
+
+template <OneDimBaseType Base>
+STRICT_CONSTEXPR auto col_broadcast(const Base& A) {
+   using E = detail::BroadCastExpr<Base, false>;
+   return StrictArrayBase2D<E>{A};
 }
 
 

@@ -308,6 +308,50 @@ private:
 };
 
 
+template <OneDimBaseType Base, bool rowwise>
+class STRICT_NODISCARD BroadCastExpr : private CopyBase2D {
+public:
+   using value_type = Base::value_type;
+   using builtin_type = value_type::value_type;
+
+   STRICT_NODISCARD_CONSTEXPR explicit BroadCastExpr(const Base& A) : A_{A} {
+   }
+
+   STRICT_NODISCARD_CONSTEXPR BroadCastExpr(const BroadCastExpr& E) = default;
+   STRICT_CONSTEXPR BroadCastExpr& operator=(const BroadCastExpr&) = delete;
+   STRICT_CONSTEXPR ~BroadCastExpr() = default;
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE value_type un(ImplicitInt i) const {
+      auto [r, c] = index_map_one_to_two_dim(*this, i);
+      return this->un(r, c);
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE value_type un(ImplicitInt i, ImplicitInt j) const {
+      if constexpr(rowwise) {
+         return A_.un(j);
+      } else {
+         return A_.un(i);
+      }
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE index_t size() const {
+      return A_.size() * A_.size();
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE index_t rows() const {
+      return A_.size();
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE index_t cols() const {
+      return A_.size();
+   }
+
+private:
+   // Slice arrays are stored by copy, arrays by reference.
+   typename CopyOrReferenceExpr<AddConst<Base>>::type A_;
+};
+
+
 template <BaseType Base, typename Op>
    requires expr::UnaryOperation<Base, Op>
 class STRICT_NODISCARD RandUnaryExpr : public UnaryExpr<Base, Op, true> {
