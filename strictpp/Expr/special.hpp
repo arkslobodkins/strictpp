@@ -248,12 +248,12 @@ STRICT_CONSTEXPR auto col_reduce(Base&& A, Op op) = delete;
 
 template <typename Base>
    requires detail::ArrayOneDimTypeRvalue<Base>
-STRICT_CONSTEXPR auto row_broadcast(const Base& A) = delete;
+STRICT_CONSTEXPR auto row_broadcast(Base&& A) = delete;
 
 
 template <typename Base>
    requires detail::ArrayOneDimTypeRvalue<Base>
-STRICT_CONSTEXPR auto col_broadcast(const Base& A) = delete;
+STRICT_CONSTEXPR auto col_broadcast(Base&& A) = delete;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
