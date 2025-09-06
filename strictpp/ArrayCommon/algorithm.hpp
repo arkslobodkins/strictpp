@@ -45,8 +45,8 @@ STRICT_CONSTEXPR_INLINE void copy(use::List1D<ValueTypeOf<Base>> L, Base& A) {
 }
 
 
-template <Builtin T, TwoDimBaseType Base>
-STRICT_CONSTEXPR_INLINE void copy(use::List2D<Strict<T>> L, Base& A) {
+template <typename T, TwoDimBaseType Base>
+STRICT_CONSTEXPR_INLINE void copy(use::List2D<T> L, Base& A) {
    StrictInt r{};
    for(auto lrow : L) {
       StrictInt c{};

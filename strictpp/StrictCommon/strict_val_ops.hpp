@@ -117,54 +117,56 @@ STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool in_closed(Value<T> x, Low<T> low, H
 
 
 template <Floating T>
-STRICT_NODISCARD_INLINE use::StrictPair<T> two_sums(Strict<T> x, Strict<T> y) {
+STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> two_sums(Strict<T> x, Strict<T> y) {
    volatile T r = x.val() + y.val();
    volatile T z = r - x.val();
    volatile T rz = r - z;
    volatile T yz = y.val() - z;
    volatile T xrz = x.val() - rz;
    T s = xrz + yz;
-   return use::StrictPair<T>{r, s};
+   return use::StrictPair<Strict<T>>{r, s};
 }
 
 
 template <Floating T>
-STRICT_NODISCARD_INLINE use::StrictPair<T> two_prods(Strict<T> x, Strict<T> y) {
+STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> two_prods(Strict<T> x, Strict<T> y) {
    auto r = x * y;
    auto s = fmas(x, y, -r);
-   return use::StrictPair<T>{r, s};
+   return use::StrictPair<Strict<T>>{r, s};
 }
 
 
 template <Floating T>
-STRICT_NODISCARD_INLINE use::StrictPair<T> pow_prods(Strict<T> x, ImplicitInt p) {
+STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> pow_prods(Strict<T> x, ImplicitInt p) {
+   using Pair = use::StrictPair<Strict<T>>;
+
    ASSERT_STRICT_DEBUG(p.get().val() > -1);
    auto pw = p.get().val();
 
    if(pw == 0) {
-      return use::StrictPair<T>{T(1), T(0)};
+      return Pair{T(1), T(0)};
 
    } else if(pw == 1) {
-      return use::StrictPair<T>{x, T(0)};
+      return Pair{x, T(0)};
 
    } else if(pw == 2) {
-      return use::StrictPair<T>{two_prods(x, x)};
+      return Pair{two_prods(x, x)};
 
    } else if(pw == 3) {
       auto [r, s] = two_prods(x, x);
       auto [rp1, sp1] = two_prods(r, x);
-      return use::StrictPair<T>{rp1, x * s + sp1};
+      return Pair{rp1, x * s + sp1};
 
    } else if(pw == 4) {
       auto [r, s] = two_prods(x, x);
       auto [r2, s2] = two_prods(r, r);
-      return use::StrictPair<T>{r2, strict_cast<T>(2) * r * s + s2};
+      return Pair{r2, strict_cast<T>(2) * r * s + s2};
 
    } else if(pw == 5) {
       auto [r, s] = two_prods(x, x);
       auto [r2, s2] = two_prods(r, r);
       auto [rp1, sp1] = two_prods(r2, x);
-      return use::StrictPair<T>{rp1, strict_cast<T>(2) * x * r * s + x * s2 + sp1};
+      return Pair{rp1, strict_cast<T>(2) * x * r * s + x * s2 + sp1};
 
    } else {
       auto [r, s] = two_prods(x, x);
@@ -192,7 +194,7 @@ STRICT_NODISCARD_INLINE use::StrictPair<T> pow_prods(Strict<T> x, ImplicitInt p)
             sum_loc += rtemp[i] * stemp[sz - 1 - i];
          }
 
-         return use::StrictPair<T>{rn, strict_cast<T>(n) * rn_m1 * s + sum_loc};
+         return Pair{rn, strict_cast<T>(n) * rn_m1 * s + sum_loc};
       } else {  // Odd degrees.
          Strict<T> sum_loc{};
          for(decltype(sz) i = 0; i < sz; ++i) {
@@ -200,7 +202,7 @@ STRICT_NODISCARD_INLINE use::StrictPair<T> pow_prods(Strict<T> x, ImplicitInt p)
          }
 
          auto [rn_p1, sn_p1] = two_prods(rn, x);
-         return use::StrictPair<T>{rn_p1, strict_cast<T>(n) * x * rn_m1 * s + x * sum_loc + sn_p1};
+         return Pair{rn_p1, strict_cast<T>(n) * x * rn_m1 * s + x * sum_loc + sn_p1};
       }
    }
 }
