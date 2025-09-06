@@ -422,6 +422,15 @@ template <typename Base1, typename Base2>
 STRICT_CONSTEXPR auto matvec_prod(Base1&& A1, Base2&& A2) = delete;
 
 
+template <OneDimRealBaseType Base1, OneDimRealBaseType Base2>
+STRICT_CONSTEXPR auto tensor_prod(const Base1& A1, const Base2& A2);
+
+
+template <OneDimRealBaseType Base1, OneDimRealBaseType Base2>
+   requires(detail::RealExprDeleted<Base1, Base2>)
+STRICT_CONSTEXPR auto tensor_prod(Base1&& A1, Base2&& A2) = delete;
+
+
 namespace detail {
 
 
@@ -716,6 +725,13 @@ STRICT_CONSTEXPR auto matvec_prod(const Base1& A, const Base2& x) {
       return s;
    };
    return row_reduce(A, [&x, &dot](auto row) { return dot(row, x); });
+}
+
+
+template <OneDimRealBaseType Base1, OneDimRealBaseType Base2>
+STRICT_CONSTEXPR auto tensor_prod(const Base1& A1, const Base2& A2) {
+   using E = detail::TensorExpr<Base1, Base2>;
+   return StrictArrayBase2D<E>{A1, A2};
 }
 
 

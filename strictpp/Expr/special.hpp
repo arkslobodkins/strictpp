@@ -11,6 +11,7 @@
 #include "../ArrayCommon/valid.hpp"
 #include "../StrictCommon/strict_common.hpp"
 #include "../derived1D.hpp"
+#include "../derived2D.hpp"
 #include "exclude_last.hpp"
 #include "types.hpp"
 #include "unary.hpp"

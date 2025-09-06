@@ -352,6 +352,49 @@ private:
 };
 
 
+template <OneDimRealBaseType Base1, OneDimRealBaseType Base2>
+class STRICT_NODISCARD TensorExpr : private CopyBase2D {
+public:
+   using value_type = Base1::value_type;
+   using builtin_type = value_type::value_type;
+
+   STRICT_NODISCARD_CONSTEXPR explicit TensorExpr(const Base1& A1, const Base2& A2)
+       : A1_{A1},
+         A2_{A2} {
+   }
+
+   STRICT_NODISCARD_CONSTEXPR TensorExpr(const TensorExpr& E) = default;
+   STRICT_CONSTEXPR TensorExpr& operator=(const TensorExpr&) = delete;
+   STRICT_CONSTEXPR ~TensorExpr() = default;
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE value_type un(ImplicitInt i) const {
+      auto [r, c] = index_map_one_to_two_dim(*this, i);
+      return this->un(r, c);
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE value_type un(ImplicitInt i, ImplicitInt j) const {
+      return A1_.un(i) * A2_.un(j);
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE index_t size() const {
+      return A1_.size() * A2_.size();
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE index_t rows() const {
+      return A1_.size();
+   }
+
+   STRICT_NODISCARD_CONSTEXPR_INLINE index_t cols() const {
+      return A2_.size();
+   }
+
+private:
+   // Slice arrays are stored by copy, arrays by reference.
+   typename CopyOrReferenceExpr<AddConst<Base1>>::type A1_;
+   typename CopyOrReferenceExpr<AddConst<Base2>>::type A2_;
+};
+
+
 template <BaseType Base, typename Op>
    requires expr::UnaryOperation<Base, Op>
 class STRICT_NODISCARD RandUnaryExpr : public UnaryExpr<Base, Op, true> {
