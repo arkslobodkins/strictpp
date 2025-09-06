@@ -40,13 +40,13 @@ STRICT_CONSTEXPR_INLINE void copy(It b, It e, Base& A) {
 
 
 template <OneDimBaseType Base>
-STRICT_CONSTEXPR_INLINE void copy(use::List1D<BuiltinTypeOf<Base>> L, Base& A) {
+STRICT_CONSTEXPR_INLINE void copy(use::List1D<ValueTypeOf<Base>> L, Base& A) {
    copy(L.begin(), L.end(), A);
 }
 
 
 template <Builtin T, TwoDimBaseType Base>
-STRICT_CONSTEXPR_INLINE void copy(use::List2D<T> L, Base& A) {
+STRICT_CONSTEXPR_INLINE void copy(use::List2D<Strict<T>> L, Base& A) {
    StrictInt r{};
    for(auto lrow : L) {
       StrictInt c{};

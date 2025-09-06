@@ -673,7 +673,7 @@ public:
       return static_cast<StrictArrayMutable2D&>(Base::operator=(x));
    }
 
-   STRICT_CONSTEXPR StrictArrayMutable2D& operator=(use::List2D<builtin_type> list) {
+   STRICT_CONSTEXPR StrictArrayMutable2D& operator=(use::List2D<value_type> list) {
       return static_cast<StrictArrayMutable2D&>(Base::operator=(list));
    }
 
@@ -731,7 +731,7 @@ public:
       return static_cast<StrictArray2D&>(Base::operator=(x));
    }
 
-   STRICT_CONSTEXPR StrictArray2D& operator=(use::List2D<builtin_type> list) & {
+   STRICT_CONSTEXPR StrictArray2D& operator=(use::List2D<value_type> list) & {
       return static_cast<StrictArray2D&>(Base::operator=(list));
    }
 
@@ -778,13 +778,13 @@ public:
 
 
 template <TwoDimBaseType Base>
-STRICT_CONSTEXPR StrictBool equal(const Base& A1, const use::List2D<BuiltinTypeOf<Base>>& A2) {
+STRICT_CONSTEXPR StrictBool equal(const Base& A1, const use::List2D<ValueTypeOf<Base>>& A2) {
    return A1 == Array2D<BuiltinTypeOf<Base>>(A2);
 }
 
 
 template <TwoDimBaseType Base>
-STRICT_CONSTEXPR StrictBool equal(const use::List2D<BuiltinTypeOf<Base>>& A1, const Base& A2) {
+STRICT_CONSTEXPR StrictBool equal(const use::List2D<ValueTypeOf<Base>>& A1, const Base& A2) {
    return Array2D<BuiltinTypeOf<Base>>(A1) == A2;
 }
 

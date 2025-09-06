@@ -29,9 +29,9 @@ public:
    STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D() = default;
    STRICT_NODISCARD_CONSTEXPR explicit FixedArrayBase2D(value_type x);
    STRICT_NODISCARD_CONSTEXPR explicit FixedArrayBase2D(Value<T> x);
-   STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D(use::List2D<builtin_type> list);
+   STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D(use::List2D<value_type> list);
    // Enforce parenthesis instead of braces.
-   STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D(use::List1D<builtin_type> list) = delete;
+   STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D(use::List1D<value_type> list) = delete;
 
    STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D(const FixedArrayBase2D& A) = default;
    STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D(FixedArrayBase2D&& A) noexcept = default;
@@ -39,7 +39,7 @@ public:
 
    // Assignments.
    STRICT_CONSTEXPR FixedArrayBase2D& operator=(value_type x);
-   STRICT_CONSTEXPR FixedArrayBase2D& operator=(use::List2D<builtin_type> list);
+   STRICT_CONSTEXPR FixedArrayBase2D& operator=(use::List2D<value_type> list);
    STRICT_CONSTEXPR FixedArrayBase2D& operator=(const FixedArrayBase2D& A) = default;
    STRICT_CONSTEXPR FixedArrayBase2D& operator=(FixedArrayBase2D&& A) noexcept = default;
    STRICT_CONSTEXPR FixedArrayBase2D& operator=(TwoDimBaseType auto const& A);
@@ -93,7 +93,7 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(Value
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(
-    use::List2D<builtin_type> list) {
+    use::List2D<value_type> list) {
    ASSERT_STRICT_DEBUG(valid_list2D(list));
    auto [nrows, ncols] = list2D_row_col_sizes(list);
    ASSERT_STRICT_DEBUG(this->rows() == nrows);
@@ -120,7 +120,7 @@ STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::o
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::operator=(
-    use::List2D<T> list) {
+    use::List2D<value_type> list) {
    // Constructor of temp checks that a list is valid and that it is of size M x N, same_size not
    // needed.
    FixedArrayBase2D temp(list);

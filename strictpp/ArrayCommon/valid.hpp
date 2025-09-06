@@ -47,7 +47,7 @@ STRICT_CONSTEXPR StrictBool semi_valid_row_col_sizes(index_t m, index_t n) {
 
 
 template <Builtin T>
-STRICT_CONSTEXPR StrictBool valid_list2D(use::List2D<T> list) {
+STRICT_CONSTEXPR StrictBool valid_list2D(use::List2D<Strict<T>> list) {
    if(list.size() != 0) {
       const auto nrows = list.size();
       const auto ncols = (*list.begin()).size();
@@ -73,7 +73,7 @@ STRICT_CONSTEXPR StrictBool valid_list2D(use::List2D<T> list) {
 
 
 template <Builtin T>
-STRICT_CONSTEXPR auto list2D_row_col_sizes(use::List2D<T> list) {
+STRICT_CONSTEXPR auto list2D_row_col_sizes(use::List2D<Strict<T>> list) {
    if(list.size() != 0) {
       const auto nrows = list.size();
       const auto ncols = (*list.begin()).size();

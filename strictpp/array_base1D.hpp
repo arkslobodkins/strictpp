@@ -39,7 +39,7 @@ public:
    STRICT_NODISCARD_CONSTEXPR explicit ArrayBase1D(Size n);
    STRICT_NODISCARD_CONSTEXPR explicit ArrayBase1D(ImplicitInt n, value_type x);
    STRICT_NODISCARD_CONSTEXPR explicit ArrayBase1D(Size n, Value<T> x);
-   STRICT_NODISCARD_CONSTEXPR ArrayBase1D(use::List1D<builtin_type> list);
+   STRICT_NODISCARD_CONSTEXPR ArrayBase1D(use::List1D<value_type> list);
 
    template <LinearIteratorType L>
    STRICT_NODISCARD_CONSTEXPR explicit ArrayBase1D(L b, L e);
@@ -50,7 +50,7 @@ public:
 
    // Assignments.
    STRICT_CONSTEXPR ArrayBase1D& operator=(value_type x);
-   STRICT_CONSTEXPR ArrayBase1D& operator=(use::List1D<builtin_type> list);
+   STRICT_CONSTEXPR ArrayBase1D& operator=(use::List1D<value_type> list);
    STRICT_CONSTEXPR ArrayBase1D& operator=(const ArrayBase1D& A);
    STRICT_CONSTEXPR ArrayBase1D& operator=(ArrayBase1D&& A) noexcept;
    STRICT_CONSTEXPR ArrayBase1D& operator=(OneDimBaseType auto const& A);
@@ -174,7 +174,7 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(Size n, Value<T> x)
 
 
 template <Builtin T, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(use::List1D<builtin_type> list)
+STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(use::List1D<value_type> list)
     : ArrayBase1D(to_index_t(list.size())) {
    copy(list, *this);
 }
@@ -219,7 +219,7 @@ STRICT_CONSTEXPR ArrayBase1D<T, AF>& ArrayBase1D<T, AF>::operator=(value_type x)
 
 
 template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR ArrayBase1D<T, AF>& ArrayBase1D<T, AF>::operator=(use::List1D<builtin_type> list) {
+STRICT_CONSTEXPR ArrayBase1D<T, AF>& ArrayBase1D<T, AF>::operator=(use::List1D<value_type> list) {
    ASSERT_STRICT_DEBUG(this->size() == to_index_t(list.size()));
    copy(list, *this);
    return *this;

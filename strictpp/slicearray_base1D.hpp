@@ -34,7 +34,7 @@ public:
    STRICT_CONSTEXPR ~SliceArrayBase1D() = default;
 
    STRICT_CONSTEXPR SliceArrayBase1D& operator=(value_type x);
-   STRICT_CONSTEXPR SliceArrayBase1D& operator=(use::List1D<builtin_type> list);
+   STRICT_CONSTEXPR SliceArrayBase1D& operator=(use::List1D<value_type> list);
    STRICT_CONSTEXPR SliceArrayBase1D& operator=(OneDimBaseType auto const& A);
 
    STRICT_NODISCARD_CONSTEXPR_INLINE value_type& un(ImplicitInt i);
@@ -68,7 +68,7 @@ STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operato
 
 template <NonConstBaseType Base, typename Sl>
 STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operator=(
-    use::List1D<builtin_type> list) {
+    use::List1D<value_type> list) {
    ASSERT_STRICT_DEBUG(size() == to_index_t(list.size()));
    copy(list, *this);
    return *this;

@@ -14,12 +14,12 @@
 namespace spp::use {
 
 
-template <Builtin T>
-using List1D = std::initializer_list<Strict<T>>;
+template <typename T>
+using List1D = std::initializer_list<T>;
 
 
-template <Builtin T>
-using List2D = std::initializer_list<std::initializer_list<Strict<T>>>;
+template <typename T>
+using List2D = std::initializer_list<std::initializer_list<T>>;
 
 
 using IndexList = std::initializer_list<ImplicitInt>;

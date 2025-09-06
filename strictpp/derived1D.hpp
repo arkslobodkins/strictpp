@@ -304,7 +304,7 @@ public:
       return static_cast<StrictArrayMutable1D&>(Base::operator=(x));
    }
 
-   STRICT_CONSTEXPR StrictArrayMutable1D& operator=(use::List1D<builtin_type> list) {
+   STRICT_CONSTEXPR StrictArrayMutable1D& operator=(use::List1D<value_type> list) {
       return static_cast<StrictArrayMutable1D&>(Base::operator=(list));
    }
 
@@ -362,7 +362,7 @@ public:
       return static_cast<StrictArray1D&>(Base::operator=(x));
    }
 
-   STRICT_CONSTEXPR StrictArray1D& operator=(use::List1D<builtin_type> list) & {
+   STRICT_CONSTEXPR StrictArray1D& operator=(use::List1D<value_type> list) & {
       return static_cast<StrictArray1D&>(Base::operator=(list));
    }
 
@@ -410,13 +410,13 @@ public:
 
 
 template <OneDimBaseType Base>
-STRICT_CONSTEXPR StrictBool equal(const Base& A1, const use::List1D<BuiltinTypeOf<Base>>& A2) {
+STRICT_CONSTEXPR StrictBool equal(const Base& A1, const use::List1D<ValueTypeOf<Base>>& A2) {
    return A1 == Array1D<BuiltinTypeOf<Base>>(A2);
 }
 
 
 template <OneDimBaseType Base>
-STRICT_CONSTEXPR StrictBool equal(const use::List1D<BuiltinTypeOf<Base>>& A1, const Base& A2) {
+STRICT_CONSTEXPR StrictBool equal(const use::List1D<ValueTypeOf<Base>>& A1, const Base& A2) {
    return Array1D<BuiltinTypeOf<Base>>(A1) == A2;
 }
 

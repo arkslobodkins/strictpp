@@ -27,7 +27,7 @@ public:
    STRICT_CONSTEXPR ~SliceArrayBase2D() = default;
 
    STRICT_CONSTEXPR SliceArrayBase2D& operator=(value_type x);
-   STRICT_CONSTEXPR SliceArrayBase2D& operator=(use::List2D<builtin_type> list);
+   STRICT_CONSTEXPR SliceArrayBase2D& operator=(use::List2D<value_type> list);
    STRICT_CONSTEXPR SliceArrayBase2D& operator=(TwoDimBaseType auto const& A);
 
    STRICT_NODISCARD_CONSTEXPR_INLINE value_type& un(ImplicitInt i);
@@ -75,7 +75,7 @@ STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, S
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
 STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, Sl2>::operator=(
-    use::List2D<builtin_type> list) {
+    use::List2D<value_type> list) {
    ASSERT_STRICT_DEBUG(valid_list2D(list));
    auto [nrows, ncols] = list2D_row_col_sizes(list);
    ASSERT_STRICT_DEBUG(this->rows() == nrows);
