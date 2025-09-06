@@ -139,7 +139,7 @@ within_tol_rel(const Base& A1, const use::List1D<ValueTypeOf<Base>>& A2,
 
 template <OneDimFloatingBaseType Base>
 STRICT_CONSTEXPR StrictBool
-within_tol_rel(const use::List1D<BuiltinTypeOf<Base>>& A1, const Base& A2,
+within_tol_rel(const use::List1D<ValueTypeOf<Base>>& A1, const Base& A2,
                ValueTypeOf<Base> tol = DefaultTol<RealTypeOf<Base>>::value,
                ValueTypeOf<Base> near_zero = DefaultTol<RealTypeOf<Base>>::value,
                StrictBool empty_default = false_sb) {
