@@ -41,7 +41,7 @@ using spp::NotQuadruple;
 
 
 using spp::AllStrict;
-using spp::StrictType;
+using spp::StrictBuiltin;
 
 
 using spp::BaseType;

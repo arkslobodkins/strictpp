@@ -13,8 +13,8 @@ namespace spp::detail {
 
 template <typename Base, typename... BaseAndStrict> concept RandomRealBasesAndStrict
     = NonConstBaseType<RemoveRef<Base>> && Real<BuiltinTypeOf<Base>>
-   && StrictType<RemoveRef<SecondLastPack_t<BaseAndStrict...>>>
-   && StrictType<RemoveRef<LastPack_t<BaseAndStrict...>>>;
+   && StrictBuiltin<RemoveRef<SecondLastPack_t<BaseAndStrict...>>>
+   && StrictBuiltin<RemoveRef<LastPack_t<BaseAndStrict...>>>;
 
 
 template <typename Base, typename... BasesAndLowHigh> concept RandomRealBasesAndLowHigh

@@ -80,13 +80,13 @@ using Strict128 = Strict<float128>;
 // This concept guarantees T to be Strict value since one can only
 // construct Strict using a built-in type or copy constructor. But
 // value_type is invalid for built-in types.
-template <typename T> concept StrictType = requires(T x) {
+template <typename T> concept StrictBuiltin = requires(T x) {
    typename T::value_type;
    Strict{x};
 };
 
 
-template <typename... Args> concept AllStrict = (... && StrictType<Args>);
+template <typename... Args> concept AllStrict = (... && StrictBuiltin<Args>);
 
 
 }  // namespace spp

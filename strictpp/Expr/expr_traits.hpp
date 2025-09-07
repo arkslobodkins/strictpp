@@ -15,11 +15,11 @@ namespace spp::expr {
 
 
 template <typename T, typename F> concept UnaryOperation
-    = StrictType<std::invoke_result_t<F, ValueTypeOf<T>>>;
+    = StrictBuiltin<std::invoke_result_t<F, ValueTypeOf<T>>>;
 
 
 template <typename T1, typename T2, typename F> concept BinaryOperation
-    = StrictType<std::invoke_result_t<F, ValueTypeOf<T1>, ValueTypeOf<T2>>>;
+    = StrictBuiltin<std::invoke_result_t<F, ValueTypeOf<T1>, ValueTypeOf<T2>>>;
 
 
 }  // namespace spp::expr
