@@ -29,11 +29,12 @@ template <typename Base>
 class StrictArray2D;
 
 
-template <Builtin T, AlignmentFlag AF = Unaligned>
+template <StrictBuiltin T, AlignmentFlag AF = Unaligned>
 using Array2D = StrictArray2D<detail::ArrayBase2D<T, AF>>;
 
 
-template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF = Unaligned>
+template <StrictBuiltin T, ImplicitIntStatic M, ImplicitIntStatic N,
+          AlignmentFlag AF = Unaligned>
 using FixedArray2D = StrictArray2D<detail::FixedArrayBase2D<T, M, N, AF>>;
 
 
@@ -361,7 +362,8 @@ public:
    template <detail::SliceType Slice1, detail::SliceType Slice2>
    STRICT_CONSTEXPR auto operator()(Slice1 row_slice, Slice2 col_slice) & {
       using namespace detail;
-      auto [s1h, s2h] = slice_row_col_helper(*this, std::move(row_slice), std::move(col_slice));
+      auto [s1h, s2h]
+          = slice_row_col_helper(*this, std::move(row_slice), std::move(col_slice));
       if constexpr(NonConstBaseType<Base>) {
          return StrictArrayMutable2D<
              SliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
@@ -432,7 +434,8 @@ public:
    template <detail::SliceType Slice1, detail::SliceType Slice2>
    STRICT_CONSTEXPR auto operator()(Slice1 row_slice, Slice2 col_slice) const& {
       using namespace detail;
-      auto [s1h, s2h] = slice_row_col_helper(*this, std::move(row_slice), std::move(col_slice));
+      auto [s1h, s2h]
+          = slice_row_col_helper(*this, std::move(row_slice), std::move(col_slice));
       return StrictArrayBase2D<
           ConstSliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
           *this, std::move(s1h), std::move(s2h)};
@@ -615,11 +618,11 @@ public:
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////
    //  Return unaligned array so that it can be constexpr.
-   STRICT_NODISCARD_CONSTEXPR Array2D<builtin_type, Unaligned> eval() const& {
+   STRICT_NODISCARD_CONSTEXPR Array2D<value_type, Unaligned> eval() const& {
       // Workaround for "inherited constructor cannot be used to copy object".
       // Replaced copy-like constructor so that eval() can also be used for
       // expression templates that generate random values.
-      Array2D<builtin_type, Unaligned> A(Base::rows(), Base::cols());
+      Array2D<value_type, Unaligned> A(Base::rows(), Base::cols());
       return A = *this;
    }
 
@@ -666,7 +669,8 @@ public:
    }
 
    STRICT_CONSTEXPR StrictArrayMutable2D& operator=(StrictArrayMutable2D&& A) noexcept {
-      return static_cast<StrictArrayMutable2D&>(Base::operator=(static_cast<Base&&>(std::move(A))));
+      return static_cast<StrictArrayMutable2D&>(
+          Base::operator=(static_cast<Base&&>(std::move(A))));
    }
 
    STRICT_CONSTEXPR StrictArrayMutable2D& operator=(value_type x) {
@@ -779,13 +783,13 @@ public:
 
 template <TwoDimBaseType Base>
 STRICT_CONSTEXPR StrictBool equal(const Base& A1, const use::List2D<ValueTypeOf<Base>>& A2) {
-   return A1 == Array2D<BuiltinTypeOf<Base>>(A2);
+   return A1 == Array2D<ValueTypeOf<Base>>(A2);
 }
 
 
 template <TwoDimBaseType Base>
 STRICT_CONSTEXPR StrictBool equal(const use::List2D<ValueTypeOf<Base>>& A1, const Base& A2) {
-   return Array2D<BuiltinTypeOf<Base>>(A1) == A2;
+   return Array2D<ValueTypeOf<Base>>(A1) == A2;
 }
 
 

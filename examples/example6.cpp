@@ -46,8 +46,8 @@ int main() {
    using T = float64;
    constexpr Strict<T> tol = Thousand<T> * constants::epsilon<T>;
 
-   FixedArray2D<T, N, N> A;
-   FixedArray1D<T, N> b;
+   FixedArray2D<Strict<T>, N, N> A;
+   FixedArray1D<Strict<T>, N> b;
    random(A, b);
    // Ensure A is diagonally dominant for convergence.
    A.diag() += Strict{T(2)} * row_reduce(A, [](auto row) { return sum(row); });

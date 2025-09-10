@@ -19,11 +19,11 @@ consteval auto ode_init() {
 }
 
 
-Array1D<float128> ode_solve(StrictLong nsteps, Strict128 h, Strict128 y_init) {
+Array1D<Strict128> ode_solve(StrictLong nsteps, Strict128 h, Strict128 y_init) {
    ASSERT_STRICT_DEBUG(nsteps > 0_sl);
    ASSERT_STRICT_DEBUG(h > 0._sq);
 
-   Array1D<float128> y(nsteps + 1_sl);
+   Array1D<Strict128> y(nsteps + 1_sl);
    y[0] = y_init;
 
    // Trapezoidal method.
@@ -34,11 +34,11 @@ Array1D<float128> ode_solve(StrictLong nsteps, Strict128 h, Strict128 y_init) {
 }
 
 
-Array1D<float128> ode_exact(StrictLong nsteps, Strict128 h, Strict128 t_init, Strict128 y_init) {
+Array1D<Strict128> ode_exact(StrictLong nsteps, Strict128 h, Strict128 t_init, Strict128 y_init) {
    ASSERT_STRICT_DEBUG(nsteps > 0_sl);
    ASSERT_STRICT_DEBUG(h > 0._sq);
 
-   Array1D<float128> y(nsteps + 1_sl);
+   Array1D<Strict128> y(nsteps + 1_sl);
    Strict128 c = y_init / exps(t_init);
 
 #pragma omp parallel for default(none) shared(c, nsteps, h, t_init, y)

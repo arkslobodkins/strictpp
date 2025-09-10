@@ -24,18 +24,18 @@ namespace detail {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 class STRICT_NODISCARD ArrayBase2D : private ReferenceBase2D, private TwoDimArrayBase {
 public:
-   using value_type = Strict<T>;
-   using builtin_type = T;
+   using value_type = T;
+   using builtin_type = T::value_type;
 
    // Constructors.
    STRICT_NODISCARD_CONSTEXPR ArrayBase2D() = default;
    STRICT_NODISCARD_CONSTEXPR explicit ArrayBase2D(ImplicitInt m, ImplicitInt n);
    STRICT_NODISCARD_CONSTEXPR explicit ArrayBase2D(Rows m, Cols n);
    STRICT_NODISCARD_CONSTEXPR explicit ArrayBase2D(ImplicitInt m, ImplicitInt n, value_type x);
-   STRICT_NODISCARD_CONSTEXPR explicit ArrayBase2D(Rows m, Cols n, Value<T> x);
+   STRICT_NODISCARD_CONSTEXPR explicit ArrayBase2D(Rows m, Cols n, Value<builtin_type> x);
    STRICT_NODISCARD_CONSTEXPR ArrayBase2D(use::List2D<value_type> list);
    // Enforce parenthesis instead of braces.
    STRICT_NODISCARD_CONSTEXPR ArrayBase2D(use::List1D<value_type> list) = delete;
@@ -130,24 +130,24 @@ public:
    // Converting to built-in types requires reinterpret_cast,
    // which cannot be done at compile time(not constexpr).
    STRICT_NODISCARD builtin_type* blas_data() &
-      requires CompatibleBuiltin<T>;
+      requires CompatibleBuiltin<builtin_type>;
    STRICT_NODISCARD const builtin_type* blas_data() const&
-      requires CompatibleBuiltin<T>;
+      requires CompatibleBuiltin<builtin_type>;
 
    STRICT_NODISCARD builtin_type* blas_data() &&
-      requires CompatibleBuiltin<T>
+      requires CompatibleBuiltin<builtin_type>
    = delete;
    STRICT_NODISCARD const builtin_type* blas_data() const&&
-      requires CompatibleBuiltin<T>
+      requires CompatibleBuiltin<builtin_type>
    = delete;
 
 private:
-   FixedArrayBase1D<long int, 2, Unaligned> dims_;
-   ArrayBase1D<T, AF> data1D_;
+   FixedArrayBase1D<StrictLong, 2, Unaligned> dims_;
+   ArrayBase1D<value_type, AF> data1D_;
 };
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(ImplicitInt m, ImplicitInt n)
     : dims_{m.get(), n.get()},
       data1D_(m.get() * n.get()) {
@@ -157,13 +157,13 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(ImplicitInt m, Implic
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(Rows m, Cols n)
     : ArrayBase2D(m.get(), n.get()) {
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(ImplicitInt m, ImplicitInt n,
                                                            value_type x)
     : ArrayBase2D(m, n) {
@@ -171,13 +171,14 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(ImplicitInt m, Implic
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(Rows m, Cols n, Value<T> x)
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(Rows m, Cols n,
+                                                           Value<builtin_type> x)
     : ArrayBase2D(m.get(), n.get(), x.get()) {
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(use::List2D<value_type> list)
     : ArrayBase2D(list2D_row_col_sizes(list).first, list2D_row_col_sizes(list).second) {
    ASSERT_STRICT_DEBUG(valid_list2D(list));
@@ -185,29 +186,30 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(use::List2D<value_typ
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(TwoDimBaseType auto const& A)
     : ArrayBase2D(A.rows(), A.cols()) {
    copy(A, *this);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(value_type x) {
    data1D_ = x;
    return *this;
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(use::List2D<value_type> list) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(
+    use::List2D<value_type> list) {
    ArrayBase2D tmp(list);
    ASSERT_STRICT_DEBUG(same_size(*this, tmp));
    return *this = std::move(tmp);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(const ArrayBase2D& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    data1D_ = A.data1D_;
@@ -215,7 +217,7 @@ STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(const ArrayBa
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(ArrayBase2D&& A) noexcept {
    NORMAL_ASSERT_STRICT_DEBUG(same_size(*this, A));
    A.dims_ = 0_sl;
@@ -224,28 +226,29 @@ STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(ArrayBase2D&&
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(TwoDimBaseType auto const& A) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR ArrayBase2D<T, AF>& ArrayBase2D<T, AF>::operator=(
+    TwoDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
    return *this;
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR void ArrayBase2D<T, AF>::swap(ArrayBase2D& A) noexcept {
    dims_ = std::exchange(A.dims_, dims_);
    data1D_.swap(A.data1D_);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR void ArrayBase2D<T, AF>::swap(ArrayBase2D&& A) noexcept {
    this->swap(A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::resize(ImplicitInt m, ImplicitInt n,
                                                   ImplicitBool preserve) {
    ASSERT_STRICT_DEBUG(m.get() >= 0_sl);
@@ -281,7 +284,7 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::resize(ImplicitInt m, ImplicitInt n,
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::resize_and_assign(TwoDimBaseType auto const& A) {
    ArrayBase2D tmp(A);
    this->swap(tmp);
@@ -289,7 +292,7 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::resize_and_assign(TwoDimBaseType auto
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::resize_and_assign(StrictArray2D<ArrayBase2D>&& A) {
    this->swap(A);
    A.swap(ArrayBase2D{});
@@ -298,8 +301,9 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::resize_and_assign(StrictArray2D<Array
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(ImplicitInt row_pos, ImplicitInt count) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(ImplicitInt row_pos,
+                                                       ImplicitInt count) {
    ASSERT_STRICT_DEBUG(count.get() > 0_sl);
    ASSERT_STRICT_DEBUG(valid_row(*this, row_pos.get()));
    ASSERT_STRICT_DEBUG(valid_row(*this, row_pos.get() + count.get() - 1_sl));
@@ -317,14 +321,15 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(ImplicitInt row_pos, Impl
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(Pos row_pos, Count count) {
    return this->remove_rows(row_pos.get(), count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(ImplicitInt col_pos, ImplicitInt count) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(ImplicitInt col_pos,
+                                                       ImplicitInt count) {
    ASSERT_STRICT_DEBUG(count.get() > 0_sl);
    ASSERT_STRICT_DEBUG(valid_col(*this, col_pos.get()));
    ASSERT_STRICT_DEBUG(valid_col(*this, col_pos.get() + count.get() - 1_sl));
@@ -342,98 +347,99 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(ImplicitInt col_pos, Impl
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(Pos col_pos, Count count) {
    return this->remove_cols(col_pos.get(), count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_row(ImplicitInt row_pos) {
    return this->remove_rows(row_pos, 1);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_row(Pos row_pos) {
    return this->remove_row(row_pos.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_row([[maybe_unused]] Last lst) {
    return this->remove_row(this->rows() - 1_sl);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_col(ImplicitInt col_pos) {
    return this->remove_cols(col_pos, 1);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_col(Pos col_pos) {
    return this->remove_col(col_pos.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_col([[maybe_unused]] Last lst) {
    return this->remove_col(this->cols() - 1_sl);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows_front(ImplicitInt count) {
    return this->remove_rows(0, count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows_front(Count count) {
    return this->remove_rows_front(count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows_back(ImplicitInt count) {
    return this->remove_rows(this->rows() - count.get(), count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows_back(Count count) {
    return this->remove_rows_back(count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols_front(ImplicitInt count) {
    return this->remove_cols(0, count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols_front(Count count) {
    return this->remove_cols_front(count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols_back(ImplicitInt count) {
    return this->remove_cols(this->cols() - count.get(), count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols_back(Count count) {
    return this->remove_cols_back(count.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(const std::vector<ImplicitInt>& indexes) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(
+    const std::vector<ImplicitInt>& indexes) {
    if(!indexes.empty()) {
       auto ci = complement_index_vector(
           valid_row<RemoveCVRef<decltype(*this)>>, this->rows(), *this, indexes);
@@ -452,8 +458,9 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(const std::vector<Implici
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(const std::vector<ImplicitInt>& indexes) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(
+    const std::vector<ImplicitInt>& indexes) {
    if(!indexes.empty()) {
       auto ci = complement_index_vector(
           valid_col<RemoveCVRef<decltype(*this)>>, this->cols(), *this, indexes);
@@ -473,7 +480,7 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(const std::vector<Implici
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_rows(ImplicitInt row_pos,
                                                        TwoDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(row_pos.get() >= 0_sl && row_pos.get() <= this->rows());
@@ -486,31 +493,33 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_rows(ImplicitInt row_pos,
 
    copy_rows(*this, tmp, row_pos.get());
    copy_rows(A, tmp, 0_sl, row_pos.get(), A.rows());
-   copy_rows(*this, tmp, row_pos.get(), row_pos.get() + A.rows(), this->rows() - row_pos.get());
+   copy_rows(
+       *this, tmp, row_pos.get(), row_pos.get() + A.rows(), this->rows() - row_pos.get());
    this->swap(tmp);
    return static_cast<StrictArray2D<ArrayBase2D>&>(*this);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_rows(Pos row_pos, TwoDimBaseType auto const& A) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_rows(Pos row_pos,
+                                                       TwoDimBaseType auto const& A) {
    return this->insert_rows(row_pos.get(), A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_rows_front(TwoDimBaseType auto const& A) {
    return this->insert_rows(0, A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_rows_back(TwoDimBaseType auto const& A) {
    return this->insert_rows(this->rows(), A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_cols(ImplicitInt col_pos,
                                                        TwoDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(col_pos.get() >= 0_sl && col_pos.get() <= this->cols());
@@ -523,31 +532,33 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_cols(ImplicitInt col_pos,
 
    copy_cols(*this, tmp, col_pos.get());
    copy_cols(A, tmp, 0_sl, col_pos.get(), A.cols());
-   copy_cols(*this, tmp, col_pos.get(), col_pos.get() + A.cols(), this->cols() - col_pos.get());
+   copy_cols(
+       *this, tmp, col_pos.get(), col_pos.get() + A.cols(), this->cols() - col_pos.get());
    this->swap(tmp);
    return static_cast<StrictArray2D<ArrayBase2D>&>(*this);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_cols(Pos col_pos, TwoDimBaseType auto const& A) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_cols(Pos col_pos,
+                                                       TwoDimBaseType auto const& A) {
    return this->insert_cols(col_pos.get(), A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_cols_front(TwoDimBaseType auto const& A) {
    return this->insert_cols(0, A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_cols_back(TwoDimBaseType auto const& A) {
    return this->insert_cols(this->cols(), A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_row(ImplicitInt row_pos,
                                                       OneDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(row_pos.get() >= 0_sl && row_pos.get() <= this->rows());
@@ -579,25 +590,26 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_row(ImplicitInt row_pos,
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_row(Pos row_pos, OneDimBaseType auto const& A) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_row(Pos row_pos,
+                                                      OneDimBaseType auto const& A) {
    return this->insert_row(row_pos.get(), A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_row_front(OneDimBaseType auto const& A) {
    return this->insert_row(0, A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_row_back(OneDimBaseType auto const& A) {
    return this->insert_row(this->rows(), A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_col(ImplicitInt col_pos,
                                                       OneDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(col_pos.get() >= 0_sl && col_pos.get() <= this->cols());
@@ -626,93 +638,95 @@ STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_col(ImplicitInt col_pos,
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_col(Pos col_pos, OneDimBaseType auto const& A) {
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_col(Pos col_pos,
+                                                      OneDimBaseType auto const& A) {
    return this->insert_col(col_pos.get(), A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_col_front(OneDimBaseType auto const& A) {
    return this->insert_col(0, A);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::insert_col_back(OneDimBaseType auto const& A) {
    return this->insert_col(this->cols(), A);
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR_INLINE index_t ArrayBase2D<T, AF>::rows() const {
    return dims_.un(0);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR_INLINE index_t ArrayBase2D<T, AF>::cols() const {
    return dims_.un(1);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_CONSTEXPR_INLINE index_t ArrayBase2D<T, AF>::size() const {
    return data1D_.size();
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i) -> value_type& {
    return data1D_.un(i);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i) const
     -> const value_type& {
    return data1D_.un(i);
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i, ImplicitInt j)
     -> value_type& {
    return data1D_.un(i.get() * dims_.un(1) + j.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i, ImplicitInt j) const
+template <StrictBuiltin T, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i,
+                                                              ImplicitInt j) const
     -> const value_type& {
    return data1D_.un(i.get() * dims_.un(1) + j.get());
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR auto ArrayBase2D<T, AF>::data() & -> value_type* {
    return data1D_.data();
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR auto ArrayBase2D<T, AF>::data() const& -> const value_type* {
    return data1D_.data();
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD auto ArrayBase2D<T, AF>::blas_data() & -> builtin_type*
-   requires CompatibleBuiltin<T>
+   requires CompatibleBuiltin<builtin_type>
 {
    return data1D_.blas_data();
 }
 
 
-template <Builtin T, AlignmentFlag AF>
+template <StrictBuiltin T, AlignmentFlag AF>
 STRICT_NODISCARD auto ArrayBase2D<T, AF>::blas_data() const& -> const builtin_type*
-   requires CompatibleBuiltin<T>
+   requires CompatibleBuiltin<builtin_type>
 {
    return data1D_.blas_data();
 }

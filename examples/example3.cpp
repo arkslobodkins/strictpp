@@ -19,14 +19,14 @@ int main() {
 
    // 1.
    index_t n = 100'000_sl;
-   Array1D<float64> A = random(n, -2.71_sd, 2.71_sd);
+   Array1D<Strict64> A = random(n, -2.71_sd, 2.71_sd);
    auto AQ = array_cast<float128>(A);
    output_results(prod(A), stable_prod(A), prod(AQ), "product");
 
 
    // 2.
    n = Million<long>;
-   Array1D<float64> B(n);
+   Array1D<Strict64> B(n);
    random(B(even), 0._sd, 10._sd);
    B(odd) = -B(even) + 1.E-16_sd;
    auto BQ = array_cast<float128>(B);
@@ -34,7 +34,7 @@ int main() {
 
 
    // 3.
-   Array1D<float64> C1(n), C2(n);
+   Array1D<Strict64> C1(n), C2(n);
    random(C1(even), C2(even), 0._sd, 10._sd);
    C1(odd) = C1(even) + 1.E-8_sd;
    C2(odd) = -C2(even) + 1.E-8_sd;

@@ -28,11 +28,11 @@ template <typename Base>
 class StrictArray1D;
 
 
-template <Builtin T, AlignmentFlag AF = Unaligned>
+template <StrictBuiltin T, AlignmentFlag AF = Unaligned>
 using Array1D = StrictArray1D<detail::ArrayBase1D<T, AF>>;
 
 
-template <Builtin T, ImplicitIntStatic sz, AlignmentFlag AF = Unaligned>
+template <StrictBuiltin T, ImplicitIntStatic sz, AlignmentFlag AF = Unaligned>
 using FixedArray1D = StrictArray1D<detail::FixedArrayBase1D<T, sz, AF>>;
 
 
@@ -261,11 +261,11 @@ public:
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////
    //  Return unaligned array so that it can be constexpr.
-   STRICT_NODISCARD_CONSTEXPR Array1D<builtin_type, Unaligned> eval() const& {
+   STRICT_NODISCARD_CONSTEXPR Array1D<value_type, Unaligned> eval() const& {
       // Workaround for "inherited constructor cannot be used to copy object".
       // Replaced copy-like constructor so that eval() can also be used for
       // expression templates that generate random values.
-      Array1D<builtin_type, Unaligned> A(Base::size());
+      Array1D<value_type, Unaligned> A(Base::size());
       return A = *this;
    }
 
@@ -297,7 +297,8 @@ public:
    }
 
    STRICT_CONSTEXPR StrictArrayMutable1D& operator=(StrictArrayMutable1D&& A) noexcept {
-      return static_cast<StrictArrayMutable1D&>(Base::operator=(static_cast<Base&&>(std::move(A))));
+      return static_cast<StrictArrayMutable1D&>(
+          Base::operator=(static_cast<Base&&>(std::move(A))));
    }
 
    STRICT_CONSTEXPR StrictArrayMutable1D& operator=(value_type x) {
@@ -411,13 +412,13 @@ public:
 
 template <OneDimBaseType Base>
 STRICT_CONSTEXPR StrictBool equal(const Base& A1, const use::List1D<ValueTypeOf<Base>>& A2) {
-   return A1 == Array1D<BuiltinTypeOf<Base>>(A2);
+   return A1 == Array1D<ValueTypeOf<Base>>(A2);
 }
 
 
 template <OneDimBaseType Base>
 STRICT_CONSTEXPR StrictBool equal(const use::List1D<ValueTypeOf<Base>>& A1, const Base& A2) {
-   return Array1D<BuiltinTypeOf<Base>>(A1) == A2;
+   return Array1D<ValueTypeOf<Base>>(A1) == A2;
 }
 
 

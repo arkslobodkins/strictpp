@@ -13,18 +13,18 @@ namespace spp::detail {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 class STRICT_NODISCARD FixedArrayBase1D : private ReferenceBase1D, private OneDimArrayBase {
 public:
-   using value_type = Strict<T>;
-   using builtin_type = T;
+   using value_type = T;
+   using builtin_type = T::value_type;
 
    static_assert(N.get() > -1_sl);
 
    // Constructors.
    STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D() = default;
    STRICT_NODISCARD_CONSTEXPR explicit FixedArrayBase1D(value_type x);
-   STRICT_NODISCARD_CONSTEXPR explicit FixedArrayBase1D(Value<T> x);
+   STRICT_NODISCARD_CONSTEXPR explicit FixedArrayBase1D(Value<builtin_type> x);
    STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D(use::List1D<value_type> list);
 
    template <LinearIteratorType L>
@@ -56,15 +56,15 @@ public:
    // Converting to built-in types requires reinterpret_cast,
    // which cannot be done at compile time(not constexpr).
    STRICT_NODISCARD builtin_type* blas_data() &
-      requires CompatibleBuiltin<T>;
+      requires CompatibleBuiltin<builtin_type>;
    STRICT_NODISCARD const builtin_type* blas_data() const&
-      requires CompatibleBuiltin<T>;
+      requires CompatibleBuiltin<builtin_type>;
 
    STRICT_NODISCARD builtin_type* blas_data() &&
-      requires CompatibleBuiltin<T>
+      requires CompatibleBuiltin<builtin_type>
    = delete;
    STRICT_NODISCARD const builtin_type* blas_data() const&&
-      requires CompatibleBuiltin<T>
+      requires CompatibleBuiltin<builtin_type>
    = delete;
 
 private:
@@ -72,26 +72,26 @@ private:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 #endif
-   alignas(detail::alignment_of<T, AF>()) value_type data_[to_size_t(N.get())];
+   alignas(detail::alignment_of<builtin_type, AF>()) value_type data_[to_size_t(N.get())];
 #ifdef __GNUG__
 #pragma GCC diagnostic pop
 #endif
 };
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(value_type x) {
    fill(x, *this);
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(Value<T> x)
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(Value<builtin_type> x)
     : FixedArrayBase1D(x.get()) {
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
     use::List1D<value_type> list) {
    ASSERT_STRICT_DEBUG(N.get() == to_index_t(list.size()));
@@ -99,7 +99,7 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 template <LinearIteratorType L>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(L b, L e) {
    ASSERT_STRICT_DEBUG(index_t{e - b} == N.get());
@@ -108,21 +108,22 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(L b, L e
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(const FixedArrayBase1D& A) {
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
+    const FixedArrayBase1D& A) {
    copy(A, *this);
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
     FixedArrayBase1D&& A) noexcept
     : FixedArrayBase1D(A) {
-   A = Zero<T>;
+   A = Zero<builtin_type>;
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
     OneDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
@@ -130,14 +131,15 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(value_type x) {
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
+STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
+    value_type x) {
    fill(x, *this);
    return *this;
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
     use::List1D<value_type> list) {
    ASSERT_STRICT_DEBUG(N.get() == to_index_t(list.size()));
@@ -146,7 +148,7 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
     const FixedArrayBase1D& A) {
    if(this != &A) {
@@ -156,18 +158,18 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
     FixedArrayBase1D&& A) noexcept {
    if(this != &A) {
       *this = A;
-      A = Zero<T>;
+      A = Zero<builtin_type>;
    }
    return *this;
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
     OneDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
@@ -176,51 +178,52 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_CONSTEXPR_INLINE index_t FixedArrayBase1D<T, N, AF>::size() {
    return N.get();
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase1D<T, N, AF>::un(ImplicitInt i)
     -> value_type& {
    return data_[i.get().val()];
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase1D<T, N, AF>::un(ImplicitInt i) const
     -> const value_type& {
    return data_[i.get().val()];
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR auto FixedArrayBase1D<T, N, AF>::data() & -> value_type* {
    return this->size() != 0_sl ? data_ : nullptr;
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR auto FixedArrayBase1D<T, N, AF>::data() const& -> const value_type* {
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR auto FixedArrayBase1D<T, N, AF>::data() const& -> const
+    value_type* {
    return this->size() != 0_sl ? data_ : nullptr;
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD auto FixedArrayBase1D<T, N, AF>::blas_data() & -> builtin_type*
-   requires CompatibleBuiltin<T>
+   requires CompatibleBuiltin<builtin_type>
 {
-   return reinterpret_cast<T*>(this->size() != 0_sl ? data_ : nullptr);
+   return reinterpret_cast<builtin_type*>(this->size() != 0_sl ? data_ : nullptr);
 }
 
 
-template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+template <StrictBuiltin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD auto FixedArrayBase1D<T, N, AF>::blas_data() const& -> const builtin_type*
-   requires CompatibleBuiltin<T>
+   requires CompatibleBuiltin<builtin_type>
 {
-   return reinterpret_cast<const T*>(this->size() != 0_sl ? data_ : nullptr);
+   return reinterpret_cast<const builtin_type*>(this->size() != 0_sl ? data_ : nullptr);
 }
 
 

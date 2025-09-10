@@ -150,9 +150,10 @@ ValueTypeOf<Base> stable_prod(const Base& A, ValueTypeOf<Base> empty_default) {
       return empty_default;
    }
 
+   using value_type = ValueTypeOf<Base>;
    using real_type = RealTypeOf<Base>;
 
-   Array1D<real_type> res(A.size() - 1_sl);
+   Array1D<value_type> res(A.size() - 1_sl);
    auto p = A.un(0);
    for(index_t i = 1_sl; i < A.size(); ++i) {
       res.un(i - 1_sl) = two_prods(p, A.un(i)).second;

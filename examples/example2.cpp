@@ -5,7 +5,7 @@ using namespace spp;
 
 // example 2 puts more emphasis on slicing features of 1-d array class.
 int main() {
-   Array1D<double> A = random(Size{10}, Low{-1._sd}, High{1._sd});
+   Array1D<Strict64> A = random(Size{10}, Low{-1._sd}, High{1._sd});
    A.remove(last - 1);
 
    auto slice_1A = A(seq(First{0}, Endmost{2}));
