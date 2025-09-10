@@ -59,15 +59,13 @@ std::ostream& operator<<(std::ostream& os, Strict<T> x);
 #endif
 
 
-template <Builtin T>
-void print(Strict<T> x, const std::string& name);
+void print(StrictBuiltin auto x, const std::string& name);
 
 
 void print(StrictBuiltin auto const&... x);
 
 
-template <Builtin T>
-void printn(Strict<T> x, const std::string& name);
+void printn(StrictBuiltin auto x, const std::string& name);
 
 
 void printn(StrictBuiltin auto const&... x);
@@ -267,8 +265,7 @@ std::ostream& operator<<(std::ostream& os, Strict<T> x) {
 #endif
 
 
-template <Builtin T>
-void print(Strict<T> x, const std::string& name) {
+void print(StrictBuiltin auto x, const std::string& name) {
    std::ostringstream stream;
    if(!name.empty()) {
       stream << name << ":" << '\n';
@@ -283,8 +280,7 @@ void print(StrictBuiltin auto const&... x) {
 }
 
 
-template <Builtin T>
-void printn(Strict<T> x, const std::string& name) {
+void printn(StrictBuiltin auto x, const std::string& name) {
    print(x, name);
    std::cout << '\n';
 }
