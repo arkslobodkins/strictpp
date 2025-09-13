@@ -62,13 +62,13 @@ std::ostream& operator<<(std::ostream& os, Strict<T> x);
 void print(StrictBuiltin auto x, const std::string& name);
 
 
-void print(StrictBuiltin auto const&... x);
+void print(StrictBuiltin auto... x);
 
 
 void printn(StrictBuiltin auto x, const std::string& name);
 
 
-void printn(StrictBuiltin auto const&... x);
+void printn(StrictBuiltin auto... x);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ void print(StrictBuiltin auto x, const std::string& name) {
 }
 
 
-void print(StrictBuiltin auto const&... x) {
+void print(StrictBuiltin auto... x) {
    (..., print(x, ""));
 }
 
@@ -286,7 +286,7 @@ void printn(StrictBuiltin auto x, const std::string& name) {
 }
 
 
-void printn(StrictBuiltin auto const&... x) {
+void printn(StrictBuiltin auto... x) {
    (..., print(x, ""));
    std::cout << '\n';
 }
