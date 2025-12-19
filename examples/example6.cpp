@@ -31,7 +31,7 @@ std::optional<std::pair<VT, index_t>> jacobi(const MT& A, const VT& b, Strict<T>
          return {std::pair{xnext, iter}};
       }
 
-      for(auto i : irange(N)) {
+      for(const auto i : irange(N)) {
          xnext[i] = (b[i] - dot_prod(exclude(A.row(i), i), exclude(xprev, i))) / A(i, i);
       }
       xprev = xnext;
@@ -41,16 +41,31 @@ std::optional<std::pair<VT, index_t>> jacobi(const MT& A, const VT& b, Strict<T>
 }
 
 
+template <typename T, ImplicitIntStatic N>
+static FixedArray2D<T, N, N> initialize_matrix() {
+   FixedArray2D<T, N, N> A;
+   random(A);
+   // Ensure A is diagonally dominant for convergence.
+   A.diag() += Strict{T(2)} * row_reduce(A, [](auto row) { return sum(row); });
+   return A;
+}
+
+
+template <typename T, ImplicitIntStatic N>
+static FixedArray1D<T, N> initialize_vector() {
+   FixedArray1D<T, N> b;
+   random(b);
+   return b;
+}
+
+
 int main() {
    constexpr index_t N = 100_sl;
    using T = float64;
    constexpr Strict<T> tol = Thousand<T> * constants::epsilon<T>;
 
-   FixedArray2D<T, N, N> A;
-   FixedArray1D<T, N> b;
-   random(A, b);
-   // Ensure A is diagonally dominant for convergence.
-   A.diag() += Strict{T(2)} * row_reduce(A, [](auto row) { return sum(row); });
+   const auto A = initialize_matrix<T, N>();
+   const auto b = initialize_vector<T, N>();
 
    if(auto x_opt = jacobi(A, b, tol)) {
       std::cout << "converged in " << x_opt->second << " iterations." << std::endl;
