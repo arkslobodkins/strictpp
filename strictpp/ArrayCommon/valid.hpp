@@ -127,7 +127,8 @@ STRICT_CONSTEXPR StrictBool valid_complement_index_vector(F f, BaseType auto con
 
 template <typename F>
 STRICT_CONSTEXPR std::vector<ImplicitInt> complement_index_vector(
-    F f, index_t n, BaseType auto const& A, const std::vector<ImplicitInt>& indexes) {
+    [[maybe_unused]] F f, index_t n, [[maybe_unused]] BaseType auto const& A,
+    const std::vector<ImplicitInt>& indexes) {
    ASSERT_STRICT_DEBUG(valid_complement_index_vector(f, A, indexes));
 
    std::vector<ImplicitInt> cmpl;
