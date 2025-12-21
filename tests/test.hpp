@@ -2,10 +2,6 @@
 
 
 #include <iostream>
-
-
-#define STRICT_ERROR_EXCEPTIONS
-#define STRICT_REMOVE_NODISCARD
 #include <strictpp/strict.hpp>
 
 

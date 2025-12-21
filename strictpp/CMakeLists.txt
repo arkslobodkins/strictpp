@@ -64,3 +64,15 @@ option(STRICT_NODISCARD "Enable extensive support of [[nodiscard]] throughout st
 if(NOT STRICT_NODISCARD)
    target_compile_definitions(strictpp INTERFACE STRICT_REMOVE_NODISCARD)
 endif()
+
+##########################################################################################
+option(STRICT_QUAD_PRECISION "Enable quadruple precision extension provided by the
+      compiler." OFF)
+if(STRICT_QUAD_PRECISION)
+   if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      message(FATAL_ERROR "strictpp currently supports quadruple precision only for GCC.")
+   else()
+      target_compile_definitions(strictpp INTERFACE STRICT_QUAD_PRECISION)
+      target_link_libraries(strictpp INTERFACE quadmath)
+   endif()
+endif()

@@ -9,6 +9,9 @@ foreach(CPPFILE ${CPPFILES})
    add_test(NAME ${CPPNAME} COMMAND ${CPPNAME})
    set_tests_properties(${CPPNAME} PROPERTIES PASS 0)
 
+   target_compile_definitions(${CPPNAME} PRIVATE STRICT_ERROR_EXCEPTIONS)
+   target_compile_definitions(${CPPNAME} PRIVATE STRICT_REMOVE_NODISCARD)
+
    # Enable testing quadruple precision on GCC.
    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       set_target_properties(${CPPNAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
