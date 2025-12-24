@@ -15,8 +15,8 @@ namespace detail {
 
 template <typename T, AlignmentFlag AF>
 consteval int alignment_of() {
-   // Align to 512 byte boundary for AVX-512.
-   return (AF == Aligned) ? 512 : 0;
+   // Align to 512 bit boundary for AVX-512.
+   return (AF == Aligned) ? 64 : 0;
 }
 
 
