@@ -74,6 +74,8 @@ public:
       requires CompatibleBuiltin<T>
    = delete;
 
+   STRICT_NODISCARD_CONSTEXPR_INLINE static int alignment();
+
 private:
    FixedArrayBase1D<T, M.get() * N.get(), AF> data1D_;
 };
@@ -170,17 +172,15 @@ STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(Implici
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(ImplicitInt i,
-                                                                         ImplicitInt j)
-    -> value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(
+    ImplicitInt i, ImplicitInt j) -> value_type& {
    return data1D_.un(i.get() * N.get() + j.get());
 }
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(ImplicitInt i,
-                                                                         ImplicitInt j) const
-    -> const value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(
+    ImplicitInt i, ImplicitInt j) const -> const value_type& {
    return data1D_.un(i.get() * N.get() + j.get());
 }
 
@@ -210,6 +210,12 @@ STRICT_NODISCARD auto FixedArrayBase2D<T, M, N, AF>::blas_data() const& -> const
    requires CompatibleBuiltin<T>
 {
    return data1D_.blas_data();
+}
+
+
+template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR_INLINE int FixedArrayBase2D<T, M, N, AF>::alignment() {
+   return FixedArrayBase1D<T, M.get() * N.get(), AF>::alignment();
 }
 
 

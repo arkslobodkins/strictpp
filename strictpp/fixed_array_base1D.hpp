@@ -67,6 +67,8 @@ public:
       requires CompatibleBuiltin<T>
    = delete;
 
+   STRICT_NODISCARD_CONSTEXPR_INLINE static int alignment();
+
 private:
 #ifdef __GNUG__
 #pragma GCC diagnostic push
@@ -221,6 +223,12 @@ STRICT_NODISCARD auto FixedArrayBase1D<T, N, AF>::blas_data() const& -> const bu
    requires CompatibleBuiltin<T>
 {
    return reinterpret_cast<const T*>(this->size() != 0_sl ? data_ : nullptr);
+}
+
+
+template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR_INLINE int FixedArrayBase1D<T, N, AF>::alignment() {
+   return detail::alignment_of<T, AF>();
 }
 
 

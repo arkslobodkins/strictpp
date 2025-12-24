@@ -141,6 +141,8 @@ public:
       requires CompatibleBuiltin<T>
    = delete;
 
+   STRICT_NODISCARD_CONSTEXPR_INLINE static int alignment();
+
 private:
    FixedArrayBase1D<long int, 2, Unaligned> dims_;
    ArrayBase1D<T, AF> data1D_;
@@ -677,8 +679,8 @@ STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i) con
 
 
 template <Builtin T, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i, ImplicitInt j)
-    -> value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i,
+                                                              ImplicitInt j) -> value_type& {
    return data1D_.un(i.get() * dims_.un(1) + j.get());
 }
 
@@ -715,6 +717,12 @@ STRICT_NODISCARD auto ArrayBase2D<T, AF>::blas_data() const& -> const builtin_ty
    requires CompatibleBuiltin<T>
 {
    return data1D_.blas_data();
+}
+
+
+template <Builtin T, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR_INLINE int ArrayBase2D<T, AF>::alignment() {
+   return ArrayBase1D<T, AF>::alignment();
 }
 
 

@@ -119,6 +119,8 @@ public:
       requires CompatibleBuiltin<T>
    = delete;
 
+   STRICT_NODISCARD_CONSTEXPR_INLINE static int alignment();
+
 private:
    value_type* data_;
    index_t n_;
@@ -503,6 +505,12 @@ STRICT_NODISCARD auto ArrayBase1D<T, AF>::blas_data() const& -> const builtin_ty
    requires CompatibleBuiltin<T>
 {
    return reinterpret_cast<const T*>(this->size() != 0_sl ? data_ : nullptr);
+}
+
+
+template <Builtin T, AlignmentFlag AF>
+STRICT_NODISCARD_CONSTEXPR_INLINE int ArrayBase1D<T, AF>::alignment() {
+   return detail::alignment_of<T, AF>();
 }
 
 
