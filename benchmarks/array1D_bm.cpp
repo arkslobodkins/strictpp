@@ -3,8 +3,6 @@
 #include <Eigen/Dense>
 #include <tuple>
 
-// Use relative path to benchmark the version of the library
-// that is in the source directory rather than the installed version.
 #include "../strictpp/strict.hpp"
 
 
