@@ -10,6 +10,9 @@
 
 
 #include "ArrayCommon/array_common.hpp"
+#ifdef STRICT_ENABLE_EIGEN
+#include "Eigen/eigen.hpp"
+#endif
 #include "Expr/expr.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "Util/util.hpp"

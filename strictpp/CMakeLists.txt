@@ -7,7 +7,7 @@ if(MATH_LIBRARY)
    target_link_libraries(strictpp INTERFACE ${MATH_LIBRARY})
 endif()
 
-##########################################################################################
+# ########################################################################################
 target_include_directories(
    strictpp INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
                       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
@@ -75,4 +75,12 @@ if(STRICT_QUAD_PRECISION)
       target_compile_definitions(strictpp INTERFACE STRICT_QUAD_PRECISION)
       target_link_libraries(strictpp INTERFACE quadmath)
    endif()
+endif()
+
+##########################################################################################
+option(STRICT_LINEAR_ALGEBRA "Enable linear algebra functionality." OFF)
+if(STRICT_LINEAR_ALGEBRA)
+find_package(Eigen3 REQUIRED)
+target_link_libraries(strictpp INTERFACE Eigen3::Eigen)
+target_compile_definitions(strictpp INTERFACE STRICT_ENABLE_EIGEN)
 endif()
