@@ -30,6 +30,19 @@ foreach(CPPFILE ${CPPFILES})
                  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/strictpp/benchmarks)
    target_link_libraries(${CPPNAME} PRIVATE Eigen3::Eigen benchmark::benchmark)
 
+   # Benchmarks are not linked against strictpp library so that CACHE variables
+   # would not have any effect on target_compile_definitions. Benchmarks require
+   # specific configuration that should not be configurable by the user.
+   #
+   # 1. STRICT_DEBUG_OFF is always defined since we are
+   # only interested in benchmarking in release mode.
+   # 2. STRICT_ERROR_EXCEPTIONS is not defined. Whether assertions or exceptions
+   # are used has no impact in release mode.
+   # 3. STRICT_STACKTRACE is not defined and has no impact.
+   # 4. STRICT_NODISCARD is not removed and has no impact.
+   # 5. Quadruple precision is not enabled and has no impact.
+
+
    # Disable assertions.
    target_compile_definitions(${CPPNAME} PRIVATE EIGEN_NO_DEBUG STRICT_DEBUG_OFF)
 
@@ -45,6 +58,4 @@ foreach(CPPFILE ${CPPFILES})
                                                     "Intel")
       target_compile_options(${CPPNAME} PRIVATE "-fp-model=precise")
    endif()
-
-   target_link_libraries(${CPPNAME} PRIVATE strictpp::strictpp)
 endforeach()
