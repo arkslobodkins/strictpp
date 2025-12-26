@@ -85,10 +85,10 @@ void run_constr_copy_other(ImplicitInt m, ImplicitInt n) {
 
 template <Builtin T>
 void run_constr_size_fail() {
-   REQUIRE_THROW(Array2D<T> A(-1, 1));
-   REQUIRE_THROW(Array2D<T> A(1, -1));
-   REQUIRE_THROW(Array2D<T> A(0, 1));
-   REQUIRE_THROW(Array2D<T> A(1, 0));
+   REQUIRE_THROW(Array2D<T>(-1, 1));
+   REQUIRE_THROW(Array2D<T>(1, -1));
+   REQUIRE_THROW(Array2D<T>(0, 1));
+   REQUIRE_THROW(Array2D<T>(1, 0));
 }
 
 

@@ -92,7 +92,7 @@ void run_constr_copy_other(ImplicitInt n) {
 
 template <Builtin T>
 void run_constr_size_fail() {
-   REQUIRE_THROW(Array1D<T> A(-1));
+   REQUIRE_THROW(Array1D<T>(-1));
 }
 
 

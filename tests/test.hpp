@@ -41,7 +41,7 @@ static inline void reset_output() {
 #define REQUIRE_THROW(condition)                                                              \
    do {                                                                                       \
       try {                                                                                   \
-         condition;                                                                           \
+         (void)(condition);                                                                   \
          spp::detail::print_stacktrace();                                                     \
          std::cerr << trace_err(__FILE__, __func__, __LINE__) << "Assertion " << (#condition) \
                    << " did not throw exception." << std::endl;                               \
@@ -54,7 +54,7 @@ static inline void reset_output() {
 #define REQUIRE_NOT_THROW(condition)                                                          \
    do {                                                                                       \
       try {                                                                                   \
-         condition;                                                                           \
+         (void)(condition);                                                                   \
       } catch(const spp::StrictException&) {                                                  \
          spp::detail::print_stacktrace();                                                     \
          std::cerr << trace_err(__FILE__, __func__, __LINE__) << "Assertion " << (#condition) \
