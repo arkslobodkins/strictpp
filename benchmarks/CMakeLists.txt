@@ -37,7 +37,7 @@ foreach(CPPFILE ${CPPFILES})
    # 1. STRICT_DEBUG_OFF is always defined since we are
    # only interested in benchmarking in release mode.
    # 2. STRICT_ERROR_EXCEPTIONS is not defined. Whether assertions or exceptions
-   # are used has no impact in release mode.
+   # are used has no impact with STRICT_DEBUG_OFF.
    # 3. STRICT_STACKTRACE is not defined and has no impact.
    # 4. STRICT_NODISCARD is not removed and has no impact.
    # 5. Quadruple precision is not enabled and has no impact.

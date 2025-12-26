@@ -10,6 +10,16 @@ file(GLOB_RECURSE CPPFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 find_package(OpenMP QUIET)
 
 foreach(CPPFILE ${CPPFILES})
+   # Examples are not linked against strictpp library so that CACHE variables
+   # would not have any effect on target_compile_definitions, etc.
+   #
+   # 1. STRICT_DEBUG_OFF is always defined so that examples run faster.
+   # 2. STRICT_ERROR_EXCEPTIONS is not defined. Whether assertions or exceptions
+   # are used has no impact with STRICT_DEBUG_OFF.
+   # 3. STRICT_STACKTRACE is not defined.
+   # 4. STRICT_NODISCARD is not removed.
+   # 5. Quadruple precision must be enabled since examples use it.
+
    get_filename_component(CPPNAME ${CPPFILE} NAME_WE)
    add_executable(${CPPNAME} ${CPPFILE})
    set_target_properties(
@@ -31,6 +41,4 @@ foreach(CPPFILE ${CPPFILES})
    if(OpenMP_CXX_FOUND AND CPPNAME STREQUAL "example5")
       target_link_libraries(${CPPNAME} PRIVATE OpenMP::OpenMP_CXX)
    endif()
-
-   target_link_libraries(${CPPNAME} PRIVATE strictpp::strictpp)
 endforeach()
