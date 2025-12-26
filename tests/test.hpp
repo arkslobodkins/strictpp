@@ -2,8 +2,7 @@
 
 
 #include <iostream>
-
-#include "../strictpp/strict.hpp"
+#include <strictpp/strict.hpp>
 
 
 namespace spp {

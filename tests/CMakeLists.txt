@@ -74,4 +74,6 @@ foreach(CPPFILE ${CPPFILES})
       target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
       target_link_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
    endif()
+
+   target_include_directories(${CPPNAME} PRIVATE ${PROJECT_SOURCE_DIR})
 endforeach()

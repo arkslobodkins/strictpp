@@ -41,4 +41,6 @@ foreach(CPPFILE ${CPPFILES})
    if(OpenMP_CXX_FOUND AND CPPNAME STREQUAL "example5")
       target_link_libraries(${CPPNAME} PRIVATE OpenMP::OpenMP_CXX)
    endif()
+
+   target_include_directories(${CPPNAME} PRIVATE ${PROJECT_SOURCE_DIR})
 endforeach()

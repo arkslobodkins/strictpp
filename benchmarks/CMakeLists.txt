@@ -58,4 +58,6 @@ foreach(CPPFILE ${CPPFILES})
                                                     "Intel")
       target_compile_options(${CPPNAME} PRIVATE "-fp-model=precise")
    endif()
+
+   target_include_directories(${CPPNAME} PRIVATE ${PROJECT_SOURCE_DIR})
 endforeach()

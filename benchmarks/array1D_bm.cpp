@@ -1,9 +1,8 @@
 #include <benchmark/benchmark.h>
 
 #include <Eigen/Dense>
+#include <strictpp/strict.hpp>
 #include <tuple>
-
-#include "../strictpp/strict.hpp"
 
 
 using namespace spp;
