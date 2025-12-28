@@ -10,7 +10,7 @@ foreach(CPPFILE ${CPPFILES})
    set_tests_properties(${CPPNAME} PROPERTIES PASS 0)
 
    # Tests are not linked against strictpp library so that CACHE variables
-   # would not have any effect on target_compile_definitions. Tests require
+   # would not have any effect on target_compile_definitions, etc. Tests require
    # specific configuration that should not be configurable by the user.
    #
    # 1. STRICT_DEBUG_OFF is never defined otherwise

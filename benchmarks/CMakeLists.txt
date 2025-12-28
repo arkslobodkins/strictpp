@@ -31,7 +31,7 @@ foreach(CPPFILE ${CPPFILES})
    target_link_libraries(${CPPNAME} PRIVATE Eigen3::Eigen benchmark::benchmark)
 
    # Benchmarks are not linked against strictpp library so that CACHE variables
-   # would not have any effect on target_compile_definitions. Benchmarks require
+   # would not have any effect on target_compile_definitions, etc. Benchmarks require
    # specific configuration that should not be configurable by the user.
    #
    # 1. STRICT_DEBUG_OFF is always defined since we are
