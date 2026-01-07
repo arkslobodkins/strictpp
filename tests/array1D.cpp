@@ -264,10 +264,10 @@ void run_resize_fail() {
 template <Builtin T>
 void run_remove_fail() {
    Array1D<T> A(10);
-   REQUIRE_THROW(A.remove(0, 0));
-   REQUIRE_THROW(A.remove(-1));
-   REQUIRE_THROW(A.remove(0, A.size() + 1_sl));
-   REQUIRE_NOT_THROW(A.remove(0, A.size()));
+   REQUIRE_THROW(A.remove(Pos{0}, Count{0}));
+   REQUIRE_THROW(A.remove(Pos{-1}));
+   REQUIRE_THROW(A.remove(Pos{0}, Count{A.size() + 1_sl}));
+   REQUIRE_NOT_THROW(A.remove(Pos{0}, Count{A.size()}));
 }
 
 
@@ -301,7 +301,7 @@ void run_insert_value_back(auto X) {
 
 
 void run_insert_array(auto X, Pos pos) {
-   auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
+   decltype(X) Y = random<BUILTIN_TYPE_OF(X)>(X.size());
    auto Z = X;
    Z.insert(pos, Y);
    ASSERT(Z == merge(X(firstN{pos.get()}), Y, X(lastN{X.size() - pos.get()})));
@@ -309,7 +309,7 @@ void run_insert_array(auto X, Pos pos) {
 
 
 void run_insert_array_front(auto X) {
-   auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
+   decltype(X) Y = random<BUILTIN_TYPE_OF(X)>(X.size());
    auto Z = X;
    Z.insert_front(Y);
    ASSERT(Z == merge(Y, X));
@@ -317,7 +317,7 @@ void run_insert_array_front(auto X) {
 
 
 void run_insert_array_back(auto X) {
-   auto Y = random<BUILTIN_TYPE_OF(X)>(X.size()).eval();
+   decltype(X) Y = random<BUILTIN_TYPE_OF(X)>(X.size());
    auto Z = X;
    Z.insert_back(Y);
    ASSERT(Z == merge(X, Y));
@@ -419,15 +419,15 @@ void array_insert() {
 
    run_insert_value(A, Pos{0});
    run_insert_value(A, Pos{10});
-   run_insert_value(A, Pos{99});
-   run_insert_value(A, Pos{100});
+   run_insert_value(A, Pos{n - 1_sl});
+   run_insert_value(A, Pos{n});
    run_insert_value_front(A);
    run_insert_value_back(A);
 
    run_insert_array(A, Pos{0});
    run_insert_array(A, Pos{10});
-   run_insert_array(A, Pos{99});
-   run_insert_array(A, Pos{100});
+   run_insert_array(A, Pos{n - 1_sl});
+   run_insert_array(A, Pos{n});
    run_insert_array_front(A);
    run_insert_array_back(A);
 

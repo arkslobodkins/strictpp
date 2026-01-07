@@ -10,6 +10,9 @@ using namespace spp;
 using namespace spp::place;
 
 
+#define BUILTIN_TYPE_OF(A) spp::BuiltinTypeOf<decltype(A)>
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <Builtin T>
 void run_constr_default() {
@@ -209,6 +212,15 @@ void run_resize_assign_move(auto X1, auto X2) {
 }
 
 
+template <Builtin T>
+void run_resize_fail() {
+   Array2D<T> A;
+   REQUIRE_THROW(A.resize(-1, -1));
+   REQUIRE_THROW(A.resize(0, 5));
+   REQUIRE_NOT_THROW(A.resize(0, 0));
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void run_remove_rows(auto X, Pos pos, Count count) {
    auto Y = X;
@@ -269,15 +281,6 @@ void run_remove_cols_vec(auto X, std::vector<ImplicitInt> indexes) {
 
 
 template <Builtin T>
-void run_resize_fail() {
-   Array2D<T> A;
-   REQUIRE_THROW(A.resize(-1, -1));
-   REQUIRE_THROW(A.resize(0, 5));
-   REQUIRE_NOT_THROW(A.resize(0, 0));
-}
-
-
-template <Builtin T>
 void run_remove_fail() {
    Array2D<T> A(10, 8);
    REQUIRE_THROW(A.remove_rows(Pos{0}, Count{0}));
@@ -291,21 +294,24 @@ void run_remove_fail() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void run_insert_rows(auto X, Pos pos, auto Y) {
+void run_insert_rows(auto X, Pos pos) {
+   decltype(X) Y = random<BUILTIN_TYPE_OF(X)>(X.rows() / 2_sl, X.cols());
    auto Z = X;
    Z.insert_rows(pos, Y);
    ASSERT(Z == merge_vertical(X(firstN{pos.get()}, all), Y, X(lastN{X.rows() - pos.get()}, all)));
 }
 
 
-void run_insert_cols(auto X, Pos pos, auto Y) {
+void run_insert_cols(auto X, Pos pos) {
+   decltype(X) Y = random<BUILTIN_TYPE_OF(X)>(X.rows(), X.cols() / 2_sl);
    auto Z = X;
    Z.insert_cols(pos, Y);
    ASSERT(Z == merge_horizontal(X(all, firstN{pos.get()}), Y, X(all, lastN{X.cols() - pos.get()})));
 }
 
 
-void run_insert_row(auto X, Pos pos, auto Y) {
+void run_insert_row(auto X, Pos pos) {
+   auto Y = random<BUILTIN_TYPE_OF(X)>(X.cols()).eval();
    auto Z = X;
    Z.insert_row(pos, Y);
    ASSERT(Z
@@ -315,7 +321,8 @@ void run_insert_row(auto X, Pos pos, auto Y) {
 }
 
 
-void run_insert_col(auto X, Pos pos, auto Y) {
+void run_insert_col(auto X, Pos pos) {
+   auto Y = random<BUILTIN_TYPE_OF(X)>(X.rows()).eval();
    auto Z = X;
    Z.insert_col(pos, Y);
    ASSERT(Z
@@ -389,6 +396,7 @@ void array_resize() {
    run_swap_rvalue(A1);
    run_resize_assign(A1, A2);
    run_resize_assign_move(A1, A2);
+   run_resize_fail<T>();
 }
 
 
@@ -417,11 +425,10 @@ void array_remove() {
    run_remove_cols_back(A, Count{2_sl});
 
    run_remove_rows_vec(A, {0, 2, 4});
-   run_remove_rows_vec(A, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+   run_remove_rows_vec(A, implicit_vector_sequence(m));
    run_remove_cols_vec(A, {0, 2, 4});
-   run_remove_cols_vec(A, {0, 1, 2, 3, 4, 5, 6, 7});
+   run_remove_cols_vec(A, implicit_vector_sequence(n));
 
-   run_resize_fail<T>();
    run_remove_fail<T>();
 }
 
@@ -429,25 +436,23 @@ void array_remove() {
 template <Builtin T>
 void array_insert() {
    constexpr index_t m = 10_sl, n = 8_sl;
-   const Array2D<T> A1 = random<T>(m, n);
-   const Array2D<T> A2 = random<T>(5, n);
-   const Array2D<T> A3 = random<T>(m, 4);
+   const Array2D<T> A = random<T>(m, n);
 
-   run_insert_rows(A1, Pos{0}, A2);
-   run_insert_rows(A1, Pos{m / 2_sl}, A2);
-   run_insert_rows(A1, Pos{m}, A2);
+   run_insert_rows(A, Pos{0});
+   run_insert_rows(A, Pos{m / 2_sl});
+   run_insert_rows(A, Pos{m});
 
-   run_insert_cols(A1, Pos{0}, A3);
-   run_insert_cols(A1, Pos{n / 2_sl}, A3);
-   run_insert_cols(A1, Pos{n}, A3);
+   run_insert_cols(A, Pos{0});
+   run_insert_cols(A, Pos{n / 2_sl});
+   run_insert_cols(A, Pos{n});
 
-   run_insert_row(A1, Pos{0}, Array1D<T>(n));
-   run_insert_row(A1, Pos{m / 2_sl}, Array1D<T>(n));
-   run_insert_row(A1, Pos{m}, Array1D<T>(n));
+   run_insert_row(A, Pos{0});
+   run_insert_row(A, Pos{m / 2_sl});
+   run_insert_row(A, Pos{m});
 
-   run_insert_col(A1, Pos{0}, Array1D<T>(m));
-   run_insert_col(A1, Pos{n / 2_sl}, Array1D<T>(m));
-   run_insert_col(A1, Pos{n}, Array1D<T>(m));
+   run_insert_col(A, Pos{0});
+   run_insert_col(A, Pos{n / 2_sl});
+   run_insert_col(A, Pos{n});
 
    run_insert_fail<T>();
 }
