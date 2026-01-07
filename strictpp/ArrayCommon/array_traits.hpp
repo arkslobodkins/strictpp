@@ -30,6 +30,7 @@ class TwoDimArrayBase : protected ArrayBase {};
 
 // BaseType returns false for references; referenceness is not removed to prevent
 // the possibility of dangling references and other misuses in generic code.
+// clang-format off
 template <typename T> concept BaseType = BaseOf<detail::DimBase, T>;
 template <typename T> concept RealBaseType = BaseType<T> && Real<typename T::builtin_type>;
 template <typename T> concept BooleanBaseType = BaseType<T> && Boolean<typename T::builtin_type>;
@@ -52,6 +53,7 @@ template <typename T> concept TwoDimBooleanBaseType = TwoDimBaseType<T> && Boole
 template <typename T> concept TwoDimIntegerBaseType = TwoDimBaseType<T> && IntegerBaseType<T>;
 template <typename T> concept TwoDimSignedIntegerBaseType = TwoDimBaseType<T> && SignedIntegerBaseType<T>;
 template <typename T> concept TwoDimFloatingBaseType = TwoDimBaseType<T> && FloatingBaseType<T>;
+// clang-format on
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,6 +183,7 @@ namespace detail {
 template <typename T, bool cnd> concept RvalueOf = !std::is_lvalue_reference_v<T> && cnd;
 
 
+// clang-format off
 template <typename T> concept ArrayType = BaseType<T> && BaseOf<ArrayBase, T>;
 template <typename T> concept ArrayRealType = ArrayType<T> && Real<BuiltinTypeOf<T>>;
 template <typename T> concept ArrayBooleanType = ArrayType<T> && Boolean<BuiltinTypeOf<T>>;
@@ -223,6 +226,7 @@ template <typename T> concept ArrayTwoDimRealTypeRvalue = RvalueOf<T, ArrayTwoDi
 template <typename T> concept ArrayTwoDimBooleanTypeRvalue = RvalueOf<T, ArrayTwoDimBooleanType<RemoveRef<T>>>;
 template <typename T> concept ArrayTwoDimIntegerTypeRvalue = RvalueOf<T, ArrayTwoDimIntegerType<RemoveRef<T>>>;
 template <typename T> concept ArrayTwoDimFloatingTypeRvalue = RvalueOf<T, ArrayTwoDimFloatingType<RemoveRef<T>>>;
+// clang-format on
 
 
 template <typename T> concept PointerConvertibleLvalue
