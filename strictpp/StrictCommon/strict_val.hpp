@@ -551,9 +551,11 @@ STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long double> Strict<bool>::sld() const 
 }
 
 
+#ifdef STRICT_QUAD_PRECISION
 STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float128> Strict<bool>::sq() const {
    return strict_cast<float128>(val_);
 }
+#endif
 
 
 }  // namespace spp
