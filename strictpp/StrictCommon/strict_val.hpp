@@ -66,6 +66,7 @@ public:
       return Strict{!val_};
    }
 
+   // Function definitions must be implemented outside of struct definition to avoid incomplete types.
    STRICT_NODISCARD_CONSTEXPR_INLINE Strict<bool> sb() const;
 
    STRICT_NODISCARD_CONSTEXPR_INLINE Strict<int> si() const;
