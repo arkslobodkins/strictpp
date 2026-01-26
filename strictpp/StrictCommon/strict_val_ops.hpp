@@ -4,10 +4,6 @@
 #pragma once
 
 
-#include <algorithm>
-#include <cstdlib>
-#include <memory>
-
 #include "auxiliary_types.hpp"
 #include "config.hpp"
 #include "error.hpp"
@@ -16,6 +12,10 @@
 #include "strict_traits.hpp"
 #include "strict_val.hpp"
 #include "use.hpp"
+
+#include <algorithm>
+#include <cstdlib>
+#include <memory>
 
 
 namespace spp {
@@ -36,7 +36,7 @@ STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long int> binom_coeff(ImplicitInt n, Im
 
    index_t prod = 1_sl;
    for(index_t f1 = d1 + 1_sl, f2 = 1_sl; f1 <= d1 + d2; ++f1, ++f2) {
-      prod = prod * f1 / f2;  // Can prove that (prod * f1) is divisible by f2.
+      prod = prod * f1 / f2; // Can prove that (prod * f1) is divisible by f2.
    }
    return prod;
 }
@@ -188,14 +188,14 @@ STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> pow_prods(Strict<T> x, Implic
       auto [rn, sn] = two_prods(rn_m1, r);
       stemp[sz - 1] = sn;
 
-      if(pw % 2 == 0) {  // Even degrees.
+      if(pw % 2 == 0) { // Even degrees.
          Strict<T> sum_loc{};
          for(decltype(sz) i = 0; i < sz; ++i) {
             sum_loc += rtemp[i] * stemp[sz - 1 - i];
          }
 
          return Pair{rn, strict_cast<T>(n) * rn_m1 * s + sum_loc};
-      } else {  // Odd degrees.
+      } else { // Odd degrees.
          Strict<T> sum_loc{};
          for(decltype(sz) i = 0; i < sz; ++i) {
             sum_loc += rtemp[i] * stemp[sz - 1 - i];
@@ -208,4 +208,4 @@ STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> pow_prods(Strict<T> x, Implic
 }
 
 
-}  // namespace spp
+} // namespace spp

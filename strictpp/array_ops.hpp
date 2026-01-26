@@ -4,6 +4,11 @@
 #pragma once
 
 
+#include "ArrayCommon/array_auxiliary.hpp"
+#include "ArrayCommon/array_traits.hpp"
+#include "Expr/expr.hpp"
+#include "StrictCommon/strict_common.hpp"
+
 #include <algorithm>
 #include <concepts>
 #include <iterator>
@@ -13,11 +18,6 @@
 #include <utility>
 #include <vector>
 
-#include "ArrayCommon/array_auxiliary.hpp"
-#include "ArrayCommon/array_traits.hpp"
-#include "Expr/expr.hpp"
-#include "StrictCommon/strict_common.hpp"
-
 
 // Generic functions that work on Arrays, SliceArrays, and their expression templates.
 namespace spp {
@@ -26,24 +26,24 @@ namespace spp {
 namespace detail {
 
 
-template <typename Base, typename F> concept ForCallable
-    = SameAs<void, std::invoke_result_t<F, std::add_lvalue_reference_t<ValueTypeOf<Base>>>>
+template <typename Base, typename F> concept ForCallable =
+   SameAs<void, std::invoke_result_t<F, std::add_lvalue_reference_t<ValueTypeOf<Base>>>>
    || SameAs<void, std::invoke_result_t<F, ValueTypeOf<Base>>>;
 
 
-template <typename Base, typename F> concept CallableArgs1
-    = SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base>>>;
+template <typename Base, typename F> concept CallableArgs1 =
+   SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base>>>;
 
 
-template <typename Base1, typename Base2, typename F> concept CallableArgs2
-    = SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base1>, ValueTypeOf<Base2>>>;
+template <typename Base1, typename Base2, typename F> concept CallableArgs2 =
+   SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base1>, ValueTypeOf<Base2>>>;
 
 
-template <typename Base, typename F> concept SortableArgs
-    = SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base>, ValueTypeOf<Base>>>;
+template <typename Base, typename F> concept SortableArgs =
+   SameAs<StrictBool, std::invoke_result_t<F, ValueTypeOf<Base>, ValueTypeOf<Base>>>;
 
 
-}  // namespace detail
+} // namespace detail
 
 
 template <RealBaseType Base>
@@ -67,25 +67,25 @@ STRICT_CONSTEXPR ValueTypeOf<Base> max(const Base& A, ValueTypeOf<Base> empty_de
 
 
 template <OneDimRealBaseType Base>
-STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>> min_index(
-    const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default = {-1_sl, {}});
+STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>>
+min_index(const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default = {-1_sl, {}});
 
 
 template <TwoDimRealBaseType Base>
-STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>> min_index(
-    const Base& A,
-    std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default = {-1_sl, -1_sl, {}});
+STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>>
+min_index(const Base& A,
+          std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default = {-1_sl, -1_sl, {}});
 
 
 template <OneDimRealBaseType Base>
-STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>> max_index(
-    const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default = {-1_sl, {}});
+STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>>
+max_index(const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default = {-1_sl, {}});
 
 
 template <TwoDimRealBaseType Base>
-STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>> max_index(
-    const Base& A,
-    std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default = {-1_sl, -1_sl, {}});
+STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>>
+max_index(const Base& A,
+          std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default = {-1_sl, -1_sl, {}});
 
 
 template <FloatingBaseType Base>
@@ -372,8 +372,8 @@ STRICT_CONSTEXPR ValueTypeOf<Base> max(const Base& A, ValueTypeOf<Base> empty_de
 
 
 template <OneDimRealBaseType Base>
-STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>> min_index(
-    const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default) {
+STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>>
+min_index(const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default) {
    if(A.empty()) {
       return empty_default;
    }
@@ -388,8 +388,8 @@ STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>> min_index(
 
 
 template <TwoDimRealBaseType Base>
-STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>> min_index(
-    const Base& A, std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default) {
+STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>>
+min_index(const Base& A, std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default) {
    if(A.empty()) {
       return empty_default;
    }
@@ -406,8 +406,8 @@ STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>> min_index(
 
 
 template <OneDimRealBaseType Base>
-STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>> max_index(
-    const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default) {
+STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>>
+max_index(const Base& A, std::pair<index_t, ValueTypeOf<Base>> empty_default) {
    if(A.empty()) {
       return empty_default;
    }
@@ -422,8 +422,8 @@ STRICT_CONSTEXPR std::pair<index_t, ValueTypeOf<Base>> max_index(
 
 
 template <TwoDimRealBaseType Base>
-STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>> max_index(
-    const Base& A, std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default) {
+STRICT_CONSTEXPR std::tuple<index_t, index_t, ValueTypeOf<Base>>
+max_index(const Base& A, std::tuple<index_t, index_t, ValueTypeOf<Base>> empty_default) {
    if(A.empty()) {
       return empty_default;
    }
@@ -864,4 +864,4 @@ void shuffle(Base&& A) {
 }
 
 
-}  // namespace spp
+} // namespace spp

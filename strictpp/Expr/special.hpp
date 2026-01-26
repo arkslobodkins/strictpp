@@ -4,8 +4,6 @@
 #pragma once
 
 
-#include <type_traits>
-
 #include "../ArrayCommon/array_auxiliary.hpp"
 #include "../ArrayCommon/array_traits.hpp"
 #include "../ArrayCommon/valid.hpp"
@@ -15,6 +13,8 @@
 #include "exclude_last.hpp"
 #include "types.hpp"
 #include "unary.hpp"
+
+#include <type_traits>
 
 
 namespace spp {
@@ -188,15 +188,15 @@ STRICT_CONSTEXPR auto col_broadcast(const Base& A);
 namespace detail {
 
 
-template <typename... Args> concept OneOfArrayOneDimTypeRvalue
-    = (... || ArrayOneDimTypeRvalue<Args>);
+template <typename... Args> concept OneOfArrayOneDimTypeRvalue =
+   (... || ArrayOneDimTypeRvalue<Args>);
 
 
-template <typename... Args> concept OneOfArrayTwoDimTypeRvalue
-    = (... || ArrayTwoDimTypeRvalue<Args>);
+template <typename... Args> concept OneOfArrayTwoDimTypeRvalue =
+   (... || ArrayTwoDimTypeRvalue<Args>);
 
 
-}  // namespace detail
+} // namespace detail
 
 
 // Deleted overloads.
@@ -281,7 +281,7 @@ STRICT_CONSTEXPR_INLINE auto horizontal_op(auto const& A1E, auto const& A2E) {
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -434,7 +434,7 @@ STRICT_CONSTEXPR auto linspace(ImplicitInt size, Strict<T> start, Strict<T> end)
    ASSERT_STRICT_DEBUG(size.get() > 0_sl);
    auto sz = size.get();
    return StrictArrayBase1D<detail::SequenceExpr1D<T>>{
-       start, sz, (end - start) / strict_cast<T>(sz - 1_sl)};
+      start, sz, (end - start) / strict_cast<T>(sz - 1_sl)};
 }
 
 
@@ -575,5 +575,4 @@ STRICT_CONSTEXPR auto col_broadcast(const Base& A) {
 }
 
 
-}  // namespace spp
-
+} // namespace spp

@@ -4,12 +4,12 @@
 #pragma once
 
 
-#include <random>
-
 #include "../ArrayCommon/array_traits.hpp"
 #include "../Expr/expr.hpp"
 #include "../StrictCommon/strict_common.hpp"
 #include "random_traits.hpp"
+
+#include <random>
 
 
 namespace spp {
@@ -196,8 +196,8 @@ private:
 template <Quadruple T>
 struct Generator<T> {
    Generator(Strict<T> l, Strict<T> h)
-       : gen{std::random_device{}()},
-         dst{l.sd().val(), h.sd().val()} {
+      : gen{std::random_device{}()},
+        dst{l.sd().val(), h.sd().val()} {
    }
 
    auto random() const {
@@ -315,7 +315,7 @@ auto random_not0(ImplicitInt m, ImplicitInt n, Strict<T> low, Strict<T> high) {
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -520,4 +520,4 @@ auto random_not0(Rows m, Cols n) {
 }
 
 
-}  // namespace spp
+} // namespace spp

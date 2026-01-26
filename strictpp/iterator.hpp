@@ -4,13 +4,13 @@
 #pragma once
 
 
-#include <iterator>
-#include <type_traits>
-#include <utility>
-
 #include "ArrayCommon/array_traits.hpp"
 #include "ArrayCommon/valid.hpp"
 #include "StrictCommon/strict_common.hpp"
+
+#include <iterator>
+#include <type_traits>
+#include <utility>
 
 
 namespace spp {
@@ -143,8 +143,8 @@ class LinearIterator {};
 
 
 // A second condition is added so that it works for reverse iterators as well.
-template <typename T> concept LinearIteratorType
-    = BaseOf<LinearIterator, T> || BaseOf<LinearIterator, typename T::iterator_type>;
+template <typename T> concept LinearIteratorType =
+   BaseOf<LinearIterator, T> || BaseOf<LinearIterator, typename T::iterator_type>;
 
 
 template <typename T, typename Flag>
@@ -181,9 +181,9 @@ public:
    using pointer = value_type*;
    using reference = value_type&;
    // Contiguous if Base owns the data and iterates over indexes (not rows and not columns).
-   using iterator_category
-       = std::conditional_t<ReferenceStorable<Base> && LinearIteratorType<IteratorTag<Base, F>>,
-                            std::contiguous_iterator_tag, std::random_access_iterator_tag>;
+   using iterator_category =
+      std::conditional_t<ReferenceStorable<Base> && LinearIteratorType<IteratorTag<Base, F>>,
+                         std::contiguous_iterator_tag, std::random_access_iterator_tag>;
 
 public:
    STRICT_NODISCARD_CONSTEXPR explicit Iterator();
@@ -236,17 +236,17 @@ STRICT_NODISCARD_CONSTEXPR Iterator<Base, F> operator+(long int incr, const Iter
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <NonConstBaseType Base, typename F>
 STRICT_NODISCARD_CONSTEXPR Iterator<Base, F>::Iterator()
-    : A_ptr_{nullptr},
-      pos_{-1_sl},
-      f_{nullptr} {
+   : A_ptr_{nullptr},
+     pos_{-1_sl},
+     f_{nullptr} {
 }
 
 
 template <NonConstBaseType Base, typename F>
 STRICT_NODISCARD_CONSTEXPR Iterator<Base, F>::Iterator(Base& A, index_t pos)
-    : A_ptr_{&A},
-      pos_{pos},
-      f_{&A} {
+   : A_ptr_{&A},
+     pos_{pos},
+     f_{&A} {
 }
 
 
@@ -301,8 +301,8 @@ STRICT_CONSTEXPR Iterator<Base, F>& Iterator<Base, F>::operator-=(difference_typ
 
 
 template <NonConstBaseType Base, typename F>
-STRICT_NODISCARD_CONSTEXPR Iterator<Base, F> Iterator<Base, F>::operator+(
-    difference_type incr) const {
+STRICT_NODISCARD_CONSTEXPR Iterator<Base, F>
+Iterator<Base, F>::operator+(difference_type incr) const {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    auto new_it = *this;
    new_it += incr;
@@ -311,8 +311,8 @@ STRICT_NODISCARD_CONSTEXPR Iterator<Base, F> Iterator<Base, F>::operator+(
 
 
 template <NonConstBaseType Base, typename F>
-STRICT_NODISCARD_CONSTEXPR Iterator<Base, F> Iterator<Base, F>::operator-(
-    difference_type incr) const {
+STRICT_NODISCARD_CONSTEXPR Iterator<Base, F>
+Iterator<Base, F>::operator-(difference_type incr) const {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    auto new_it = *this;
    new_it -= incr;
@@ -322,7 +322,7 @@ STRICT_NODISCARD_CONSTEXPR Iterator<Base, F> Iterator<Base, F>::operator-(
 
 template <NonConstBaseType Base, typename F>
 STRICT_NODISCARD_CONSTEXPR auto Iterator<Base, F>::operator-(const Iterator& it) const
-    -> difference_type {
+   -> difference_type {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    ASSERT_STRICT_DEBUG(A_ptr_ == it.A_ptr_);
    return (pos_ - it.pos_).val();
@@ -420,9 +420,9 @@ public:
    using pointer = const value_type*;
    using reference = const value_type&;
    // Contiguous if Base owns the data and iterates over indexes (not rows and not columns).
-   using iterator_category
-       = std::conditional_t<ReferenceStorable<Base> && LinearIteratorType<IteratorTag<Base, F>>,
-                            std::contiguous_iterator_tag, std::random_access_iterator_tag>;
+   using iterator_category =
+      std::conditional_t<ReferenceStorable<Base> && LinearIteratorType<IteratorTag<Base, F>>,
+                         std::contiguous_iterator_tag, std::random_access_iterator_tag>;
 
    STRICT_NODISCARD_CONSTEXPR explicit ConstIterator();
    STRICT_NODISCARD_CONSTEXPR explicit ConstIterator(const Base& A, index_t pos);
@@ -475,17 +475,17 @@ STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F> operator+(long int incr,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <BaseType Base, typename F>
 STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F>::ConstIterator()
-    : A_ptr_{nullptr},
-      pos_{-1_sl},
-      f_{nullptr} {
+   : A_ptr_{nullptr},
+     pos_{-1_sl},
+     f_{nullptr} {
 }
 
 
 template <BaseType Base, typename F>
 STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F>::ConstIterator(const Base& A, index_t pos)
-    : A_ptr_{&A},
-      pos_{pos},
-      f_{&A} {
+   : A_ptr_{&A},
+     pos_{pos},
+     f_{&A} {
 }
 
 
@@ -540,8 +540,8 @@ STRICT_CONSTEXPR ConstIterator<Base, F>& ConstIterator<Base, F>::operator-=(diff
 
 
 template <BaseType Base, typename F>
-STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F> ConstIterator<Base, F>::operator+(
-    difference_type incr) const {
+STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F>
+ConstIterator<Base, F>::operator+(difference_type incr) const {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    auto new_it = *this;
    new_it += incr;
@@ -550,8 +550,8 @@ STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F> ConstIterator<Base, F>::operat
 
 
 template <BaseType Base, typename F>
-STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F> ConstIterator<Base, F>::operator-(
-    difference_type incr) const {
+STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F>
+ConstIterator<Base, F>::operator-(difference_type incr) const {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    auto new_it = *this;
    new_it -= incr;
@@ -561,7 +561,7 @@ STRICT_NODISCARD_CONSTEXPR ConstIterator<Base, F> ConstIterator<Base, F>::operat
 
 template <BaseType Base, typename F>
 STRICT_NODISCARD_CONSTEXPR auto ConstIterator<Base, F>::operator-(const ConstIterator& it) const
-    -> difference_type {
+   -> difference_type {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    ASSERT_STRICT_DEBUG(A_ptr_ == it.A_ptr_);
    return (pos_ - it.pos_).val();
@@ -569,8 +569,8 @@ STRICT_NODISCARD_CONSTEXPR auto ConstIterator<Base, F>::operator-(const ConstIte
 
 
 template <BaseType Base, typename F>
-STRICT_NODISCARD_CONSTEXPR decltype(auto) ConstIterator<Base, F>::operator[](
-    difference_type n) const {
+STRICT_NODISCARD_CONSTEXPR decltype(auto)
+ConstIterator<Base, F>::operator[](difference_type n) const {
    ASSERT_STRICT_DEBUG(this->points_somewhere());
    ASSERT_STRICT_RANGE_DEBUG(pos_ + Strict{n} > -1_sl && pos_ + Strict{n} < f_.size());
    return f_(pos_ + Strict{n});
@@ -659,10 +659,10 @@ public:
 
    STRICT_NODISCARD_CONSTEXPR explicit PlaneIterator(index_t i, index_t j, index_t rows,
                                                      index_t cols)
-       : i_{i},
-         j_{j},
-         rows_{rows},
-         cols_{cols} {
+      : i_{i},
+        j_{j},
+        rows_{rows},
+        cols_{cols} {
       ASSERT_STRICT_DEBUG(i_ >= 0_sl);
       ASSERT_STRICT_DEBUG(j_ >= 0_sl);
       ASSERT_STRICT_DEBUG(rows_ >= i_);
@@ -726,7 +726,7 @@ private:
 };
 
 
-}  // namespace detail
+} // namespace detail
 
 
 // Must specify std::is_lvalue_reference_v so that BaseRef template argument cannot
@@ -740,7 +740,7 @@ class STRICT_NODISCARD RowIt {
 public:
    STRICT_NODISCARD_CONSTEXPR explicit RowIt(auto&& A)
       requires(!std::is_same_v<RemoveCVRef<decltype(A)>, RowIt>)
-       : A_{std::forward<decltype(A)>(A)} {
+      : A_{std::forward<decltype(A)>(A)} {
       static_assert(std::is_lvalue_reference_v<decltype(A)>);
       // Avoid implicit conversions from slice and expression templates to constant arrays.
       static_assert(std::is_same_v<BaseRef, decltype(A)>);
@@ -758,8 +758,8 @@ public:
       }
    }
 
-   // Iterator member functions are not ref-qualified since the constructor ensures that A is lvalue.
-   // Calling them with rvalue RowIt objects is allowed and even encouraged.
+   // Iterator member functions are not ref-qualified since the constructor ensures that A is
+   // lvalue. Calling them with rvalue RowIt objects is allowed and even encouraged.
    STRICT_NODISCARD_CONSTEXPR auto begin() const {
       using namespace detail;
       return ConstIterator<base_type, ConstRowFlag<base_type>>{A_, 0_sl};
@@ -831,7 +831,7 @@ class STRICT_NODISCARD ColIt {
 public:
    STRICT_NODISCARD_CONSTEXPR explicit ColIt(auto&& A)
       requires(!std::is_same_v<RemoveCVRef<decltype(A)>, ColIt>)
-       : A_{std::forward<decltype(A)>(A)} {
+      : A_{std::forward<decltype(A)>(A)} {
       static_assert(std::is_lvalue_reference_v<decltype(A)>);
       // Avoid implicit conversions from slice and expression templates to constant arrays.
       static_assert(std::is_same_v<BaseRef, decltype(A)>);
@@ -840,8 +840,8 @@ public:
    STRICT_NODISCARD_CONSTEXPR ColIt(const ColIt&) = default;
    STRICT_CONSTEXPR ColIt& operator=(const ColIt&) = delete;
 
-   // Iterator member functions are not ref-qualified since the constructor ensures that A is lvalue.
-   // Calling them with rvalue ColIt objects is allowed and even encouraged.
+   // Iterator member functions are not ref-qualified since the constructor ensures that A is
+   // lvalue. Calling them with rvalue ColIt objects is allowed and even encouraged.
    STRICT_NODISCARD_CONSTEXPR auto begin() {
       using namespace detail;
       if constexpr(NonConstBaseType<RemoveRef<BaseRef>>) {
@@ -917,15 +917,15 @@ public:
    STRICT_NODISCARD_CONSTEXPR IndexRange2D(const IndexRange2D&) = default;
 
    STRICT_NODISCARD_CONSTEXPR explicit IndexRange2D(ImplicitInt rows, ImplicitInt cols)
-       : rows_{rows.get()},
-         cols_{cols.get()} {
+      : rows_{rows.get()},
+        cols_{cols.get()} {
       ASSERT_STRICT_DEBUG(rows_ > -1_sl);
       ASSERT_STRICT_DEBUG(cols_ > -1_sl);
       ASSERT_STRICT_DEBUG(detail::semi_valid_row_col_sizes(rows_, cols_));
    }
 
    STRICT_NODISCARD_CONSTEXPR explicit IndexRange2D(TwoDimBaseType auto const& A)
-       : IndexRange2D{A.rows(), A.cols()} {
+      : IndexRange2D{A.rows(), A.cols()} {
    }
 
    STRICT_CONSTEXPR IndexRange2D& operator=(const IndexRange2D&) = delete;
@@ -943,4 +943,4 @@ private:
 };
 
 
-}  // namespace spp
+} // namespace spp

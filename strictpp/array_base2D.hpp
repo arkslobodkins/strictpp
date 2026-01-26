@@ -4,13 +4,13 @@
 #pragma once
 
 
-#include <utility>
-#include <vector>
-
 #include "ArrayCommon/array_common.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "array_base1D.hpp"
 #include "fixed_array_base1D.hpp"
+
+#include <utility>
+#include <vector>
 
 
 namespace spp {
@@ -151,8 +151,8 @@ private:
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(ImplicitInt m, ImplicitInt n)
-    : dims_{m.get(), n.get()},
-      data1D_(m.get() * n.get()) {
+   : dims_{m.get(), n.get()},
+     data1D_(m.get() * n.get()) {
    ASSERT_STRICT_DEBUG(m.get() >= 0_sl);
    ASSERT_STRICT_DEBUG(n.get() >= 0_sl);
    ASSERT_STRICT_DEBUG(semi_valid_row_col_sizes(m.get(), n.get()));
@@ -161,27 +161,27 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(ImplicitInt m, Implic
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(Rows m, Cols n)
-    : ArrayBase2D(m.get(), n.get()) {
+   : ArrayBase2D(m.get(), n.get()) {
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(ImplicitInt m, ImplicitInt n,
                                                            value_type x)
-    : ArrayBase2D(m, n) {
+   : ArrayBase2D(m, n) {
    data1D_ = x;
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(Rows m, Cols n, Value<T> x)
-    : ArrayBase2D(m.get(), n.get(), x.get()) {
+   : ArrayBase2D(m.get(), n.get(), x.get()) {
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(use::List2D<value_type> list)
-    : ArrayBase2D(list2D_row_col_sizes(list).first, list2D_row_col_sizes(list).second) {
+   : ArrayBase2D(list2D_row_col_sizes(list).first, list2D_row_col_sizes(list).second) {
    ASSERT_STRICT_DEBUG(valid_list2D(list));
    copy(list, *this);
 }
@@ -189,7 +189,7 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(use::List2D<value_typ
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase2D<T, AF>::ArrayBase2D(TwoDimBaseType auto const& A)
-    : ArrayBase2D(A.rows(), A.cols()) {
+   : ArrayBase2D(A.rows(), A.cols()) {
    copy(A, *this);
 }
 
@@ -438,7 +438,7 @@ template <Builtin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_rows(const std::vector<ImplicitInt>& indexes) {
    if(!indexes.empty()) {
       auto ci = complement_index_vector(
-          valid_row<RemoveCVRef<decltype(*this)>>, this->rows(), *this, indexes);
+         valid_row<RemoveCVRef<decltype(*this)>>, this->rows(), *this, indexes);
 
       index_t new_rows = to_index_t(ci.size());
       ArrayBase2D tmp(new_rows, new_rows == 0_sl ? 0_sl : this->cols());
@@ -458,7 +458,7 @@ template <Builtin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase2D<T, AF>::remove_cols(const std::vector<ImplicitInt>& indexes) {
    if(!indexes.empty()) {
       auto ci = complement_index_vector(
-          valid_col<RemoveCVRef<decltype(*this)>>, this->cols(), *this, indexes);
+         valid_col<RemoveCVRef<decltype(*this)>>, this->cols(), *this, indexes);
 
       index_t new_cols = to_index_t(ci.size());
       ArrayBase2D tmp(new_cols == 0_sl ? 0_sl : this->rows(), new_cols);
@@ -673,21 +673,21 @@ STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i) -> 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i) const
-    -> const value_type& {
+   -> const value_type& {
    return data1D_.un(i);
 }
 
 
 template <Builtin T, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i,
-                                                              ImplicitInt j) -> value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i, ImplicitInt j)
+   -> value_type& {
    return data1D_.un(i.get() * dims_.un(1) + j.get());
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase2D<T, AF>::un(ImplicitInt i, ImplicitInt j) const
-    -> const value_type& {
+   -> const value_type& {
    return data1D_.un(i.get() * dims_.un(1) + j.get());
 }
 
@@ -726,7 +726,7 @@ STRICT_NODISCARD_CONSTEXPR_INLINE int ArrayBase2D<T, AF>::alignment() {
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
-}  // namespace spp
+} // namespace spp

@@ -4,11 +4,11 @@
 #pragma once
 
 
-#include <utility>
-#include <vector>
-
 #include "ArrayCommon/array_common.hpp"
 #include "StrictCommon/strict_common.hpp"
+
+#include <utility>
+#include <vector>
 
 
 namespace spp {
@@ -18,15 +18,15 @@ class STRICT_NODISCARD seqN {
 public:
    STRICT_NODISCARD_CONSTEXPR explicit seqN(ImplicitInt start, ImplicitInt size,
                                             ImplicitInt stride = 1)
-       : start_{start.get()},
-         size_{size.get()},
-         stride_{stride.get()} {
+      : start_{start.get()},
+        size_{size.get()},
+        stride_{stride.get()} {
       ASSERT_STRICT_DEBUG(start_ > -1_sl);
       ASSERT_STRICT_DEBUG(size_ > -1_sl);
    }
 
    STRICT_NODISCARD_CONSTEXPR explicit seqN(First first, Size size, Stride stride = Stride{1})
-       : seqN{first.get(), size.get(), stride.get()} {
+      : seqN{first.get(), size.get(), stride.get()} {
    }
 
    STRICT_CONSTEXPR index_t start() const {
@@ -81,9 +81,9 @@ class STRICT_NODISCARD seq {
 public:
    STRICT_NODISCARD_CONSTEXPR explicit seq(ImplicitInt first, ImplicitInt last,
                                            ImplicitInt stride = 1)
-       : first_{first.get()},
-         last_{last.get()},
-         stride_{stride.get()} {
+      : first_{first.get()},
+        last_{last.get()},
+        stride_{stride.get()} {
       ASSERT_STRICT_DEBUG(first_ > -1_sl);
       ASSERT_STRICT_DEBUG(last_ > -1_sl);
       ASSERT_STRICT_DEBUG(((stride_ > 0_sl) && (first_ <= last_))
@@ -92,7 +92,7 @@ public:
    }
 
    STRICT_NODISCARD_CONSTEXPR explicit seq(First first, Endmost last, Stride stride = Stride{1})
-       : seq{first.get(), last.get(), stride.get()} {
+      : seq{first.get(), last.get(), stride.get()} {
    }
 
    STRICT_CONSTEXPR seqN to_slice() const {
@@ -203,7 +203,7 @@ public:
    }
 
    STRICT_NODISCARD_CONSTEXPR explicit complement(std::initializer_list<ImplicitInt> list)
-       : v_{list} {
+      : v_{list} {
    }
 
    STRICT_NODISCARD_CONSTEXPR const std::vector<ImplicitInt>& get() const {
@@ -215,7 +215,7 @@ private:
 };
 
 
-}  // namespace place
+} // namespace place
 
 
 namespace detail {
@@ -227,8 +227,8 @@ template <typename T> concept LinearSliceType = SameAs<T, seqN> || SameAs<T, seq
                                              || SameAs<T, place::firstN> || SameAs<T, place::lastN>;
 
 
-template <typename T> concept NonlinearSliceType
-    = SameAs<T, std::vector<ImplicitInt>> || SameAs<T, place::complement>;
+template <typename T> concept NonlinearSliceType =
+   SameAs<T, std::vector<ImplicitInt>> || SameAs<T, place::complement>;
 
 
 template <typename T> concept SliceType = LinearSliceType<T> || NonlinearSliceType<T>;
@@ -592,7 +592,7 @@ template <>
 class SliceArrayWrapper<std::vector<ImplicitInt>> {
 public:
    STRICT_CONSTEXPR explicit SliceArrayWrapper(std::vector<ImplicitInt>&& indexes)
-       : indexes_{std::move(indexes)} {
+      : indexes_{std::move(indexes)} {
    }
 
    STRICT_CONSTEXPR_INLINE index_t size() const {
@@ -633,14 +633,16 @@ private:
 template <typename T>
 STRICT_CONSTEXPR auto default_wrapper() {
    if constexpr(SameAs<T, seqN>) {
-      return SliceArrayWrapper<seqN>{seqN{0, 0}};
+      return SliceArrayWrapper<seqN>{
+         seqN{0, 0}
+      };
    } else {
       return SliceArrayWrapper<std::vector<ImplicitInt>>{{}};
    }
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
-}  // namespace spp
+} // namespace spp

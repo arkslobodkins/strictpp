@@ -1,8 +1,9 @@
 #pragma once
 
 
-#include <iostream>
 #include <strictpp/strict.hpp>
+
+#include <iostream>
 
 
 namespace spp {
@@ -35,7 +36,7 @@ static inline void reset_output() {
 }
 
 
-}  // namespace spp
+} // namespace spp
 
 
 #define REQUIRE_THROW(condition)                                                              \
@@ -128,4 +129,3 @@ static inline void reset_output() {
 
 #define TEST_NON_TYPE(function_name, ...) \
    PERFORM_FUNCTION_CALLS(function_name, function_name(__VA_ARGS__))
-

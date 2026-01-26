@@ -4,13 +4,13 @@
 #pragma once
 
 
-#include <new>
-#include <utility>
-#include <vector>
-
 #include "ArrayCommon/array_common.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "iterator.hpp"
+
+#include <new>
+#include <utility>
+#include <vector>
 
 
 namespace spp {
@@ -136,11 +136,11 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D() : data_{nullptr},
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD ArrayBase1D<T, AF>::ArrayBase1D(ImplicitInt n)
    requires(AF == Aligned)
-    : data_{nullptr},
-      n_{n.get()} {
+   : data_{nullptr},
+     n_{n.get()} {
    ASSERT_STRICT_DEBUG(n_ > -1_sl);
    if(n_ != 0_sl) {
-      data_ = new(std::align_val_t{detail::alignment_of<T, AF>()}) value_type[to_size_t(n_)];
+      data_ = new (std::align_val_t{detail::alignment_of<T, AF>()}) value_type[to_size_t(n_)];
    }
 }
 
@@ -148,8 +148,8 @@ STRICT_NODISCARD ArrayBase1D<T, AF>::ArrayBase1D(ImplicitInt n)
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(ImplicitInt n)
    requires(AF == Unaligned)
-    : data_{nullptr},
-      n_{n.get()} {
+   : data_{nullptr},
+     n_{n.get()} {
    ASSERT_STRICT_DEBUG(n_ > -1_sl);
    if(n_ != 0_sl) {
       data_ = new value_type[to_size_t(n_)];
@@ -164,20 +164,20 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(Size n) : ArrayBase1D
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(ImplicitInt n, value_type x)
-    : ArrayBase1D(n) {
+   : ArrayBase1D(n) {
    fill(x, *this);
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(Size n, Value<T> x)
-    : ArrayBase1D(n.get(), x.get()) {
+   : ArrayBase1D(n.get(), x.get()) {
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(use::List1D<value_type> list)
-    : ArrayBase1D(to_index_t(list.size())) {
+   : ArrayBase1D(to_index_t(list.size())) {
    copy(list, *this);
 }
 
@@ -186,7 +186,7 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(use::List1D<value_typ
 template <Builtin T, AlignmentFlag AF>
 template <LinearIteratorType L>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(L b, L e)
-    : ArrayBase1D(abss(Strict{e - b})) {
+   : ArrayBase1D(abss(Strict{e - b})) {
    ASSERT_STRICT_DEBUG(e >= b);
    copy(b, e, *this);
 }
@@ -194,21 +194,21 @@ STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(L b, L e)
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(const ArrayBase1D& A)
-    : ArrayBase1D(A.size()) {
+   : ArrayBase1D(A.size()) {
    copy(A, *this);
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(ArrayBase1D&& A) noexcept
-    : data_{std::exchange(A.data_, nullptr)},
-      n_{std::exchange(A.n_, 0_sl)} {
+   : data_{std::exchange(A.data_, nullptr)},
+     n_{std::exchange(A.n_, 0_sl)} {
 }
 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR ArrayBase1D<T, AF>::ArrayBase1D(OneDimBaseType auto const& A)
-    : ArrayBase1D(A.size()) {
+   : ArrayBase1D(A.size()) {
    copy(A, *this);
 }
 
@@ -372,7 +372,7 @@ template <Builtin T, AlignmentFlag AF>
 STRICT_CONSTEXPR auto& ArrayBase1D<T, AF>::remove(const std::vector<ImplicitInt>& indexes) {
    if(!indexes.empty()) {
       auto ci = complement_index_vector(
-          valid_index<RemoveCVRef<decltype(*this)>>, this->size(), *this, indexes);
+         valid_index<RemoveCVRef<decltype(*this)>>, this->size(), *this, indexes);
       ArrayBase1D tmp(to_index_t(ci.size()));
 
       for(index_t i = 0_sl; i < tmp.size(); ++i) {
@@ -475,7 +475,7 @@ STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase1D<T, AF>::un(ImplicitInt i) -> 
 
 template <Builtin T, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto ArrayBase1D<T, AF>::un(ImplicitInt i) const
-    -> const value_type& {
+   -> const value_type& {
    return data_[i.get().val()];
 }
 
@@ -514,7 +514,7 @@ STRICT_NODISCARD_CONSTEXPR_INLINE int ArrayBase1D<T, AF>::alignment() {
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
-}  // namespace spp
+} // namespace spp

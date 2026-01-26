@@ -1,6 +1,6 @@
-#include <cstdlib>
-
 #include "test.hpp"
+
+#include <cstdlib>
 
 
 using namespace spp;
@@ -88,6 +88,6 @@ void stable_ops(ImplicitInt n) {
 
 
 int main() {
-   TEST_NON_TYPE(stable_ops, 1000);
+   TEST_NON_TYPE(stable_ops, 1'000);
    return EXIT_SUCCESS;
 }

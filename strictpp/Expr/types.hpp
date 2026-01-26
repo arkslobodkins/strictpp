@@ -4,13 +4,13 @@
 #pragma once
 
 
-#include <utility>
-
 #include "../ArrayCommon/array_auxiliary.hpp"
 #include "../ArrayCommon/array_traits.hpp"
 #include "../ArrayCommon/valid.hpp"
 #include "../StrictCommon/strict_common.hpp"
 #include "expr_traits.hpp"
+
+#include <utility>
 
 
 namespace spp::detail {
@@ -27,7 +27,7 @@ namespace spp::detail {
 template <BaseType Base, typename Op, bool copy_delete>
    requires expr::UnaryOperation<Base, Op>
 class STRICT_NODISCARD UnaryExprBase
-    : private std::conditional_t<OneDimBaseType<Base>, CopyBase1D, CopyBase2D> {
+   : private std::conditional_t<OneDimBaseType<Base>, CopyBase1D, CopyBase2D> {
 public:
    // value_type is not always the same as ValueTypeOf<Base>. For example,
    // when converting array to a different type.
@@ -70,8 +70,8 @@ class STRICT_NODISCARD UnaryExpr;
 
 template <OneDimBaseType Base, typename Op, bool copy_delete>
    requires expr::UnaryOperation<Base, Op>
-class STRICT_NODISCARD UnaryExpr<Base, Op, copy_delete>
-    : public UnaryExprBase<Base, Op, copy_delete> {
+class STRICT_NODISCARD
+   UnaryExpr<Base, Op, copy_delete> : public UnaryExprBase<Base, Op, copy_delete> {
 public:
    using UnaryExprBase<Base, Op, copy_delete>::UnaryExprBase;
 };
@@ -79,13 +79,13 @@ public:
 
 template <TwoDimBaseType Base, typename Op, bool copy_delete>
    requires expr::UnaryOperation<Base, Op>
-class STRICT_NODISCARD UnaryExpr<Base, Op, copy_delete>
-    : public UnaryExprBase<Base, Op, copy_delete> {
+class STRICT_NODISCARD
+   UnaryExpr<Base, Op, copy_delete> : public UnaryExprBase<Base, Op, copy_delete> {
 private:
    using ExprBase = UnaryExprBase<Base, Op, copy_delete>;
 
 public:
-   using ExprBase::un;  // Unhide.
+   using ExprBase::un; // Unhide.
    using ExprBase::UnaryExprBase;
 
    STRICT_NODISCARD_CONSTEXPR_INLINE ExprBase::value_type un(ImplicitInt i, ImplicitInt j) const {
@@ -106,15 +106,15 @@ public:
 template <BaseType Base1, BaseType Base2, typename Op, bool copy_delete>
    requires expr::BinaryOperation<Base1, Base2, Op>
 class STRICT_NODISCARD BinaryExprBase
-    : private std::conditional_t<OneDimBaseType<Base1>, CopyBase1D, CopyBase2D> {
+   : private std::conditional_t<OneDimBaseType<Base1>, CopyBase1D, CopyBase2D> {
 public:
    using value_type = decltype(std::declval<Op>()(ValueTypeOf<Base1>{}, ValueTypeOf<Base2>{}));
    using builtin_type = value_type::value_type;
 
    STRICT_NODISCARD_CONSTEXPR explicit BinaryExprBase(const Base1& A1, const Base2& A2, Op op)
-       : A1_{A1},
-         A2_{A2},
-         op_{op} {
+      : A1_{A1},
+        A2_{A2},
+        op_{op} {
       ASSERT_STRICT_DEBUG(same_size(A1_, A2_));
       static_assert(same_dimension<Base1, Base2>());
    }
@@ -154,7 +154,7 @@ class STRICT_NODISCARD BinaryExpr;
 template <OneDimBaseType Base1, OneDimBaseType Base2, typename Op, bool copy_delete>
    requires expr::BinaryOperation<Base1, Base2, Op>
 class STRICT_NODISCARD BinaryExpr<Base1, Base2, Op, copy_delete>
-    : public BinaryExprBase<Base1, Base2, Op, copy_delete> {
+   : public BinaryExprBase<Base1, Base2, Op, copy_delete> {
 public:
    using BinaryExprBase<Base1, Base2, Op, copy_delete>::BinaryExprBase;
 };
@@ -163,13 +163,13 @@ public:
 template <TwoDimBaseType Base1, TwoDimBaseType Base2, typename Op, bool copy_delete>
    requires expr::BinaryOperation<Base1, Base2, Op>
 class STRICT_NODISCARD BinaryExpr<Base1, Base2, Op, copy_delete>
-    : public BinaryExprBase<Base1, Base2, Op, copy_delete> {
+   : public BinaryExprBase<Base1, Base2, Op, copy_delete> {
 private:
    using ExprBase = BinaryExprBase<Base1, Base2, Op, copy_delete>;
 
 public:
    using ExprBase::BinaryExprBase;
-   using ExprBase::un;  // Unhide.
+   using ExprBase::un; // Unhide.
 
    STRICT_NODISCARD_CONSTEXPR_INLINE ExprBase::value_type un(ImplicitInt i, ImplicitInt j) const {
       return ExprBase::op_(ExprBase::A1_.un(i, j), ExprBase::A2_.un(i, j));
@@ -195,9 +195,9 @@ public:
    // incr can be 0 or negative.
    STRICT_NODISCARD_CONSTEXPR explicit SequenceExpr1D(value_type start, index_t size,
                                                       value_type incr)
-       : start_{start},
-         size_{size},
-         incr_{incr} {
+      : start_{start},
+        size_{size},
+        incr_{incr} {
       ASSERT_STRICT_DEBUG(size_ > -1_sl);
    }
 
@@ -228,9 +228,9 @@ public:
    using builtin_type = value_type::value_type;
 
    STRICT_NODISCARD_CONSTEXPR explicit IndexExpr2D(index_t rows, index_t cols, Op op)
-       : rows_{rows},
-         cols_{cols},
-         op_{op} {
+      : rows_{rows},
+        cols_{cols},
+        op_{op} {
       ASSERT_STRICT_DEBUG(rows_ > -1_sl);
       ASSERT_STRICT_DEBUG(cols_ > -1_sl);
    }
@@ -274,8 +274,8 @@ class STRICT_NODISCARD ReduceExpr : private CopyBase1D {
    using col_type = decltype(std::declval<Base>().lval().col(0));
 
 public:
-   using value_type = decltype(std::declval<Op>()(
-       std::declval<std::conditional_t<rowwise, row_type, col_type>>()));
+   using value_type =
+      decltype(std::declval<Op>()(std::declval<std::conditional_t<rowwise, row_type, col_type>>()));
    using builtin_type = value_type::value_type;
 
    STRICT_NODISCARD_CONSTEXPR explicit ReduceExpr(const Base& A, Op op) : A_{A}, op_{op} {
@@ -359,8 +359,8 @@ public:
    using builtin_type = value_type::value_type;
 
    STRICT_NODISCARD_CONSTEXPR explicit TensorExpr(const Base1& A1, const Base2& A2)
-       : A1_{A1},
-         A2_{A2} {
+      : A1_{A1},
+        A2_{A2} {
    }
 
    STRICT_NODISCARD_CONSTEXPR TensorExpr(const TensorExpr& E) = default;
@@ -404,9 +404,9 @@ public:
 
    STRICT_NODISCARD_CONSTEXPR explicit RandUnaryExpr(const Base& A, Op op, value_type low,
                                                      value_type high)
-       : UnaryExpr<Base, Op, true>{A, op},
-         low_{low},
-         high_{high} {
+      : UnaryExpr<Base, Op, true>{A, op},
+        low_{low},
+        high_{high} {
    }
 
    STRICT_NODISCARD_CONSTEXPR RandUnaryExpr(const RandUnaryExpr& E) = default;
@@ -426,5 +426,4 @@ private:
 };
 
 
-}  // namespace spp::detail
-
+} // namespace spp::detail

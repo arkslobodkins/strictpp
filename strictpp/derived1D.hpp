@@ -4,9 +4,6 @@
 #pragma once
 
 
-#include <iterator>
-#include <utility>
-
 #include "ArrayCommon/array_common.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "array_base1D.hpp"
@@ -15,6 +12,9 @@
 #include "iterator.hpp"
 #include "slice.hpp"
 #include "slicearray_base1D.hpp"
+
+#include <iterator>
+#include <utility>
 
 
 namespace spp {
@@ -180,10 +180,10 @@ public:
       auto sh = slice_helper(*this, std::move(slice));
       if constexpr(NonConstBaseType<Base>) {
          return StrictArrayMutable1D<SliceArrayBase1D<StrictArrayBase1D, decltype(sh)>>{
-             *this, std::move(sh)};
+            *this, std::move(sh)};
       } else {
          return StrictArrayBase1D<ConstSliceArrayBase1D<StrictArrayBase1D, decltype(sh)>>{
-             *this, std::move(sh)};
+            *this, std::move(sh)};
       }
    }
 
@@ -205,7 +205,7 @@ public:
       using namespace detail;
       auto sh = slice_helper(*this, std::move(slice));
       return StrictArrayBase1D<ConstSliceArrayBase1D<StrictArrayBase1D, decltype(sh)>>{
-          *this, std::move(sh)};
+         *this, std::move(sh)};
    }
 
    STRICT_CONSTEXPR auto operator()(use::IndexList list) const& {
@@ -260,7 +260,7 @@ public:
    = delete;
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////
-   //  Return unaligned array so that it can be constexpr.
+   // Return unaligned array so that it can be constexpr.
    STRICT_NODISCARD_CONSTEXPR Array1D<builtin_type, Unaligned> eval() const& {
       // Workaround for "inherited constructor cannot be used to copy object".
       // Replaced copy-like constructor so that eval() can also be used for
@@ -277,9 +277,9 @@ public:
 
 template <detail::OneDimNonConstBaseType Base>
 class STRICT_NODISCARD StrictArrayMutable1D
-    : public StrictArrayBase1D<Base>,
-      public detail::Lval_CRTP<StrictArrayMutable1D<Base>>,
-      public detail::Operands_CRTP<StrictArrayMutable1D<Base>, ValueTypeOf<Base>> {
+   : public StrictArrayBase1D<Base>,
+     public detail::Lval_CRTP<StrictArrayMutable1D<Base>>,
+     public detail::Operands_CRTP<StrictArrayMutable1D<Base>, ValueTypeOf<Base>> {
 public:
    using typename StrictArrayBase1D<Base>::builtin_type;
    using typename StrictArrayBase1D<Base>::size_type;
@@ -328,9 +328,9 @@ public:
 
 template <typename Base>
 class STRICT_NODISCARD StrictArray1D final
-    : public StrictArrayMutable1D<Base>,
-      public detail::Lval_CRTP<StrictArray1D<Base>>,
-      public detail::Operands_CRTP<StrictArray1D<Base>, ValueTypeOf<Base>> {
+   : public StrictArrayMutable1D<Base>,
+     public detail::Lval_CRTP<StrictArray1D<Base>>,
+     public detail::Operands_CRTP<StrictArray1D<Base>, ValueTypeOf<Base>> {
    using MutableBase1D = StrictArrayMutable1D<Base>;
 
 public:
@@ -392,11 +392,11 @@ public:
    }
 
    STRICT_CONSTEXPR Strict64 mbytes() const {
-      return this->bytes().sd() / squares(1024_sl).sd();
+      return this->bytes().sd() / squares(1'024_sl).sd();
    }
 
    STRICT_CONSTEXPR Strict64 gbytes() const {
-      return this->bytes().sd() / cubes(1024_sl).sd();
+      return this->bytes().sd() / cubes(1'024_sl).sd();
    }
 
    STRICT_CONSTEXPR static StrictBool is_dynamic() {
@@ -421,5 +421,4 @@ STRICT_CONSTEXPR StrictBool equal(const use::List1D<ValueTypeOf<Base>>& A1, cons
 }
 
 
-}  // namespace spp
-
+} // namespace spp

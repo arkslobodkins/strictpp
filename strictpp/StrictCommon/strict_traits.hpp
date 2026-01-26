@@ -23,19 +23,19 @@ using float64 = double;
 
 
 static_assert(sizeof(int) >= 4, STRICT_COMPATIBILITY_ERROR_MSG);
-static_assert(sizeof(long int) >= 8, STRICT_COMPATIBILITY_ERROR_MSG);  // Ensure 64-bit indexing.
+static_assert(sizeof(long int) >= 8, STRICT_COMPATIBILITY_ERROR_MSG); // Ensure 64-bit indexing.
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T> concept SignedInteger = SameAs<T, int> || SameAs<T, long int>;
 
-template <typename T> concept UnsignedInteger
-    = SameAs<T, unsigned int> || SameAs<T, unsigned long int>;
+template <typename T> concept UnsignedInteger =
+   SameAs<T, unsigned int> || SameAs<T, unsigned long int>;
 
 template <typename T> concept Integer = SignedInteger<T> || UnsignedInteger<T>;
 
-template <typename T> concept StandardFloating
-    = SameAs<T, float> || SameAs<T, double> || SameAs<T, long double>;
+template <typename T> concept StandardFloating =
+   SameAs<T, float> || SameAs<T, double> || SameAs<T, long double>;
 
 
 #ifdef STRICT_QUAD_PRECISION
@@ -89,4 +89,4 @@ template <typename T> concept StrictBuiltin = requires(T x) {
 template <typename... Args> concept AllStrict = (... && StrictBuiltin<Args>);
 
 
-}  // namespace spp
+} // namespace spp

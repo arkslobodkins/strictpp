@@ -1,6 +1,6 @@
-#include <cstdlib>
-
 #include "test.hpp"
+
+#include <cstdlib>
 
 
 using namespace spp;

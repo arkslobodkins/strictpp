@@ -1,9 +1,9 @@
+#include "test.hpp"
+
 #include <algorithm>
 #include <cstdlib>
 #include <utility>
 #include <vector>
-
-#include "test.hpp"
 
 
 using namespace spp;
@@ -449,9 +449,9 @@ void array_data() {
    T* a_blas_ptr = A1.blas_data();
    const T* b_blas_ptr = A2.blas_data();
    ASSERT(
-       std::all_of(a_blas_ptr, a_blas_ptr + n.val(), [](auto x) { return Strict{x} == One<T>; }));
+      std::all_of(a_blas_ptr, a_blas_ptr + n.val(), [](auto x) { return Strict{x} == One<T>; }));
    ASSERT(
-       std::all_of(b_blas_ptr, b_blas_ptr + n.val(), [](auto x) { return Strict{x} == One<T>; }));
+      std::all_of(b_blas_ptr, b_blas_ptr + n.val(), [](auto x) { return Strict{x} == One<T>; }));
 }
 
 

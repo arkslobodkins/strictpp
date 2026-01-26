@@ -4,10 +4,10 @@
 #pragma once
 
 
-#include <utility>
-
 #include "strict_traits.hpp"
 #include "strict_val.hpp"
+
+#include <utility>
 
 
 namespace spp::use {
@@ -18,4 +18,3 @@ using StrictPair = std::pair<T, T>;
 
 
 }
-

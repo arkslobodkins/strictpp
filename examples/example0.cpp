@@ -1,9 +1,10 @@
+#include <strictpp/strict.hpp>
+
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <numeric>
-#include <strictpp/strict.hpp>
 
 
 // example0 demonstrates how Strict arithmetic types can help
@@ -14,8 +15,8 @@ int main() {
 
 
    // 1.
-   long double ld_bad{2.2};    // Loses precision, likely a bug.
-   long double ld_good{2.2L};  // Ok, retains all digits.
+   long double ld_bad{2.2};   // Loses precision, likely a bug.
+   long double ld_good{2.2L}; // Ok, retains all digits.
    cout << scientific << setprecision(18);
    cout << "long double initialized with 2.2:   " << ld_bad << '\n';
    cout << "long double initialized with 2.2L:  " << ld_good << "\n\n";
@@ -27,13 +28,13 @@ int main() {
    // 2.
    double A[]{0.1, 0.2, 0.3, 0.4, 0.5};
    cout << "result of accumulate when passing 0(deduces int):      "
-        << accumulate(begin(A), end(A), 0) << "\n";  // Accumulates in int, likely a bug.
+        << accumulate(begin(A), end(A), 0) << "\n"; // Accumulates in int, likely a bug.
 
    cout << "result of accumulate when passing 0.(deduces double):  "
-        << accumulate(begin(A), end(A), 0.) << "\n\n";  // Ok, accumulates in double.
+        << accumulate(begin(A), end(A), 0.) << "\n\n"; // Ok, accumulates in double.
 
    Strict64 B[]{0.1_sd, 0.2_sd, 0.3_sd, 0.4_sd, 0.5_sd};
-   (void)accumulate(begin(B), end(B), 0._sd);  // As expected.
+   (void)accumulate(begin(B), end(B), 0._sd); // As expected.
    // accumulate(begin(B), end(B), 0_si);   // Won't compile!!!
 
 

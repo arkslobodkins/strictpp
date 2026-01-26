@@ -1,7 +1,7 @@
+#include "test.hpp"
+
 #include <cstdlib>
 #include <utility>
-
-#include "test.hpp"
 
 using namespace spp;
 using namespace spp::place;
@@ -99,7 +99,10 @@ consteval void array2D() {
    Array2D<T>(Rows{2}, Cols{2});
    Array2D<T>(2, 2, Zero<T>);
    Array2D<T>(Rows{2}, Cols{2}, Value{Zero<T>});
-   Array2D<T>{{Zero<T>, Zero<T>}, {Zero<T>, Zero<T>}};
+   Array2D<T>{
+      {Zero<T>, Zero<T>},
+      {Zero<T>, Zero<T>}
+   };
 
    Array2D<T> A(2, 2);
    Array2D<T> B = A;
@@ -107,7 +110,10 @@ consteval void array2D() {
    Array2D<T> D = std::move(A);
 
    D = Zero<T>;
-   D = {{Zero<T>, Zero<T>}, {Zero<T>, Zero<T>}};
+   D = {
+      {Zero<T>, Zero<T>},
+      {Zero<T>, Zero<T>}
+   };
    D = B;
    D = const2D<T>(2, 2, Zero<T>);
    D = std::move(B);
@@ -182,7 +188,10 @@ consteval void fixed_array2D() {
    FixedArray2D<T, 2, 2>{};
    FixedArray2D<T, 2, 2>(Zero<T>);
    FixedArray2D<T, 2, 2>(Value{Zero<T>});
-   FixedArray2D<T, 2, 2>{{Zero<T>, Zero<T>}, {Zero<T>, Zero<T>}};
+   FixedArray2D<T, 2, 2>{
+      {Zero<T>, Zero<T>},
+      {Zero<T>, Zero<T>}
+   };
 
    FixedArray2D<T, 2, 2> A;
    FixedArray2D<T, 2, 2> B = A;
@@ -190,7 +199,10 @@ consteval void fixed_array2D() {
    FixedArray2D<T, 2, 2> D = std::move(A);
 
    D = Zero<T>;
-   D = {{Zero<T>, Zero<T>}, {Zero<T>, Zero<T>}};
+   D = {
+      {Zero<T>, Zero<T>},
+      {Zero<T>, Zero<T>}
+   };
    D = B;
    D = const2D<T>(2, 2, Zero<T>);
    D = std::move(B);
@@ -243,7 +255,7 @@ consteval void array_ops() {
    sort_increasing(x);
    sort_decreasing(x);
 
-#if __cplusplus >= 202302L
+#if __cplusplus >= 202'302L
    all_finite(x);
    has_inf(x);
    has_nan(x);
@@ -508,4 +520,3 @@ int main() {
    TEST_ALL_TYPES(slice_ops_2D);
    return EXIT_SUCCESS;
 }
-

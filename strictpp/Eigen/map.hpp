@@ -52,7 +52,7 @@ struct CopyConstTo<const T, U> {
 };
 
 
-}  // namespace detail
+} // namespace detail
 
 
 template <typename Base>
@@ -64,19 +64,18 @@ auto map(Base&& A) {
 
    if constexpr(base::is_fixed()) {
       using matrix_type = detail::CopyConstTo<
-          base,
-          Matrix<builtin_type, base::rows().val(), base::cols().val(), RowMajor>>::value_type;
+         base,
+         Matrix<builtin_type, base::rows().val(), base::cols().val(), RowMajor>>::value_type;
 
       return Map<matrix_type, detail::eigen_align<base>()>{A.blas_data()};
    } else {
-      using matrix_type
-          = detail::CopyConstTo<base, Matrix<builtin_type, Dynamic, Dynamic, RowMajor>>::value_type;
+      using matrix_type =
+         detail::CopyConstTo<base, Matrix<builtin_type, Dynamic, Dynamic, RowMajor>>::value_type;
 
       return Map<matrix_type, detail::eigen_align<base>()>{
-          A.blas_data(), A.rows().val(), A.cols().val()};
+         A.blas_data(), A.rows().val(), A.cols().val()};
    }
 }
 
 
-}}  // namespace spp::eigen
-
+}} // namespace spp::eigen

@@ -309,5 +309,4 @@ struct BinaryPowProdSecond {
 };
 
 
-}  // namespace spp::expr
-
+} // namespace spp::expr

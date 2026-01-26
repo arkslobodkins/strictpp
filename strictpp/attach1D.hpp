@@ -31,8 +31,8 @@ public:
    using builtin_type = T;
 
    STRICT_NODISCARD strict_attach_ptr1D(T* data, ImplicitInt n)
-       : data_{reinterpret_cast<Strict<T>*>(data)},
-         n_{n.get()} {
+      : data_{reinterpret_cast<Strict<T>*>(data)},
+        n_{n.get()} {
    }
 
    STRICT_NODISCARD_INLINE value_type& un(ImplicitInt i) {
@@ -60,8 +60,8 @@ public:
    using builtin_type = T;
 
    STRICT_NODISCARD const_strict_attach_ptr1D(const T* data, ImplicitInt n)
-       : data_{reinterpret_cast<const Strict<T>*>(data)},
-         n_{n.get()} {
+      : data_{reinterpret_cast<const Strict<T>*>(data)},
+        n_{n.get()} {
    }
 
    STRICT_NODISCARD_INLINE const value_type& un(ImplicitInt i) const {
@@ -78,7 +78,7 @@ private:
 };
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,9 @@ template <detail::PointerConvertibleLvalue T>
 auto attach1D(T&& data, ImplicitInt n) {
    using namespace detail;
    auto proxy = strict_attach_ptr1D(data, n);
-   return StrictArrayMutable1D<SliceArrayBase1D<decltype(proxy), seqN>>{proxy, seqN{0, n}};
+   return StrictArrayMutable1D<SliceArrayBase1D<decltype(proxy), seqN>>{
+      proxy, seqN{0, n}
+   };
 }
 
 
@@ -94,9 +96,10 @@ template <detail::PointerConvertibleLvalueConst T>
 auto attach1D(T&& data, ImplicitInt n) {
    using namespace detail;
    auto proxy = const_strict_attach_ptr1D(data, n);
-   return StrictArrayBase1D<ConstSliceArrayBase1D<decltype(proxy), seqN>>{proxy, seqN{0, n}};
+   return StrictArrayBase1D<ConstSliceArrayBase1D<decltype(proxy), seqN>>{
+      proxy, seqN{0, n}
+   };
 }
 
 
-}  // namespace spp
-
+} // namespace spp

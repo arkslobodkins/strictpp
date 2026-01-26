@@ -5,20 +5,20 @@
 
 
 #ifdef STRICT_QUAD_PRECISION
-#include <cstddef>  // ptrdiff_t
+#include <cstddef> // ptrdiff_t
 #endif
+#include "auxiliary_types.hpp"
+#include "common_traits.hpp"
+#include "error.hpp"
+#include "strict_traits.hpp"
+#include "strict_val.hpp"
+
 #include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <limits>
 #include <sstream>
 #include <string>
-
-#include "auxiliary_types.hpp"
-#include "common_traits.hpp"
-#include "error.hpp"
-#include "strict_traits.hpp"
-#include "strict_val.hpp"
 
 
 namespace spp {
@@ -173,7 +173,7 @@ private:
 };
 
 
-}  // namespace detail
+} // namespace detail
 inline detail::StrictFormat format;
 
 
@@ -292,5 +292,4 @@ void printn(StrictBuiltin auto... x) {
 }
 
 
-}  // namespace spp
-
+} // namespace spp

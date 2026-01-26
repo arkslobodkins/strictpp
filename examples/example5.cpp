@@ -1,6 +1,7 @@
+#include <strictpp/strict.hpp>
+
 #include <cstdlib>
 #include <stdexcept>
-#include <strictpp/strict.hpp>
 #include <tuple>
 
 using namespace spp;
@@ -14,7 +15,7 @@ consteval auto ode_init() {
    constexpr StrictLong nsteps = pows(2_sl, 24_sl);
    constexpr Strict128 h = invs(nsteps.sq());
    constexpr Strict128 t_init{0.Q};
-   constexpr Strict128 y_init{1.Q};  // y(t_init), t_init is not necessarily 0.
+   constexpr Strict128 y_init{1.Q}; // y(t_init), t_init is not necessarily 0.
    return std::tuple{nsteps, h, t_init, y_init};
 }
 

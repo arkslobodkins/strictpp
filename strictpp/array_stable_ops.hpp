@@ -4,14 +4,14 @@
 #pragma once
 
 
-#include <tuple>
-
 #include "ArrayCommon/array_auxiliary.hpp"
 #include "ArrayCommon/array_traits.hpp"
 #include "Expr/expr.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "array_ops.hpp"
 #include "derived1D.hpp"
+
+#include <tuple>
 
 
 namespace spp {
@@ -323,4 +323,4 @@ ValueTypeOf<Base1> stable_gpolynomial(const Base1& coeffs, const Base2& X, const
 }
 
 
-}  // namespace spp
+} // namespace spp

@@ -4,11 +4,11 @@
 #pragma once
 
 
-#include <utility>
-
 #include "ArrayCommon/array_common.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "slice.hpp"
+
+#include <utility>
 
 
 namespace spp::detail {
@@ -52,9 +52,9 @@ private:
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
 STRICT_NODISCARD_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>::SliceArrayBase2D(Base& A, Sl1 sl1,
                                                                               Sl2 sl2)
-    : A_{A},
-      slw1_{std::move(sl1)},
-      slw2_{std::move(sl2)} {
+   : A_{A},
+     slw1_{std::move(sl1)},
+     slw2_{std::move(sl2)} {
    ASSERT_STRICT_DEBUG(slw1_.valid_first(A_));
    ASSERT_STRICT_DEBUG(slw2_.valid_second(A_));
    if(slw1_.size() == 0_sl) {
@@ -66,16 +66,16 @@ STRICT_NODISCARD_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>::SliceArrayBase2D(Ba
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, Sl2>::operator=(
-    value_type x) {
+STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>&
+SliceArrayBase2D<Base, Sl1, Sl2>::operator=(value_type x) {
    fill(x, *this);
    return *this;
 }
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, Sl2>::operator=(
-    use::List2D<value_type> list) {
+STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>&
+SliceArrayBase2D<Base, Sl1, Sl2>::operator=(use::List2D<value_type> list) {
    ASSERT_STRICT_DEBUG(valid_list2D(list));
    auto [nrows, ncols] = list2D_row_col_sizes(list);
    ASSERT_STRICT_DEBUG(this->rows() == nrows);
@@ -87,8 +87,8 @@ STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, S
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, Sl2>::operator=(
-    const SliceArrayBase2D& A) {
+STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>&
+SliceArrayBase2D<Base, Sl1, Sl2>::operator=(const SliceArrayBase2D& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
    return *this;
@@ -96,8 +96,8 @@ STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, S
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, Sl2>::operator=(
-    TwoDimBaseType auto const& A) {
+STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>&
+SliceArrayBase2D<Base, Sl1, Sl2>::operator=(TwoDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
    return *this;
@@ -106,7 +106,7 @@ STRICT_CONSTEXPR SliceArrayBase2D<Base, Sl1, Sl2>& SliceArrayBase2D<Base, Sl1, S
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i)
-    -> value_type& {
+   -> value_type& {
    auto [r, c] = index_map_one_to_two_dim(*this, i);
    return this->un(r, c);
 }
@@ -114,22 +114,24 @@ STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(Impl
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i) const
-    -> const value_type& {
+   -> const value_type& {
    auto [r, c] = index_map_one_to_two_dim(*this, i);
    return this->un(r, c);
 }
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(
-    ImplicitInt i, ImplicitInt j) -> value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i,
+                                                                            ImplicitInt j)
+   -> value_type& {
    return A_.un(slw1_.map(i), slw2_.map(j));
 }
 
 
 template <TwoDimNonConstBaseType Base, typename Sl1, typename Sl2>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(
-    ImplicitInt i, ImplicitInt j) const -> const value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i,
+                                                                            ImplicitInt j) const
+   -> const value_type& {
    return A_.un(slw1_.map(i), slw2_.map(j));
 }
 
@@ -200,11 +202,11 @@ private:
 
 
 template <TwoDimBaseType Base, typename Sl1, typename Sl2>
-STRICT_NODISCARD_CONSTEXPR ConstSliceArrayBase2D<Base, Sl1, Sl2>::ConstSliceArrayBase2D(
-    const Base& A, Sl1 sl1, Sl2 sl2)
-    : A_{A},
-      slw1_{std::move(sl1)},
-      slw2_{std::move(sl2)} {
+STRICT_NODISCARD_CONSTEXPR
+ConstSliceArrayBase2D<Base, Sl1, Sl2>::ConstSliceArrayBase2D(const Base& A, Sl1 sl1, Sl2 sl2)
+   : A_{A},
+     slw1_{std::move(sl1)},
+     slw2_{std::move(sl2)} {
    ASSERT_STRICT_DEBUG(slw1_.valid_first(A_));
    ASSERT_STRICT_DEBUG(slw2_.valid_second(A_));
    if(slw1_.size() == 0_sl) {
@@ -216,16 +218,16 @@ STRICT_NODISCARD_CONSTEXPR ConstSliceArrayBase2D<Base, Sl1, Sl2>::ConstSliceArra
 
 
 template <TwoDimBaseType Base, typename Sl1, typename Sl2>
-STRICT_NODISCARD_CONSTEXPR_INLINE decltype(auto) ConstSliceArrayBase2D<Base, Sl1, Sl2>::un(
-    ImplicitInt i) const {
+STRICT_NODISCARD_CONSTEXPR_INLINE decltype(auto)
+ConstSliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i) const {
    auto [r, c] = index_map_one_to_two_dim(*this, i);
    return this->un(r, c);
 }
 
 
 template <TwoDimBaseType Base, typename Sl1, typename Sl2>
-STRICT_NODISCARD_CONSTEXPR_INLINE decltype(auto) ConstSliceArrayBase2D<Base, Sl1, Sl2>::un(
-    ImplicitInt i, ImplicitInt j) const {
+STRICT_NODISCARD_CONSTEXPR_INLINE decltype(auto)
+ConstSliceArrayBase2D<Base, Sl1, Sl2>::un(ImplicitInt i, ImplicitInt j) const {
    return A_.un(slw1_.map(i), slw2_.map(j));
 }
 
@@ -266,5 +268,4 @@ STRICT_CONSTEXPR_INLINE index_t ConstSliceArrayBase2D<Base, Sl1, Sl2>::size() co
 }
 
 
-}  // namespace spp::detail
-
+} // namespace spp::detail

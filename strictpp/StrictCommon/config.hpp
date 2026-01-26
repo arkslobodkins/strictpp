@@ -26,7 +26,7 @@
 #define STRICT_INLINE inline
 
 
-#if __cplusplus >= 202302L
+#if __cplusplus >= 202'302L
 #define STRICT_NODISCARD_CONSTEXPR_INLINE_2023 STRICT_NODISCARD_CONSTEXPR_INLINE
 #define STRICT_NODISCARD_CONSTEXPR_2023 STRICT_NODISCARD_CONSTEXPR
 #define STRICT_CONSTEXPR_INLINE_2023 STRICT_CONSTEXPR_INLINE
@@ -40,7 +40,7 @@
 #endif
 
 
-#if __cplusplus > 202302L
+#if __cplusplus > 202'302L
 #define STRICT_NODISCARD_CONSTEXPR_INLINE_2026 STRICT_NODISCARD_CONSTEXPR_INLINE
 #define STRICT_NODISCARD_CONSTEXPR_2026 STRICT_NODISCARD_CONSTEXPR
 #define STRICT_CONSTEXPR_INLINE_2026 STRICT_CONSTEXPR_INLINE
@@ -56,7 +56,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #if defined __GNUG__ || defined __INTEL_COMPILER || defined __INTEL_LLVM_COMPILER \
-    || defined __clang__
+   || defined __clang__
 #define STRICT_RESTRICT __restrict
 #else
 #define STRICT_RESTRICT
@@ -99,7 +99,7 @@ inline void print_stacktrace() {
    std::cout << "..." << std::endl;
 }
 
-}  // namespace spp::detail
+} // namespace spp::detail
 
 #else
 
@@ -108,7 +108,7 @@ inline void print_stacktrace() {
 namespace spp::detail {
 constexpr inline void print_stacktrace() {
 }
-}  // namespace spp::detail
+} // namespace spp::detail
 
 #endif
 
@@ -118,7 +118,7 @@ constexpr inline void print_stacktrace() {
 namespace spp::detail {
 constexpr inline void print_stacktrace() {
 }
-}  // namespace spp::detail
+} // namespace spp::detail
 
 #endif
 
@@ -154,5 +154,4 @@ inline void print_config_info() {
 }
 
 
-}  // namespace spp
-
+} // namespace spp

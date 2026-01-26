@@ -33,5 +33,4 @@ Array2D<BuiltinTypeOf<Base1>> matrix_prod(const Base1& A, const Base2& B) {
 }
 
 
-}  // namespace spp
-
+} // namespace spp

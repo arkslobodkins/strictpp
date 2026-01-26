@@ -1,6 +1,7 @@
+#include <strictpp/strict.hpp>
+
 #include <cassert>
 #include <cstdlib>
-#include <strictpp/strict.hpp>
 #include <utility>
 
 using namespace spp;
@@ -33,8 +34,8 @@ int main() {
    // Add(x, y, Array1D<double>(x + y)); // Won't compile, dangling temporary!!!
    // AbsMerge(x, y, Array1D<double>(x + y)); // Won't compile, dangling temporary!!!
 
-   auto s1 = sum(Add(x, y, Array1D<double>(x + y).lval()));       // Ok, can be used as lvalue.
-   auto s2 = sum(AbsMerge(x, y, Array1D<double>(x + y).lval()));  // Ok, can be used as lvalue.
+   auto s1 = sum(Add(x, y, Array1D<double>(x + y).lval()));      // Ok, can be used as lvalue.
+   auto s2 = sum(AbsMerge(x, y, Array1D<double>(x + y).lval())); // Ok, can be used as lvalue.
 
    // Suppress unused variable warnings.
    []<typename... Args>([[maybe_unused]] Args&&...) {}(z1, z2, s1, s2);

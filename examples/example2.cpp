@@ -1,5 +1,6 @@
-#include <cstdlib>
 #include <strictpp/strict.hpp>
+
+#include <cstdlib>
 
 using namespace spp;
 
@@ -41,4 +42,3 @@ int main() {
                                                        dst2);
    return EXIT_SUCCESS;
 }
-

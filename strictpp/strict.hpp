@@ -4,7 +4,7 @@
 #pragma once
 
 
-#if __cplusplus < 202002L
+#if __cplusplus < 202'002L
 #error requires c++20 or higher
 #else
 

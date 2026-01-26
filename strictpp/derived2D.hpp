@@ -4,9 +4,6 @@
 #pragma once
 
 
-#include <iterator>
-#include <utility>
-
 #include "ArrayCommon/array_common.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "array_base1D.hpp"
@@ -16,6 +13,9 @@
 #include "iterator.hpp"
 #include "slice.hpp"
 #include "slicearray_base2D.hpp"
+
+#include <iterator>
+#include <utility>
 
 
 namespace spp {
@@ -242,10 +242,12 @@ public:
       using namespace detail;
       if constexpr(NonConstBaseType<Base>) {
          return StrictArrayMutable1D<SliceArrayBase1D<StrictArrayBase2D, seqN>>{
-             *this, seqN{0, Base::size(), 1}};
+            *this, seqN{0, Base::size(), 1}
+         };
       } else {
          return StrictArrayBase1D<ConstSliceArrayBase1D<StrictArrayBase2D, seqN>>{
-             *this, seqN{0, Base::size(), 1}};
+            *this, seqN{0, Base::size(), 1}
+         };
       }
    }
 
@@ -282,7 +284,8 @@ public:
 
    STRICT_CONSTEXPR auto view1D() const& {
       return StrictArrayBase1D<detail::ConstSliceArrayBase1D<StrictArrayBase2D, seqN>>{
-          *this, seqN{0, Base::size(), 1}};
+         *this, seqN{0, Base::size(), 1}
+      };
    }
 
    // Implemented in attach2D.hpp.
@@ -364,12 +367,12 @@ public:
       auto [s1h, s2h] = slice_row_col_helper(*this, std::move(row_slice), std::move(col_slice));
       if constexpr(NonConstBaseType<Base>) {
          return StrictArrayMutable2D<
-             SliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
-             *this, std::move(s1h), std::move(s2h)};
+            SliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
+            *this, std::move(s1h), std::move(s2h)};
       } else {
          return StrictArrayBase2D<
-             ConstSliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
-             *this, std::move(s1h), std::move(s2h)};
+            ConstSliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
+            *this, std::move(s1h), std::move(s2h)};
       }
    }
 
@@ -434,8 +437,8 @@ public:
       using namespace detail;
       auto [s1h, s2h] = slice_row_col_helper(*this, std::move(row_slice), std::move(col_slice));
       return StrictArrayBase2D<
-          ConstSliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
-          *this, std::move(s1h), std::move(s2h)};
+         ConstSliceArrayBase2D<StrictArrayBase2D, decltype(s1h), decltype(s2h)>>{
+         *this, std::move(s1h), std::move(s2h)};
    }
 
    template <detail::SliceType Slice>
@@ -614,7 +617,7 @@ public:
    = delete;
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////
-   //  Return unaligned array so that it can be constexpr.
+   // Return unaligned array so that it can be constexpr.
    STRICT_NODISCARD_CONSTEXPR Array2D<builtin_type, Unaligned> eval() const& {
       // Workaround for "inherited constructor cannot be used to copy object".
       // Replaced copy-like constructor so that eval() can also be used for
@@ -644,9 +647,9 @@ private:
 
 template <detail::TwoDimNonConstBaseType Base>
 class STRICT_NODISCARD StrictArrayMutable2D
-    : public StrictArrayBase2D<Base>,
-      public detail::Lval_CRTP<StrictArrayMutable2D<Base>>,
-      public detail::Operands_CRTP<StrictArrayMutable2D<Base>, ValueTypeOf<Base>> {
+   : public StrictArrayBase2D<Base>,
+     public detail::Lval_CRTP<StrictArrayMutable2D<Base>>,
+     public detail::Operands_CRTP<StrictArrayMutable2D<Base>, ValueTypeOf<Base>> {
    using CommonBase2D = StrictArrayBase2D<Base>;
 
 public:
@@ -696,9 +699,9 @@ public:
 
 template <typename Base>
 class STRICT_NODISCARD StrictArray2D final
-    : public StrictArrayMutable2D<Base>,
-      public detail::Lval_CRTP<StrictArray2D<Base>>,
-      public detail::Operands_CRTP<StrictArray2D<Base>, ValueTypeOf<Base>> {
+   : public StrictArrayMutable2D<Base>,
+     public detail::Lval_CRTP<StrictArray2D<Base>>,
+     public detail::Operands_CRTP<StrictArray2D<Base>, ValueTypeOf<Base>> {
    using CommonBase2D = StrictArrayBase2D<Base>;
    using MutableBase2D = StrictArrayMutable2D<Base>;
 
@@ -760,11 +763,11 @@ public:
    }
 
    STRICT_CONSTEXPR Strict64 mbytes() const {
-      return this->bytes().sd() / squares(1024_sl).sd();
+      return this->bytes().sd() / squares(1'024_sl).sd();
    }
 
    STRICT_CONSTEXPR Strict64 gbytes() const {
-      return this->bytes().sd() / cubes(1024_sl).sd();
+      return this->bytes().sd() / cubes(1'024_sl).sd();
    }
 
    STRICT_CONSTEXPR static StrictBool is_dynamic() {
@@ -789,5 +792,4 @@ STRICT_CONSTEXPR StrictBool equal(const use::List2D<ValueTypeOf<Base>>& A1, cons
 }
 
 
-}  // namespace spp
-
+} // namespace spp

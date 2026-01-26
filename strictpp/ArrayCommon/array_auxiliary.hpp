@@ -91,5 +91,4 @@ STRICT_CONSTEXPR StrictBool equal(const Base1& A1, const Base2& A2) {
 }
 
 
-}  // namespace spp
-
+} // namespace spp

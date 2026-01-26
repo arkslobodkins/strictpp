@@ -1,7 +1,7 @@
+#include "test.hpp"
+
 #include <cmath>
 #include <cstdlib>
-
-#include "test.hpp"
 
 
 using namespace spp;
@@ -275,18 +275,33 @@ void run_merge() {
 void run_merge_horizontal() {
    auto A = sequence<int>(4).view2D(2, 2);
    ASSERT(equal(merge_horizontal(A, const2D<int>(2, 1, 1_si)),
-                {{0_si, 1_si, 1_si}, {2_si, 3_si, 1_si}}));
+                {
+                   {0_si, 1_si, 1_si},
+                   {2_si, 3_si, 1_si}
+   }));
    ASSERT(equal(merge_horizontal(A, const2D<int>(2, 1, 1_si), const2D<int>(2, 1, 2_si)),
-                {{0_si, 1_si, 1_si, 2_si}, {2_si, 3_si, 1_si, 2_si}}));
+                {
+                   {0_si, 1_si, 1_si, 2_si},
+                   {2_si, 3_si, 1_si, 2_si}
+   }));
 }
 
 
 void run_merge_vertical() {
    auto A = sequence<int>(4).view2D(2, 2);
    ASSERT(equal(merge_vertical(A, const2D<int>(1, 2, 1_si)),
-                {{0_si, 1_si}, {2_si, 3_si}, {1_si, 1_si}}));
+                {
+                   {0_si, 1_si},
+                   {2_si, 3_si},
+                   {1_si, 1_si}
+   }));
    ASSERT(equal(merge_vertical(A, const2D<int>(1, 2, 1_si), const2D<int>(1, 2, 2_si)),
-                {{0_si, 1_si}, {2_si, 3_si}, {1_si, 1_si}, {2_si, 2_si}}));
+                {
+                   {0_si, 1_si},
+                   {2_si, 3_si},
+                   {1_si, 1_si},
+                   {2_si, 2_si}
+   }));
 }
 
 
@@ -330,13 +345,21 @@ void run_e_unit() {
 
 
 void run_identity() {
-   ASSERT(equal(identity<int>(2), {{1_si, 0_si}, {0_si, 1_si}}));
+   ASSERT(equal(identity<int>(2),
+                {
+                   {1_si, 0_si},
+                   {0_si, 1_si}
+   }));
 }
 
 
 void run_transpose() {
    auto A = sequence<int>(6).view2D(3, 2);
-   ASSERT(equal(transpose(A), {{0_si, 2_si, 4_si}, {1_si, 3_si, 5_si}}));
+   ASSERT(equal(transpose(A),
+                {
+                   {0_si, 2_si, 4_si},
+                   {1_si, 3_si, 5_si}
+   }));
 }
 
 
@@ -345,7 +368,11 @@ void run_const() {
    ASSERT(equal(A1, {1_si, 1_si, 1_si}));
 
    auto A2 = const2D(Rows{2}, Cols{3}, Value{1});
-   ASSERT(equal(A2, {{1_si, 1_si, 1_si}, {1_si, 1_si, 1_si}}));
+   ASSERT(equal(A2,
+                {
+                   {1_si, 1_si, 1_si},
+                   {1_si, 1_si, 1_si}
+   }));
 }
 
 

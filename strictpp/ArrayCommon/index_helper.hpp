@@ -4,9 +4,6 @@
 #pragma once
 
 
-#include <utility>
-#include <vector>
-
 #include "../StrictCommon/auxiliary_types.hpp"
 #include "../StrictCommon/common_traits.hpp"
 #include "../StrictCommon/config.hpp"
@@ -14,6 +11,9 @@
 #include "../StrictCommon/strict_traits.hpp"
 #include "../StrictCommon/strict_val.hpp"
 #include "array_traits.hpp"
+
+#include <utility>
+#include <vector>
 
 
 namespace spp::detail {
@@ -88,21 +88,21 @@ STRICT_CONSTEXPR_INLINE index_t index_col_helper(TwoDimBaseType auto const& A, a
 }
 
 
-STRICT_CONSTEXPR_INLINE std::pair<index_t, index_t> index_row_col_helper(
-    TwoDimBaseType auto const& A, auto i, auto j) {
+STRICT_CONSTEXPR_INLINE std::pair<index_t, index_t>
+index_row_col_helper(TwoDimBaseType auto const& A, auto i, auto j) {
    return {IndexWrapper{i}.get_row(A), IndexWrapper{j}.get_col(A)};
 }
 
 
-STRICT_CONSTEXPR_INLINE std::pair<index_t, index_t> index_map_one_to_two_dim(
-    TwoDimBaseType auto const& A, auto i) {
+STRICT_CONSTEXPR_INLINE std::pair<index_t, index_t>
+index_map_one_to_two_dim(TwoDimBaseType auto const& A, auto i) {
    auto r = i.get() / A.cols();
    auto c = i.get() % A.cols();
    return {r, c};
 }
 
 
-}  // namespace spp::detail
+} // namespace spp::detail
 
 
 namespace spp {
@@ -127,5 +127,4 @@ STRICT_CONSTEXPR_INLINE auto implicit_vector_sequence(Size size, Start<T> start 
 }
 
 
-}  // namespace spp
-
+} // namespace spp

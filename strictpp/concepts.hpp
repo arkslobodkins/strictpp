@@ -73,9 +73,8 @@ using spp::OneDimOwnerType;
 using spp::TwoDimOwnerType;
 
 
-using spp::expr::UnaryOperation;
 using spp::expr::BinaryOperation;
+using spp::expr::UnaryOperation;
 
 
-}  // namespace spp::concepts
-
+} // namespace spp::concepts

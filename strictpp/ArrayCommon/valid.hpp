@@ -4,10 +4,6 @@
 #pragma once
 
 
-#include <algorithm>
-#include <utility>
-#include <vector>
-
 #include "../StrictCommon/auxiliary_types.hpp"
 #include "../StrictCommon/config.hpp"
 #include "../StrictCommon/error.hpp"
@@ -16,6 +12,10 @@
 #include "../StrictCommon/strict_val.hpp"
 #include "array_traits.hpp"
 #include "use.hpp"
+
+#include <algorithm>
+#include <utility>
+#include <vector>
 
 
 namespace spp::detail {
@@ -92,21 +92,21 @@ STRICT_CONSTEXPR auto list2D_row_col_sizes(use::List2D<Strict<T>> list) {
 STRICT_CONSTEXPR StrictBool valid_slice_vector(BaseType auto const& A,
                                                const std::vector<ImplicitInt>& indexes) {
    return Strict{
-       std::ranges::all_of(indexes, [&A](auto i) { return bool{valid_index(A, i.get())}; })};
+      std::ranges::all_of(indexes, [&A](auto i) { return bool{valid_index(A, i.get())}; })};
 }
 
 
 STRICT_CONSTEXPR StrictBool valid_row_slice_vector(TwoDimBaseType auto const& A,
                                                    const std::vector<ImplicitInt>& indexes) {
    return Strict{
-       std::ranges::all_of(indexes, [&A](auto i) { return bool{valid_row(A, i.get())}; })};
+      std::ranges::all_of(indexes, [&A](auto i) { return bool{valid_row(A, i.get())}; })};
 }
 
 
 STRICT_CONSTEXPR StrictBool valid_col_slice_vector(TwoDimBaseType auto const& A,
                                                    const std::vector<ImplicitInt>& indexes) {
    return Strict{
-       std::ranges::all_of(indexes, [&A](auto i) { return bool{valid_col(A, i.get())}; })};
+      std::ranges::all_of(indexes, [&A](auto i) { return bool{valid_col(A, i.get())}; })};
 }
 
 
@@ -121,14 +121,14 @@ STRICT_CONSTEXPR StrictBool valid_complement_index_vector(F f, BaseType auto con
    // Check if indexes are in strictly increasing order, true for ranges that are empty or of
    // length 1.
    return Strict{
-       std::ranges::is_sorted(indexes, [](auto x, auto y) { return bool{x.get() <= y.get()}; })};
+      std::ranges::is_sorted(indexes, [](auto x, auto y) { return bool{x.get() <= y.get()}; })};
 }
 
 
 template <typename F>
-STRICT_CONSTEXPR std::vector<ImplicitInt> complement_index_vector(
-    [[maybe_unused]] F f, index_t n, [[maybe_unused]] BaseType auto const& A,
-    const std::vector<ImplicitInt>& indexes) {
+STRICT_CONSTEXPR std::vector<ImplicitInt>
+complement_index_vector([[maybe_unused]] F f, index_t n, [[maybe_unused]] BaseType auto const& A,
+                        const std::vector<ImplicitInt>& indexes) {
    ASSERT_STRICT_DEBUG(valid_complement_index_vector(f, A, indexes));
 
    std::vector<ImplicitInt> cmpl;
@@ -145,4 +145,4 @@ STRICT_CONSTEXPR std::vector<ImplicitInt> complement_index_vector(
 }
 
 
-}  // namespace spp::detail
+} // namespace spp::detail

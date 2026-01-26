@@ -154,5 +154,4 @@ STRICT_CONSTEXPR_INLINE void fill(ValueTypeOf<Base> val, Base& A) {
 }
 
 
-}  // namespace spp::detail
-
+} // namespace spp::detail

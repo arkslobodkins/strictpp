@@ -32,9 +32,9 @@ public:
    using builtin_type = T;
 
    STRICT_NODISCARD strict_attach_ptr2D(T* data, ImplicitInt m, ImplicitInt n)
-       : data_{reinterpret_cast<Strict<T>*>(data)},
-         m_{m.get()},
-         n_{n.get()} {
+      : data_{reinterpret_cast<Strict<T>*>(data)},
+        m_{m.get()},
+        n_{n.get()} {
    }
 
    STRICT_NODISCARD_INLINE value_type& un(ImplicitInt i) {
@@ -78,9 +78,9 @@ public:
    using builtin_type = T;
 
    STRICT_NODISCARD const_strict_attach_ptr2D(const T* data, ImplicitInt m, ImplicitInt n)
-       : data_{reinterpret_cast<const Strict<T>*>(data)},
-         m_{m.get()},
-         n_{n.get()} {
+      : data_{reinterpret_cast<const Strict<T>*>(data)},
+        m_{m.get()},
+        n_{n.get()} {
    }
 
    STRICT_NODISCARD_INLINE const value_type& un(ImplicitInt i) const {
@@ -117,9 +117,9 @@ public:
    using builtin_type = Base::builtin_type;
 
    STRICT_NODISCARD_CONSTEXPR strict_convert_slice2D(Base& A, ImplicitInt m, ImplicitInt n)
-       : A_{A},
-         m_{m.get()},
-         n_{n.get()} {
+      : A_{A},
+        m_{m.get()},
+        n_{n.get()} {
    }
 
    STRICT_NODISCARD_CONSTEXPR strict_convert_slice2D(const strict_convert_slice2D&) = default;
@@ -176,16 +176,15 @@ public:
 
    STRICT_NODISCARD_CONSTEXPR const_strict_convert_slice2D(const Base& A, ImplicitInt m,
                                                            ImplicitInt n)
-       : A_{A},
-         m_{m.get()},
-         n_{n.get()} {
+      : A_{A},
+        m_{m.get()},
+        n_{n.get()} {
    }
 
-   STRICT_NODISCARD_CONSTEXPR const_strict_convert_slice2D(const const_strict_convert_slice2D&)
-       = default;
-   STRICT_NODISCARD_CONSTEXPR const_strict_convert_slice2D& operator=(
-       const const_strict_convert_slice2D&)
-       = delete;
+   STRICT_NODISCARD_CONSTEXPR
+   const_strict_convert_slice2D(const const_strict_convert_slice2D&) = default;
+   STRICT_NODISCARD_CONSTEXPR const_strict_convert_slice2D&
+   operator=(const const_strict_convert_slice2D&) = delete;
 
    STRICT_NODISCARD_CONSTEXPR_INLINE decltype(auto) un(ImplicitInt i) const {
       return A_.un(i.get().val());
@@ -217,7 +216,9 @@ template <BaseType Base>
 STRICT_NODISCARD_CONSTEXPR auto convert2D(Base& A, ImplicitInt m, ImplicitInt n) {
    auto proxy = strict_convert_slice2D{A, m, n};
    return StrictArrayMutable2D<SliceArrayBase2D<decltype(proxy), seqN, seqN>>{
-       proxy, seqN{0, m}, seqN{0, n}};
+      proxy, seqN{0, m},
+       seqN{0, n}
+   };
 }
 
 
@@ -225,11 +226,13 @@ template <BaseType Base>
 STRICT_NODISCARD_CONSTEXPR auto const_convert2D(const Base& A, ImplicitInt m, ImplicitInt n) {
    auto proxy = const_strict_convert_slice2D{A, m, n};
    return StrictArrayBase2D<ConstSliceArrayBase2D<decltype(proxy), seqN, seqN>>{
-       proxy, seqN{0, m}, seqN{0, n}};
+      proxy, seqN{0, m},
+       seqN{0, n}
+   };
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,7 +295,9 @@ auto attach2D(T&& data, ImplicitInt m, ImplicitInt n) {
    using namespace detail;
    auto proxy = strict_attach_ptr2D(data, m, n);
    return StrictArrayMutable2D<SliceArrayBase2D<decltype(proxy), seqN, seqN>>{
-       proxy, seqN{0, m}, seqN{0, n}};
+      proxy, seqN{0, m},
+       seqN{0, n}
+   };
 }
 
 
@@ -301,8 +306,10 @@ auto attach2D(T&& data, ImplicitInt m, ImplicitInt n) {
    using namespace detail;
    auto proxy = const_strict_attach_ptr2D(data, m, n);
    return StrictArrayBase2D<ConstSliceArrayBase2D<decltype(proxy), seqN, seqN>>{
-       proxy, seqN{0, m}, seqN{0, n}};
+      proxy, seqN{0, m},
+       seqN{0, n}
+   };
 }
 
 
-}  // namespace spp
+} // namespace spp

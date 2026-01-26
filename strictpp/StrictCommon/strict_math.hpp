@@ -4,12 +4,12 @@
 #pragma once
 
 
-#include <cmath>
-
 #include "config.hpp"
 #include "error.hpp"
 #include "strict_traits.hpp"
 #include "strict_val.hpp"
+
+#include <cmath>
 
 
 namespace spp {
@@ -310,5 +310,4 @@ STRICT_NODISCARD_CONSTEXPR_INLINE_2023 Strict<T> fmas(Strict<T> x, Strict<T> y, 
 }
 
 
-}  // namespace spp
-
+} // namespace spp

@@ -89,13 +89,13 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(value_ty
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(Value<T> x)
-    : FixedArrayBase1D(x.get()) {
+   : FixedArrayBase1D(x.get()) {
 }
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
-    use::List1D<value_type> list) {
+STRICT_NODISCARD_CONSTEXPR
+FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(use::List1D<value_type> list) {
    ASSERT_STRICT_DEBUG(N.get() == to_index_t(list.size()));
    copy(list, *this);
 }
@@ -117,16 +117,16 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(const Fi
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
-    FixedArrayBase1D&& A) noexcept
-    : FixedArrayBase1D(A) {
+STRICT_NODISCARD_CONSTEXPR
+FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(FixedArrayBase1D&& A) noexcept
+   : FixedArrayBase1D(A) {
    A = Zero<T>;
 }
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(
-    OneDimBaseType auto const& A) {
+STRICT_NODISCARD_CONSTEXPR
+FixedArrayBase1D<T, N, AF>::FixedArrayBase1D(OneDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
 }
@@ -140,8 +140,8 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
-    use::List1D<value_type> list) {
+STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>&
+FixedArrayBase1D<T, N, AF>::operator=(use::List1D<value_type> list) {
    ASSERT_STRICT_DEBUG(N.get() == to_index_t(list.size()));
    copy(list, *this);
    return *this;
@@ -149,8 +149,8 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
-    const FixedArrayBase1D& A) {
+STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>&
+FixedArrayBase1D<T, N, AF>::operator=(const FixedArrayBase1D& A) {
    if(this != &A) {
       copy(A, *this);
    }
@@ -159,8 +159,8 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
-    FixedArrayBase1D&& A) noexcept {
+STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>&
+FixedArrayBase1D<T, N, AF>::operator=(FixedArrayBase1D&& A) noexcept {
    if(this != &A) {
       *this = A;
       A = Zero<T>;
@@ -170,8 +170,8 @@ STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operato
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>& FixedArrayBase1D<T, N, AF>::operator=(
-    OneDimBaseType auto const& A) {
+STRICT_CONSTEXPR FixedArrayBase1D<T, N, AF>&
+FixedArrayBase1D<T, N, AF>::operator=(OneDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
    return *this;
@@ -186,14 +186,14 @@ STRICT_CONSTEXPR_INLINE index_t FixedArrayBase1D<T, N, AF>::size() {
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase1D<T, N, AF>::un(ImplicitInt i)
-    -> value_type& {
+   -> value_type& {
    return data_[i.get().val()];
 }
 
 
 template <Builtin T, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase1D<T, N, AF>::un(ImplicitInt i) const
-    -> const value_type& {
+   -> const value_type& {
    return data_[i.get().val()];
 }
 
@@ -232,4 +232,4 @@ STRICT_NODISCARD_CONSTEXPR_INLINE int FixedArrayBase1D<T, N, AF>::alignment() {
 }
 
 
-}  // namespace spp::detail
+} // namespace spp::detail

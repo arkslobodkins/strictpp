@@ -89,13 +89,13 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(value
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(Value<T> x)
-    : FixedArrayBase2D(x.get()) {
+   : FixedArrayBase2D(x.get()) {
 }
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(
-    use::List2D<value_type> list) {
+STRICT_NODISCARD_CONSTEXPR
+FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(use::List2D<value_type> list) {
    ASSERT_STRICT_DEBUG(valid_list2D(list));
    auto [nrows, ncols] = list2D_row_col_sizes(list);
    ASSERT_STRICT_DEBUG(this->rows() == nrows);
@@ -105,24 +105,24 @@ STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(
-    TwoDimBaseType auto const& A) {
+STRICT_NODISCARD_CONSTEXPR
+FixedArrayBase2D<T, M, N, AF>::FixedArrayBase2D(TwoDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
 }
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::operator=(
-    value_type x) {
+STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>&
+FixedArrayBase2D<T, M, N, AF>::operator=(value_type x) {
    data1D_ = x;
    return *this;
 }
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::operator=(
-    use::List2D<value_type> list) {
+STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>&
+FixedArrayBase2D<T, M, N, AF>::operator=(use::List2D<value_type> list) {
    // Constructor of temp checks that a list is valid and that it is of size M x N, same_size not
    // needed.
    FixedArrayBase2D temp(list);
@@ -131,8 +131,8 @@ STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::o
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>& FixedArrayBase2D<T, M, N, AF>::operator=(
-    TwoDimBaseType auto const& A) {
+STRICT_CONSTEXPR FixedArrayBase2D<T, M, N, AF>&
+FixedArrayBase2D<T, M, N, AF>::operator=(TwoDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
    return *this;
@@ -159,28 +159,30 @@ STRICT_CONSTEXPR_INLINE index_t FixedArrayBase2D<T, M, N, AF>::size() {
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(ImplicitInt i)
-    -> value_type& {
+   -> value_type& {
    return data1D_.un(i);
 }
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(ImplicitInt i) const
-    -> const value_type& {
+   -> const value_type& {
    return data1D_.un(i);
 }
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(
-    ImplicitInt i, ImplicitInt j) -> value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(ImplicitInt i,
+                                                                         ImplicitInt j)
+   -> value_type& {
    return data1D_.un(i.get() * N.get() + j.get());
 }
 
 
 template <Builtin T, ImplicitIntStatic M, ImplicitIntStatic N, AlignmentFlag AF>
-STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(
-    ImplicitInt i, ImplicitInt j) const -> const value_type& {
+STRICT_NODISCARD_CONSTEXPR_INLINE auto FixedArrayBase2D<T, M, N, AF>::un(ImplicitInt i,
+                                                                         ImplicitInt j) const
+   -> const value_type& {
    return data1D_.un(i.get() * N.get() + j.get());
 }
 
@@ -219,4 +221,4 @@ STRICT_NODISCARD_CONSTEXPR_INLINE int FixedArrayBase2D<T, M, N, AF>::alignment()
 }
 
 
-}  // namespace spp::detail
+} // namespace spp::detail

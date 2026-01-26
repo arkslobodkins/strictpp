@@ -1,8 +1,8 @@
+#include "test.hpp"
+
 #include <algorithm>
 #include <cstdlib>
 #include <utility>
-
-#include "test.hpp"
 
 
 using namespace spp;
@@ -34,7 +34,10 @@ template <Builtin T>
 consteval void run_constr_list() {
    constexpr auto x0 = Zero<T>;
    constexpr auto x1 = One<T>;
-   constexpr FixedArray2D<T, 2, 2> A{{x0, x0}, {x1, x1}};
+   constexpr FixedArray2D<T, 2, 2> A{
+      {x0, x0},
+      {x1, x1}
+   };
    static_assert(A(0, 0) == x0);
    static_assert(A(0, 1) == x0);
    static_assert(A(1, 0) == x1);
@@ -70,7 +73,10 @@ consteval void run_constr_copy_other() {
 
 template <Builtin T>
 void run_constr_list_fail() {
-   REQUIRE_THROW((FixedArray2D<T, 2, 2>{{Zero<T>, Zero<T>}, {Zero<T>}}));
+   REQUIRE_THROW((FixedArray2D<T, 2, 2>{
+      {Zero<T>, Zero<T>},
+      {Zero<T>}
+   }));
 }
 
 
@@ -94,7 +100,10 @@ consteval void run_assign_list() {
    auto x0 = Zero<T>;
    auto x1 = One<T>;
    FixedArray2D<T, 2, 2> A;
-   A = {{x0, x0}, {x1, x1}};
+   A = {
+      {x0, x0},
+      {x1, x1}
+   };
    ASSERT(A(0, 0) == x0);
    ASSERT(A(0, 1) == x0);
    ASSERT(A(1, 0) == x1);
@@ -139,7 +148,10 @@ consteval void run_assign_copy_other() {
 template <Builtin T>
 void run_assign_list_fail() {
    FixedArray2D<T, 2, 2> A;
-   REQUIRE_THROW((A = {{Zero<T>, Zero<T>}, {Zero<T>}}));
+   REQUIRE_THROW((A = {
+                     {Zero<T>, Zero<T>},
+                     {Zero<T>}
+   }));
 }
 
 
@@ -196,9 +208,9 @@ void fixed_array_data() {
    T* a_blas_ptr = A1.blas_data();
    const T* b_blas_ptr = A2.blas_data();
    ASSERT(std::all_of(
-       a_blas_ptr, a_blas_ptr + (M * N).val(), [](auto x) { return Strict{x} == One<T>; }));
+      a_blas_ptr, a_blas_ptr + (M * N).val(), [](auto x) { return Strict{x} == One<T>; }));
    ASSERT(std::all_of(
-       b_blas_ptr, b_blas_ptr + (M * N).val(), [](auto x) { return Strict{x} == One<T>; }));
+      b_blas_ptr, b_blas_ptr + (M * N).val(), [](auto x) { return Strict{x} == One<T>; }));
 }
 
 

@@ -4,6 +4,13 @@
 #pragma once
 
 
+#include "ArrayCommon/array_traits.hpp"
+#include "Expr/expr.hpp"
+#include "StrictCommon/strict_common.hpp"
+#include "array_ops.hpp"
+#include "derived1D.hpp"
+#include "derived2D.hpp"
+
 #include <cmath>
 #include <fstream>
 #include <iomanip>
@@ -11,13 +18,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include "ArrayCommon/array_traits.hpp"
-#include "Expr/expr.hpp"
-#include "StrictCommon/strict_common.hpp"
-#include "array_ops.hpp"
-#include "derived1D.hpp"
-#include "derived2D.hpp"
 
 
 namespace spp {
@@ -97,7 +97,7 @@ private:
    enum Style : int { Row, Column } style_ = Column;
 };
 
-}  // namespace detail
+} // namespace detail
 inline detail::ArrayFormat array_format;
 
 
@@ -202,7 +202,7 @@ auto count_digit(Real auto number) -> int {
       return 1;
    }
    return static_cast<int>(std::log10(number)) + 1;
-};
+}
 
 
 const auto integer_spacing = []<Integer T>(Strict<T> x) -> int {
@@ -340,7 +340,7 @@ void print_helper(const Base1& A1, const BArgs&... AArgs) {
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,4 +420,4 @@ STRICT_INLINE std::ostream& operator<<(std::ostream& os, const std::vector<Impli
 }
 
 
-}  // namespace spp
+} // namespace spp

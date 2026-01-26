@@ -41,7 +41,7 @@
                                                                             \
       template <SignedInteger T, bool b = non_neg>                          \
       STRICT_NODISCARD_CONSTEXPR explicit(cnd) SmallObjectName(T x)         \
-          : x_{static_cast<long int>(x)} {                                  \
+         : x_{static_cast<long int>(x)} {                                   \
          if constexpr(b) {                                                  \
             ASSERT_STRICT_DEBUG(x_ > -1_sl);                                \
          }                                                                  \
@@ -49,7 +49,7 @@
                                                                             \
       template <SignedInteger T, bool b = non_neg>                          \
       STRICT_NODISCARD_CONSTEXPR explicit(cnd) SmallObjectName(Strict<T> x) \
-          : x_{strict_cast<long int>(x)} {                                  \
+         : x_{strict_cast<long int>(x)} {                                   \
          if constexpr(b) {                                                  \
             ASSERT_STRICT_DEBUG(x_ > -1_sl);                                \
          }                                                                  \
@@ -77,7 +77,7 @@
       template <typename U>                                                                      \
          requires SameAs<Type, U>                                                                \
       STRICT_NODISCARD_CONSTEXPR explicit(cnd) SmallObjectName(Strict<U> x)                      \
-          : x_{strict_cast<Type>(x)} {                                                           \
+         : x_{strict_cast<Type>(x)} {                                                            \
       }                                                                                          \
                                                                                                  \
       STRICT_NODISCARD_CONSTEXPR Strict<Type> get() const {                                      \
@@ -168,15 +168,15 @@ public:
 
 namespace detail {
 
-class STRICT_NODISCARD All{};
+class STRICT_NODISCARD All {};
 
-class STRICT_NODISCARD Even{};
+class STRICT_NODISCARD Even {};
 
-class STRICT_NODISCARD Odd{};
+class STRICT_NODISCARD Odd {};
 
-class STRICT_NODISCARD Reverse{};
+class STRICT_NODISCARD Reverse {};
 
-}  // namespace detail
+} // namespace detail
 
 
 // Moved from namespace::detail for ADL.
@@ -200,7 +200,7 @@ constexpr inline detail::Even even;
 constexpr inline detail::Odd odd;
 constexpr inline detail::Reverse reverse;
 constexpr inline Last last{0};
-}  // namespace place
+} // namespace place
 
 
 using place::last;
@@ -244,4 +244,4 @@ STRICT_NODISCARD_CONSTEXPR_INLINE ImplicitIntStatic operator-(ImplicitIntStatic 
 }
 
 
-}  // namespace spp
+} // namespace spp

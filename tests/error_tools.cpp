@@ -1,6 +1,6 @@
-#include <cstdlib>
-
 #include "test.hpp"
+
+#include <cstdlib>
 
 
 using namespace spp;
@@ -11,7 +11,7 @@ static constexpr auto eps10 = Strict{T(10)} * constants::epsilon<T>;
 
 
 template <Floating T>
-static constexpr auto eps1000 = Strict{T(1000)} * constants::epsilon<T>;
+static constexpr auto eps1000 = Strict{T(1'000)} * constants::epsilon<T>;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ void run_within_tol_abs() {
    static_assert(within_tol_abs(One<T>, One<T> + eps10<T>));
    static_assert(not within_tol_abs(One<T>, One<T> + eps1000<T>));
 
-   Array1D<T> x = random<T>(1000);
+   Array1D<T> x = random<T>(1'000);
    ASSERT(within_tol_abs(x, x));
    ASSERT(within_tol_abs(x, x + eps10<T>));
    ASSERT(not within_tol_abs(x, x + eps1000<T>));
@@ -41,7 +41,7 @@ void run_within_tol_rel() {
    static_assert(within_tol_rel(One<T>, One<T> + eps10<T>));
    static_assert(not within_tol_rel(One<T>, One<T> + eps1000<T>));
 
-   Array1D<T> x = random<T>(1000);
+   Array1D<T> x = random<T>(1'000);
    ASSERT(within_tol_rel(x, x));
    ASSERT(within_tol_rel(x, x + x * eps10<T>));
    ASSERT(not within_tol_rel(x, x + x * eps1000<T>));
@@ -57,14 +57,14 @@ void run_within_tol_rel_fail() {
 
    REQUIRE_NOT_THROW(within_tol_rel(Array(1), Array(1), constants::epsilon<T>));
    REQUIRE_NOT_THROW(
-       within_tol_rel(Array(1), Array(1), constants::epsilon<T>, constants::epsilon<T>));
+      within_tol_rel(Array(1), Array(1), constants::epsilon<T>, constants::epsilon<T>));
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <Floating T>
 void run_abs_error() {
-   Array1D<T> x = random<T>(1000, NegOne<T>, One<T>);
+   Array1D<T> x = random<T>(1'000, NegOne<T>, One<T>);
    ASSERT(max_abs_error(x, x) <= constants::epsilon<T>);
    ASSERT(max_abs_error(x, x + eps10<T>) <= DefaultTol<T>::value);
    ASSERT(not(max_abs_error(x, x + eps1000<T>) <= DefaultTol<T>::value));
@@ -81,7 +81,7 @@ void run_abs_error_fail() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <Floating T>
 void run_rel_error() {
-   Array1D<T> x = random_not0<T>(1000, NegOne<T>, One<T>);
+   Array1D<T> x = random_not0<T>(1'000, NegOne<T>, One<T>);
    ASSERT(*max_rel_error(x, x) <= eps10<T>);
    ASSERT(*max_rel_error(x, x + x * eps10<T>) <= DefaultTol<T>::value);
    ASSERT(not(*max_rel_error(x, x + x * eps1000<T>) <= DefaultTol<T>::value));

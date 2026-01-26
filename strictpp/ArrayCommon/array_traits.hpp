@@ -4,13 +4,13 @@
 #pragma once
 
 
-#include <tuple>
-#include <type_traits>
-#include <utility>
-
 #include "../StrictCommon/auxiliary_types.hpp"
 #include "../StrictCommon/common_traits.hpp"
 #include "../StrictCommon/strict_traits.hpp"
+
+#include <tuple>
+#include <type_traits>
+#include <utility>
 
 
 namespace spp {
@@ -25,7 +25,7 @@ class TwoDimBase : protected DimBase {};
 class ArrayBase {};
 class OneDimArrayBase : protected ArrayBase {};
 class TwoDimArrayBase : protected ArrayBase {};
-}  // namespace detail
+} // namespace detail
 
 
 // BaseType returns false for references; referenceness is not removed to prevent
@@ -64,12 +64,12 @@ struct ConstSliceBase {};
 template <typename T> concept ConstSliceBaseType = BaseType<T> && BaseOf<ConstSliceBase, T>;
 
 
-// Objects of the type Array or slices of Array with non-constant semantics. Expression templates are
-// excluded since they return by value and thus std::is_lvalue_reference_v evaluates to false.
-template <typename T> concept NonConstBaseType
-    = BaseType<T> && (requires(T A) {
-         requires std::is_lvalue_reference_v<decltype(A.un(0))>;
-      } && !std::is_const_v<T> && !ConstSliceBaseType<T>);
+// Objects of the type Array or slices of Array with non-constant semantics. Expression templates
+// are excluded since they return by value and thus std::is_lvalue_reference_v evaluates to false.
+template <typename T> concept NonConstBaseType =
+   BaseType<T> && (requires(T A) {
+      requires std::is_lvalue_reference_v<decltype(A.un(0))>;
+   } && !std::is_const_v<T> && !ConstSliceBaseType<T>);
 template <typename T> concept OneDimNonConstBaseType = OneDimBaseType<T> && NonConstBaseType<T>;
 template <typename T> concept TwoDimNonConstBaseType = TwoDimBaseType<T> && NonConstBaseType<T>;
 
@@ -146,7 +146,7 @@ struct IsNonConstBase {
 template <typename... Args> concept AllNonConstBases = std::conjunction_v<IsNonConstBase<Args>...>;
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,20 +229,20 @@ template <typename T> concept ArrayTwoDimFloatingTypeRvalue = RvalueOf<T, ArrayT
 // clang-format on
 
 
-template <typename T> concept PointerConvertibleLvalue
-    = std::is_lvalue_reference_v<T> && requires(RemoveRef<T> p) {
-         { p } -> std::convertible_to<std::add_pointer_t<decltype(p[0])>>;
-         requires CompatibleBuiltin<RemoveCVRef<decltype(p[0])>>;
-         requires !IsConst<RemoveRef<decltype(p[0])>>;
-      };
+template <typename T> concept PointerConvertibleLvalue =
+   std::is_lvalue_reference_v<T> && requires(RemoveRef<T> p) {
+      { p } -> std::convertible_to<std::add_pointer_t<decltype(p[0])>>;
+      requires CompatibleBuiltin<RemoveCVRef<decltype(p[0])>>;
+      requires !IsConst<RemoveRef<decltype(p[0])>>;
+   };
 
 
-template <typename T> concept PointerConvertibleLvalueConst
-    = std::is_lvalue_reference_v<T> && requires(RemoveRef<T> p) {
-         { p } -> std::convertible_to<std::add_pointer_t<decltype(p[0])>>;
-         requires CompatibleBuiltin<RemoveCVRef<decltype(p[0])>>;
-         requires IsConst<RemoveRef<decltype(p[0])>>;
-      };
+template <typename T> concept PointerConvertibleLvalueConst =
+   std::is_lvalue_reference_v<T> && requires(RemoveRef<T> p) {
+      { p } -> std::convertible_to<std::add_pointer_t<decltype(p[0])>>;
+      requires CompatibleBuiltin<RemoveCVRef<decltype(p[0])>>;
+      requires IsConst<RemoveRef<decltype(p[0])>>;
+   };
 
 
 template <typename T, typename = void>
@@ -253,12 +253,11 @@ template <typename T>
 struct has_resize<T, std::void_t<decltype(&T::resize)>> : std::true_type {};
 
 
-}  // namespace detail
+} // namespace detail
 
 
 template <typename T> concept OneDimOwnerType = detail::ArrayOneDimType<T>;
 template <typename T> concept TwoDimOwnerType = detail::ArrayTwoDimType<T>;
 
 
-}  // namespace spp
-
+} // namespace spp

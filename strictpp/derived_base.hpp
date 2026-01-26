@@ -38,12 +38,12 @@ private:
 };
 
 
-template <typename T1, typename T2> concept SameDimensionRealBaseType
-    = RealBaseType<T1> && RealBaseType<T2> && same_dimension_b<T1, T2>();
+template <typename T1, typename T2> concept SameDimensionRealBaseType =
+   RealBaseType<T1> && RealBaseType<T2> && same_dimension_b<T1, T2>();
 
 
-template <typename T1, typename T2> concept SameDimensionIntegerBaseType
-    = IntegerBaseType<T1> && IntegerBaseType<T2> && same_dimension_b<T1, T2>();
+template <typename T1, typename T2> concept SameDimensionIntegerBaseType =
+   IntegerBaseType<T1> && IntegerBaseType<T2> && same_dimension_b<T1, T2>();
 
 
 template <typename Base, typename T>
@@ -208,5 +208,4 @@ public:
 };
 
 
-}  // namespace spp::detail
-
+} // namespace spp::detail

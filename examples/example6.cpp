@@ -1,8 +1,9 @@
+#include <strictpp/strict.hpp>
+
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <optional>
-#include <strictpp/strict.hpp>
 #include <utility>
 
 using namespace spp;
@@ -28,7 +29,9 @@ std::optional<std::pair<VT, index_t>> jacobi(const MT& A, const VT& b, Strict<T>
 
    for(const auto iter : irange(max_its + 1_sl)) {
       if(within_tol_rel(matvec_prod(A, xnext), b, tol)) {
-         return {std::pair{xnext, iter}};
+         return {
+            std::pair{xnext, iter}
+         };
       }
 
       for(const auto i : irange(N)) {

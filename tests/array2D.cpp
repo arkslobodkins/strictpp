@@ -1,9 +1,9 @@
+#include "test.hpp"
+
 #include <algorithm>
 #include <cstdlib>
 #include <utility>
 #include <vector>
-
-#include "test.hpp"
 
 
 using namespace spp;
@@ -48,7 +48,10 @@ template <Builtin T>
 void run_constr_list() {
    auto x0 = Zero<T>;
    auto x1 = One<T>;
-   Array2D<T> A{{x0, x0}, {x1, x1}};
+   Array2D<T> A{
+      {x0, x0},
+      {x1, x1}
+   };
    ASSERT(A(0, 0) == x0);
    ASSERT(A(0, 1) == x0);
    ASSERT(A(1, 0) == x1);
@@ -109,7 +112,10 @@ void run_assign_list() {
    auto x0 = Zero<T>;
    auto x1 = One<T>;
    Array2D<T> A(2, 2);
-   A = {{x0, x0}, {x1, x1}};
+   A = {
+      {x0, x0},
+      {x1, x1}
+   };
    ASSERT(A(0, 0) == x0);
    ASSERT(A(0, 1) == x0);
    ASSERT(A(1, 0) == x1);
@@ -158,7 +164,10 @@ void run_assign_copy_other(ImplicitInt m, ImplicitInt n) {
 template <Builtin T>
 void run_assign_list_fail() {
    Array2D<T> A(2, 2);
-   REQUIRE_THROW((A = {{Zero<T>, Zero<T>}, {Zero<T>}}));
+   REQUIRE_THROW((A = {
+                     {Zero<T>, Zero<T>},
+                     {Zero<T>}
+   }));
 }
 
 
@@ -345,7 +354,10 @@ void run_insert_fail() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void run_resize_and_assign_strong() {
-   Array2D<int> A1{{2_si, 2_si}, {2_si, 2_si}};
+   Array2D<int> A1{
+      {2_si, 2_si},
+      {2_si, 2_si}
+   };
    auto A2 = A1;
    auto A3 = A2;
    REQUIRE_THROW((A2.resize_and_assign(A1 / Array2D<int>{{2_si, 2_si}, {2_si, 0_si}}.lval())));
@@ -473,9 +485,9 @@ void array_data() {
    T* a_blas_ptr = A1.blas_data();
    const T* b_blas_ptr = A2.blas_data();
    ASSERT(
-       std::all_of(a_blas_ptr, a_blas_ptr + mn.val(), [](auto x) { return Strict{x} == One<T>; }));
+      std::all_of(a_blas_ptr, a_blas_ptr + mn.val(), [](auto x) { return Strict{x} == One<T>; }));
    ASSERT(
-       std::all_of(b_blas_ptr, b_blas_ptr + mn.val(), [](auto x) { return Strict{x} == One<T>; }));
+      std::all_of(b_blas_ptr, b_blas_ptr + mn.val(), [](auto x) { return Strict{x} == One<T>; }));
 }
 
 

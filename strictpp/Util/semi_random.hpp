@@ -155,10 +155,10 @@ class SemiGenerator {
 public:
    constexpr SemiGenerator(Strict<unsigned> seed = Strict<unsigned>{1U}, Strict<T> low = Zero<T>,
                            Strict<T> high = One<T>)
-       : previous_{Strict{static_cast<unsigned>(__TIME__[7])} * Strict{100'000U}
-                   + seed * Strict{100'000U}},
-         low_{low},
-         high_{high} {
+      : previous_{Strict{static_cast<unsigned>(__TIME__[7])} * Strict{100'000U}
+                  + seed * Strict{100'000U}},
+        low_{low},
+        high_{high} {
    }
 
    constexpr Strict<T> random() const {
@@ -300,7 +300,7 @@ constexpr auto semi_random_not0(ImplicitInt m, ImplicitInt n, Strict<T> low, Str
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -389,7 +389,7 @@ constexpr void semi_random_not0(Base&&... A) {
    static_assert(sizeof...(Base) > 0);
    (...,
     detail::semi_random_not0(
-        A, Zero<BuiltinTypeOf<Base>>, One<BuiltinTypeOf<Base>>, One<unsigned>));
+       A, Zero<BuiltinTypeOf<Base>>, One<BuiltinTypeOf<Base>>, One<unsigned>));
 }
 
 
@@ -492,5 +492,4 @@ constexpr auto semi_random_not0(Rows m, Cols n, Seed seed) {
 }
 
 
-}  // namespace spp
-
+} // namespace spp

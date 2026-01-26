@@ -71,5 +71,4 @@ constexpr inline auto sqrt2_sq = sqrt2<float128>;
 #endif
 
 
-}  // namespace spp::constants
-
+} // namespace spp::constants

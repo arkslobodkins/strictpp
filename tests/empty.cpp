@@ -1,7 +1,7 @@
+#include "test.hpp"
+
 #include <cstdlib>
 #include <vector>
-
-#include "test.hpp"
 
 using namespace spp;
 using namespace spp::place;
@@ -134,4 +134,3 @@ int main() {
    TEST_NON_TYPE(empty_slice_ops);
    return EXIT_SUCCESS;
 }
-

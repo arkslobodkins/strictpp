@@ -1,8 +1,8 @@
 
+#include "test.hpp"
+
 #include <cstdlib>
 #include <vector>
-
-#include "test.hpp"
 
 
 using namespace spp;
@@ -117,7 +117,7 @@ void run_vector1D() {
    ASSERT(equal(A(std::vector<ImplicitInt>{0, 2, 4}), {0_si, 2_si, 4_si}));
    ASSERT(equal(A(std::vector<ImplicitInt>{4, 2, 0}), {4_si, 2_si, 0_si}));
    ASSERT(
-       equal(A(std::vector<ImplicitInt>{4, 4, 3, 3, 5, 5}), {4_si, 4_si, 3_si, 3_si, 5_si, 5_si}));
+      equal(A(std::vector<ImplicitInt>{4, 4, 3, 3, 5, 5}), {4_si, 4_si, 3_si, 3_si, 5_si, 5_si}));
 }
 
 
@@ -197,21 +197,36 @@ void run_compound1D() {
 template <bool is_array>
 void run_seqn2D() {
    typename ArrayOrView2D<is_array>::type A = sequence<int>(9).view2D(3, 3);
-   ASSERT(equal(A(seqN{0, 3, 1}, seqN{0, 2, 1}), {{0_si, 1_si}, {3_si, 4_si}, {6_si, 7_si}}));
+   ASSERT(equal(A(
+                   seqN{
+                      0, 3, 1
+   },
+                   seqN{0, 2, 1}),
+                {{0_si, 1_si}, {3_si, 4_si}, {6_si, 7_si}}));
 }
 
 
 template <bool is_array>
 void run_seq2D() {
    typename ArrayOrView2D<is_array>::type A = sequence<int>(9).view2D(3, 3);
-   ASSERT(equal(A(seq{0, 2, 1}, seq{0, 1, 1}), {{0_si, 1_si}, {3_si, 4_si}, {6_si, 7_si}}));
+   ASSERT(equal(A(
+                   seq{
+                      0, 2, 1
+   },
+                   seq{0, 1, 1}),
+                {{0_si, 1_si}, {3_si, 4_si}, {6_si, 7_si}}));
 }
 
 
 template <bool is_array>
 void run_skip2D() {
    typename ArrayOrView2D<is_array>::type A = sequence<int>(9).view2D(3, 3);
-   ASSERT(equal(A(skipN{2}, skipN{2}), {{0_si, 2_si}, {6_si, 8_si}}));
+   ASSERT(equal(A(
+                   skipN{
+                      2
+   },
+                   skipN{2}),
+                {{0_si, 2_si}, {6_si, 8_si}}));
 }
 
 
@@ -225,14 +240,23 @@ void run_odd_even2D() {
 template <bool is_array>
 void run_first_last2D() {
    typename ArrayOrView2D<is_array>::type A = sequence<int>(9).view2D(3, 3);
-   ASSERT(equal(A(firstN{2}, lastN{2}), {{1_si, 2_si}, {4_si, 5_si}}));
+   ASSERT(equal(A(
+                   firstN{
+                      2
+   },
+                   lastN{2}),
+                {{1_si, 2_si}, {4_si, 5_si}}));
 }
 
 
 template <bool is_array>
 void run_vector2D() {
    typename ArrayOrView2D<is_array>::type A = sequence<int>(9).view2D(3, 3);
-   ASSERT(equal(A(std::vector<ImplicitInt>{0, 2}, std::vector<ImplicitInt>{1, 2}),
+   ASSERT(equal(A(
+                   std::vector<ImplicitInt>{
+                      0, 2
+   },
+                   std::vector<ImplicitInt>{1, 2}),
                 {{1_si, 2_si}, {7_si, 8_si}}));
 }
 

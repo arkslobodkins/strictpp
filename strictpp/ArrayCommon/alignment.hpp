@@ -20,8 +20,7 @@ consteval int alignment_of() {
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
-}  // namespace spp
-
+} // namespace spp

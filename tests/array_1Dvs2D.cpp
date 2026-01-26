@@ -1,8 +1,8 @@
+#include "test.hpp"
+
 #include <algorithm>
 #include <cstdlib>
 #include <tuple>
-
-#include "test.hpp"
 
 
 using namespace spp;
@@ -201,8 +201,8 @@ void run_stable_norm_lp(const auto& A1, const auto& A2, ImplicitInt norm_value) 
 
 
 void run_stable_norm_lp_scaled(const auto& A1, const auto& A2, ImplicitInt norm_value) {
-   ASSERT(within_tol_rel(stable_norm_lp_scaled(A1, norm_value),
-                         stable_norm_lp_scaled(A2, norm_value)));
+   ASSERT(
+      within_tol_rel(stable_norm_lp_scaled(A1, norm_value), stable_norm_lp_scaled(A2, norm_value)));
 }
 
 
@@ -307,4 +307,3 @@ int main() {
    TEST_NON_TYPE(error_tools, 20, 10);
    return EXIT_SUCCESS;
 }
-

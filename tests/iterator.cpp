@@ -1,8 +1,8 @@
+#include "test.hpp"
+
 #include <cstdlib>
 #include <iterator>
 #include <utility>
-
-#include "test.hpp"
 
 
 using namespace spp;

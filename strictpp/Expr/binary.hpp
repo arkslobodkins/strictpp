@@ -4,8 +4,6 @@
 #pragma once
 
 
-#include <utility>
-
 #include "../ArrayCommon/array_traits.hpp"
 #include "../StrictCommon/strict_common.hpp"
 #include "../derived1D.hpp"
@@ -14,6 +12,8 @@
 #include "functors.hpp"
 #include "special.hpp"
 #include "types.hpp"
+
+#include <utility>
 
 
 namespace spp {
@@ -418,7 +418,7 @@ STRICT_CONSTEXPR auto matvec_prod(const Base1& A, const Base2& x);
 
 template <typename Base1, typename Base2>
    requires TwoDimRealBaseType<RemoveRef<Base1>> && OneDimRealBaseType<RemoveRef<Base2>>
-             && (detail::ArrayRealTypeRvalue<Base1> || detail::ArrayRealTypeRvalue<Base2>)
+            && (detail::ArrayRealTypeRvalue<Base1> || detail::ArrayRealTypeRvalue<Base2>)
 STRICT_CONSTEXPR auto matvec_prod(Base1&& A1, Base2&& A2) = delete;
 
 
@@ -444,7 +444,7 @@ STRICT_CONSTEXPR auto generate_const(const Base& A, ValueTypeOf<Base> x) {
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -735,4 +735,4 @@ STRICT_CONSTEXPR auto tensor_prod(const Base1& A1, const Base2& A2) {
 }
 
 
-}  // namespace spp
+} // namespace spp

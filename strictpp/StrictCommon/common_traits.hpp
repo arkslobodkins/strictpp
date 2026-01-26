@@ -31,8 +31,7 @@ using AddConst = std::add_const_t<T>;
 
 namespace detail {
 template <typename T> concept IsConst = std::is_const_v<T>;
-}  // namespace detail
+} // namespace detail
 
 
-}  // namespace spp
-
+} // namespace spp

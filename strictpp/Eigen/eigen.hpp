@@ -6,4 +6,3 @@
 
 #include "map.hpp"
 #include "matrix_ops.hpp"
-

@@ -4,11 +4,11 @@
 #pragma once
 
 
-#include <cstdlib>
-
 #include "config.hpp"
 #include "error.hpp"
 #include "strict_traits.hpp"
+
+#include <cstdlib>
 
 
 namespace spp {
@@ -66,7 +66,8 @@ public:
       return Strict{!val_};
    }
 
-   // Function definitions must be implemented outside of struct definition to avoid incomplete types.
+   // Function definitions must be implemented outside of struct definition to avoid incomplete
+   // types.
    STRICT_NODISCARD_CONSTEXPR_INLINE Strict<bool> sb() const;
 
    STRICT_NODISCARD_CONSTEXPR_INLINE Strict<int> si() const;
@@ -559,4 +560,4 @@ STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float128> Strict<bool>::sq() const {
 #endif
 
 
-}  // namespace spp
+} // namespace spp

@@ -212,7 +212,7 @@ STRICT_CONSTEXPR auto generate_random(const Base& A, F f, ValueTypeOf<Base> low,
 }
 
 
-}  // namespace detail
+} // namespace detail
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -343,5 +343,4 @@ STRICT_CONSTEXPR auto array_cast(const Base& A) {
 }
 
 
-}  // namespace spp
-
+} // namespace spp

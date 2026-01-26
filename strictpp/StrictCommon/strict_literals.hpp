@@ -4,10 +4,10 @@
 #pragma once
 
 
-#include <limits>
-
 #include "error.hpp"
 #include "strict_val.hpp"
+
+#include <limits>
 
 
 namespace spp::inline literals {
@@ -58,9 +58,9 @@ inline Strict<float128> operator""_sq() {
 
    // Pre-check for binary/octal literals.
    ASSERT_STRICT_ALWAYS_MSG(
-       !(sizeof...(Chars) >= 2u && str[0] == '0'
-         && (str[1] == 'b' || str[1] == 'B' || (str[1] >= '0' && str[1] <= '7'))),
-       "A real128 cannot be constructed from binary or octal literals\n");
+      !(sizeof...(Chars) >= 2u && str[0] == '0'
+        && (str[1] == 'b' || str[1] == 'B' || (str[1] >= '0' && str[1] <= '7'))),
+      "A real128 cannot be constructed from binary or octal literals\n");
 
    float128 x = strtoflt128(str, nullptr);
    return Strict{x};
@@ -107,10 +107,9 @@ consteval Strict<long double> operator""_SL(long double x) {
 #ifdef STRICT_QUAD_PRECISION
 template <char... Chars>
 inline Strict<float128> operator""_SQ() {
-   return operator""_sq < Chars... > ();
+   return operator""_sq < Chars...>();
 }
 #endif
 
 
-}  // namespace spp::inline literals
-
+} // namespace spp::inline literals

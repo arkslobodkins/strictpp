@@ -4,12 +4,12 @@
 #pragma once
 
 
+#include "config.hpp"
+
 #include <cassert>
 #include <exception>
 #include <string>
 #include <utility>
-
-#include "config.hpp"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ inline std::string trace_err(const char* file, const char* func, int line) {
 }
 
 
-}  // namespace spp
+} // namespace spp
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,11 +95,9 @@ inline std::string trace_err(const char* file, const char* func, int line) {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#define ASSERT_STRICT_RANGE_DEBUG(condition) \
-   ASSERT_STRICT_DEBUG_MSG(condition, "OUT OF RANGE!")
+#define ASSERT_STRICT_RANGE_DEBUG(condition) ASSERT_STRICT_DEBUG_MSG(condition, "OUT OF RANGE!")
 
-#define ASSERT_STRICT_RANGE_ALWAYS(condition) \
-   ASSERT_STRICT_ALWAYS_MSG(condition, "OUT OF RANGE!")
+#define ASSERT_STRICT_RANGE_ALWAYS(condition) ASSERT_STRICT_ALWAYS_MSG(condition, "OUT OF RANGE!")
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

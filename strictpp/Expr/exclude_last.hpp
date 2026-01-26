@@ -25,5 +25,4 @@ consteval bool all_strict_except_last() {
 template <typename... Args> concept AllStrictExceptLast = all_strict_except_last<Args...>();
 
 
-}  // namespace spp::detail
-
+} // namespace spp::detail

@@ -4,11 +4,11 @@
 #pragma once
 
 
-#include <utility>
-
 #include "ArrayCommon/array_common.hpp"
 #include "StrictCommon/strict_common.hpp"
 #include "slice.hpp"
+
+#include <utility>
 
 
 namespace spp::detail {
@@ -53,8 +53,8 @@ private:
 
 template <NonConstBaseType Base, typename Sl>
 STRICT_NODISCARD_CONSTEXPR SliceArrayBase1D<Base, Sl>::SliceArrayBase1D(Base& A, Sl slice_obj)
-    : A_{A},
-      slw_{std::move(slice_obj)} {
+   : A_{A},
+     slw_{std::move(slice_obj)} {
    ASSERT_STRICT_DEBUG(slw_.valid(A_));
 }
 
@@ -67,8 +67,8 @@ STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operato
 
 
 template <NonConstBaseType Base, typename Sl>
-STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operator=(
-    use::List1D<value_type> list) {
+STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>&
+SliceArrayBase1D<Base, Sl>::operator=(use::List1D<value_type> list) {
    ASSERT_STRICT_DEBUG(size() == to_index_t(list.size()));
    copy(list, *this);
    return *this;
@@ -76,8 +76,8 @@ STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operato
 
 
 template <NonConstBaseType Base, typename Sl>
-STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operator=(
-    const SliceArrayBase1D& A) {
+STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>&
+SliceArrayBase1D<Base, Sl>::operator=(const SliceArrayBase1D& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
    return *this;
@@ -85,8 +85,8 @@ STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operato
 
 
 template <NonConstBaseType Base, typename Sl>
-STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operator=(
-    OneDimBaseType auto const& A) {
+STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>&
+SliceArrayBase1D<Base, Sl>::operator=(OneDimBaseType auto const& A) {
    ASSERT_STRICT_DEBUG(same_size(*this, A));
    copy(A, *this);
    return *this;
@@ -95,14 +95,14 @@ STRICT_CONSTEXPR SliceArrayBase1D<Base, Sl>& SliceArrayBase1D<Base, Sl>::operato
 
 template <NonConstBaseType Base, typename Sl>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase1D<Base, Sl>::un(ImplicitInt i)
-    -> value_type& {
+   -> value_type& {
    return A_.un(slw_.map(i));
 }
 
 
 template <NonConstBaseType Base, typename Sl>
 STRICT_NODISCARD_CONSTEXPR_INLINE auto SliceArrayBase1D<Base, Sl>::un(ImplicitInt i) const
-    -> const value_type& {
+   -> const value_type& {
    return A_.un(slw_.map(i));
 }
 
@@ -161,15 +161,15 @@ private:
 template <BaseType Base, typename Sl>
 STRICT_NODISCARD_CONSTEXPR ConstSliceArrayBase1D<Base, Sl>::ConstSliceArrayBase1D(const Base& A,
                                                                                   Sl slice_obj)
-    : A_{A},
-      slw_{std::move(slice_obj)} {
+   : A_{A},
+     slw_{std::move(slice_obj)} {
    ASSERT_STRICT_DEBUG(slw_.valid(A_));
 }
 
 
 template <BaseType Base, typename Sl>
-STRICT_NODISCARD_CONSTEXPR_INLINE decltype(auto) ConstSliceArrayBase1D<Base, Sl>::un(
-    ImplicitInt i) const {
+STRICT_NODISCARD_CONSTEXPR_INLINE decltype(auto)
+ConstSliceArrayBase1D<Base, Sl>::un(ImplicitInt i) const {
    return A_.un(slw_.map(i));
 }
 
@@ -198,4 +198,4 @@ STRICT_CONSTEXPR_INLINE index_t ConstSliceArrayBase1D<Base, Sl>::size() const {
 }
 
 
-}  // namespace spp::detail
+} // namespace spp::detail
