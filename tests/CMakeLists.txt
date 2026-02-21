@@ -9,9 +9,9 @@ foreach(CPPFILE ${CPPFILES})
    add_test(NAME ${CPPNAME} COMMAND ${CPPNAME})
    set_tests_properties(${CPPNAME} PROPERTIES PASS 0)
 
-   # Tests are not linked against strictpp library so that CACHE variables
-   # would not have any effect on target_compile_definitions, etc. Tests require
-   # specific configuration that should not be configurable by the user.
+   # Tests are linked against strictpp_core instead of strictpp library so that
+   # CACHE variables would not have any effect on target_compile_definitions, etc.
+   # Tests require specific configuration that should not be configurable by the user.
    #
    # 1. STRICT_DEBUG_OFF is never defined otherwise
    # expressions such as REQUIRE_THROW would fail.
@@ -21,6 +21,7 @@ foreach(CPPFILE ${CPPFILES})
    # of the expression and don't use the type it returns.
    # 5. Quadruple precision is enabled and tested for GCC.
 
+   target_link_libraries(${CPPNAME} PRIVATE strictpp_core)
    target_compile_definitions(${CPPNAME} PRIVATE STRICT_ERROR_EXCEPTIONS)
    target_compile_definitions(${CPPNAME} PRIVATE STRICT_REMOVE_NODISCARD)
 
@@ -74,6 +75,4 @@ foreach(CPPFILE ${CPPFILES})
       target_compile_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
       target_link_options(${CPPNAME} PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
    endif()
-
-   target_include_directories(${CPPNAME} PRIVATE ${PROJECT_SOURCE_DIR})
 endforeach()

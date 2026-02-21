@@ -39,7 +39,11 @@ include(GNUInstallDirs)
 set(STRICTPP_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/strictpp-${PROJECT_VERSION})
 
 # Install strictpp interface library.
-install(TARGETS ${PROJECT_NAME} EXPORT strictppTargets)
+if(STRICT_LINEAR_ALGEBRA)
+install(TARGETS strictpp_core strictpp eigen EXPORT strictppTargets)
+else()
+install(TARGETS strictpp_core strictpp EXPORT strictppTargets)
+endif()
 
 install(EXPORT strictppTargets FILE strictppTargets.cmake
         DESTINATION ${STRICTPP_INSTALL_CONFIGDIR} NAMESPACE strictpp::)

@@ -1,16 +1,21 @@
 add_library(strictpp INTERFACE)
 add_library(strictpp::strictpp ALIAS strictpp)
+add_library(strictpp_core INTERFACE)
+add_library(strictpp::strictpp_core ALIAS strictpp_core)
 
 ##########################################################################################
 find_library(MATH_LIBRARY m)
 if(MATH_LIBRARY)
-   target_link_libraries(strictpp INTERFACE ${MATH_LIBRARY})
+   target_link_libraries(strictpp_core INTERFACE ${MATH_LIBRARY})
 endif()
 
 # ########################################################################################
 target_include_directories(
-   strictpp INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
-                      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+   strictpp_core INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+##########################################################################################
+target_link_libraries(strictpp INTERFACE strictpp_core)
 
 ##########################################################################################
 set(STRICT_DEBUG
@@ -80,7 +85,12 @@ endif()
 ##########################################################################################
 option(STRICT_LINEAR_ALGEBRA "Enable linear algebra functionality." OFF)
 if(STRICT_LINEAR_ALGEBRA)
-find_package(Eigen3 REQUIRED)
-target_link_libraries(strictpp INTERFACE Eigen3::Eigen)
-target_compile_definitions(strictpp INTERFACE STRICT_ENABLE_EIGEN)
+   include(FetchContent)
+
+   FetchContent_Declare(Eigen3 GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+                        GIT_TAG master GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+   FetchContent_MakeAvailable(Eigen3)
+
+   target_link_libraries(strictpp INTERFACE Eigen3::Eigen)
+   target_compile_definitions(strictpp INTERFACE STRICT_ENABLE_EIGEN)
 endif()
