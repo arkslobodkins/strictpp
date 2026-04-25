@@ -52,13 +52,13 @@ consteval Strict<long double> operator""_sl(long double x) {
 
 // Implementation from mp++.
 #ifdef STRICT_QUAD_PRECISION
-template <char... Chars>
+template <char... chars>
 inline Strict<float128> operator""_sq() {
-   constexpr char str[] = {Chars..., '\0'};
+   constexpr char str[] = {chars..., '\0'};
 
    // Pre-check for binary/octal literals.
    ASSERT_STRICT_ALWAYS_MSG(
-      !(sizeof...(Chars) >= 2u && str[0] == '0'
+      !(sizeof...(chars) >= 2u && str[0] == '0'
         && (str[1] == 'b' || str[1] == 'B' || (str[1] >= '0' && str[1] <= '7'))),
       "A real128 cannot be constructed from binary or octal literals\n");
 
@@ -105,9 +105,9 @@ consteval Strict<long double> operator""_SL(long double x) {
 
 // Implementation from mp++.
 #ifdef STRICT_QUAD_PRECISION
-template <char... Chars>
+template <char... chars>
 inline Strict<float128> operator""_SQ() {
-   return operator""_sq < Chars...>();
+   return operator""_sq < chars...>();
 }
 #endif
 
