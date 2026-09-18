@@ -5,9 +5,14 @@
 
 
 #include "error.hpp"
+#include "strict_traits.hpp"
 #include "strict_val.hpp"
 
 #include <limits>
+
+#ifdef STRICT_QUAD_PRECISION
+#include <quadmath.h>
+#endif
 
 
 namespace spp::inline literals {

@@ -4,11 +4,12 @@
 #pragma once
 
 
+#include "common_traits.hpp"
 #include "config.hpp"
 #include "error.hpp"
 #include "strict_traits.hpp"
 
-#include <cstdlib>
+#include <cstddef>
 
 
 namespace spp {

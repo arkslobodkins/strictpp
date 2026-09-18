@@ -13,6 +13,10 @@
 #include "strict_traits.hpp"
 #include "strict_val.hpp"
 
+#ifdef STRICT_QUAD_PRECISION
+#include <quadmath.h>
+#endif
+
 
 namespace spp::constants {
 

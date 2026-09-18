@@ -4,9 +4,6 @@
 #pragma once
 
 
-#include "strict_traits.hpp"
-#include "strict_val.hpp"
-
 #include <utility>
 
 
