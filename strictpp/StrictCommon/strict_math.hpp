@@ -11,6 +11,10 @@
 
 #include <cmath>
 
+#ifdef STRICT_QUAD_PRECISION
+#include <quadmath.h>
+#endif
+
 
 namespace spp {
 

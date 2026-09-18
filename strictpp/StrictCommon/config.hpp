@@ -68,9 +68,7 @@
 
 #ifdef __GNUG__
 
-#if __has_include(<quadmath.h>)
-#include <quadmath.h>
-#else
+#if !__has_include(<quadmath.h>)
 #error QUADRUPLE PRECISION IS NOT PROVIDED ON THIS COMPILER. TO ENABLE IT, COMPILE WITH GCC COMPILER THAT SUPPORTS QUAD PRECISION.
 #endif
 
