@@ -21,14 +21,14 @@
 namespace spp {
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long int> factorial(ImplicitInt n) {
+constexpr Strict<long int> factorial(ImplicitInt n) {
    ASSERT_STRICT_DEBUG(n.get() > -1_sl);
    index_t nf = n.get();
    return nf == 0_sl ? 1_sl : nf * factorial(nf - 1_sl);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long int> binom_coeff(ImplicitInt n, ImplicitInt k) {
+constexpr Strict<long int> binom_coeff(ImplicitInt n, ImplicitInt k) {
    ASSERT_STRICT_DEBUG(k.get() > -1_sl);
    ASSERT_STRICT_DEBUG(n.get() >= k.get());
    index_t d1 = n.get() - k.get();
@@ -43,7 +43,7 @@ STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long int> binom_coeff(ImplicitInt n, Im
 
 
 template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> clamps(Strict<T> x, Strict<T> low, Strict<T> high) {
+constexpr Strict<T> clamps(Strict<T> x, Strict<T> low, Strict<T> high) {
    ASSERT_STRICT_DEBUG(low <= high);
    if constexpr(Floating<T>) {
       ASSERT_STRICT_DEBUG(!isnans(x));
@@ -55,19 +55,19 @@ STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> clamps(Strict<T> x, Strict<T> low, S
 
 
 template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> clamps(Strict<T> x, Low<T> low, High<T> high) {
+constexpr Strict<T> clamps(Strict<T> x, Low<T> low, High<T> high) {
    return clamps(x, low.get(), high.get());
 }
 
 
 template <Floating T>
-STRICT_NODISCARD_CONSTEXPR_INLINE_2026 Strict<T> pows_int(Strict<T> x, ImplicitInt p) {
+STRICT_CONSTEXPR_2026 Strict<T> pows_int(Strict<T> x, ImplicitInt p) {
    return pows(x, strict_cast<T>(p.get()));
 }
 
 
 template <Floating T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> fast_pows_int(Strict<T> x, const ImplicitInt p) {
+constexpr Strict<T> fast_pows_int(Strict<T> x, const ImplicitInt p) {
    auto res = One<T>;
    auto power = abss(p.get());
    for(;;) {
@@ -91,33 +91,33 @@ STRICT_NODISCARD_CONSTEXPR_INLINE_2026 Strict<T> exps_int(ImplicitInt p) {
 
 
 template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool in_open(Strict<T> x, Strict<T> low, Strict<T> high) {
+constexpr StrictBool in_open(Strict<T> x, Strict<T> low, Strict<T> high) {
    ASSERT_STRICT_DEBUG(low <= high);
    return x > low && x < high;
 }
 
 
 template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool in_open(Value<T> x, Low<T> low, High<T> high) {
+constexpr StrictBool in_open(Value<T> x, Low<T> low, High<T> high) {
    return in_open(x.get(), low.get(), high.get());
 }
 
 
 template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool in_closed(Strict<T> x, Strict<T> low, Strict<T> high) {
+constexpr StrictBool in_closed(Strict<T> x, Strict<T> low, Strict<T> high) {
    ASSERT_STRICT_DEBUG(low <= high);
    return x >= low && x <= high;
 }
 
 
 template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool in_closed(Value<T> x, Low<T> low, High<T> high) {
+constexpr StrictBool in_closed(Value<T> x, Low<T> low, High<T> high) {
    return in_closed(x.get(), low.get(), high.get());
 }
 
 
 template <Floating T>
-STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> two_sums(Strict<T> x, Strict<T> y) {
+[[nodiscard]] use::StrictPair<Strict<T>> two_sums(Strict<T> x, Strict<T> y) {
    volatile T r = x.val() + y.val();
    volatile T z = r - x.val();
    volatile T rz = r - z;
@@ -129,7 +129,7 @@ STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> two_sums(Strict<T> x, Strict<
 
 
 template <Floating T>
-STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> two_prods(Strict<T> x, Strict<T> y) {
+[[nodiscard]] STRICT_CONSTEXPR_2023 use::StrictPair<Strict<T>> two_prods(Strict<T> x, Strict<T> y) {
    auto r = x * y;
    auto s = fmas(x, y, -r);
    return use::StrictPair<Strict<T>>{r, s};
@@ -137,7 +137,8 @@ STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> two_prods(Strict<T> x, Strict
 
 
 template <Floating T>
-STRICT_NODISCARD_INLINE use::StrictPair<Strict<T>> pow_prods(Strict<T> x, ImplicitInt p) {
+[[nodiscard]] STRICT_CONSTEXPR_2023 use::StrictPair<Strict<T>> pow_prods(Strict<T> x,
+                                                                         ImplicitInt p) {
    using Pair = use::StrictPair<Strict<T>>;
 
    ASSERT_STRICT_DEBUG(p.get().val() > -1);
