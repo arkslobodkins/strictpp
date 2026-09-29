@@ -10,6 +10,8 @@
 #include "strict_val.hpp"
 
 #include <cmath>
+#include <limits>
+#include <numeric>
 
 #ifdef STRICT_QUAD_PRECISION
 #include <quadmath.h>
@@ -45,6 +47,18 @@ STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> mins(Strict<T> x, Strict<T> y) {
 template <Real T>
 STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> maxs(Strict<T> x, Strict<T> y) {
    return x > y ? x : y;
+}
+
+
+/// @brief Returns the greatest common divisor of |x| and |y|; returns 0 if both are zero.
+/// @pre Both |x| and |y| are representable in T.
+template <Integer T>
+STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> gcds(Strict<T> x, Strict<T> y) {
+   if constexpr(SignedInteger<T>) {
+      ASSERT_STRICT_DEBUG(x.val() != std::numeric_limits<T>::lowest());
+      ASSERT_STRICT_DEBUG(y.val() != std::numeric_limits<T>::lowest());
+   }
+   return Strict<T>{std::gcd(x.val(), y.val())};
 }
 
 
