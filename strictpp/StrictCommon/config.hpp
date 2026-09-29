@@ -94,7 +94,7 @@ inline void print_stacktrace() {
    for(std::stacktrace::size_type i = 0; i < s.size(); ++i) {
       std::cout << s[i] << '\n';
    }
-   std::cout << "..." << std::endl;
+   std::cout << "..." << '\n';
 }
 
 } // namespace spp::detail
