@@ -4,12 +4,16 @@
 #pragma once
 
 
+#include "auxiliary_types.hpp"
 #include "config.hpp"
 #include "error.hpp"
 #include "strict_traits.hpp"
 #include "strict_val.hpp"
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
+#include <numeric>
 
 #ifdef STRICT_QUAD_PRECISION
 #include <quadmath.h>
@@ -45,6 +49,42 @@ STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> mins(Strict<T> x, Strict<T> y) {
 template <Real T>
 STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> maxs(Strict<T> x, Strict<T> y) {
    return x > y ? x : y;
+}
+
+
+/// @brief Returns `x` clamped to [low, high].
+/// @pre `low <= high`; for floating types none of `x`, `low`, or `high` is NaN.
+template <Real T>
+constexpr Strict<T> clamps(const Strict<T> x, const Strict<T> low, const Strict<T> high) {
+   if constexpr(Floating<T>) {
+      // Use self-comparison instead of isnans to guarantee constexpr in C++20.
+      ASSERT_STRICT_DEBUG_MSG(x == x, "Clamp value must not be NaN.");
+      ASSERT_STRICT_DEBUG_MSG(low == low, "Clamp lower bound must not be NaN.");
+      ASSERT_STRICT_DEBUG_MSG(high == high, "Clamp upper bound must not be NaN.");
+   }
+   ASSERT_STRICT_DEBUG(low <= high);
+   return Strict{std::clamp(x.val(), low.val(), high.val())};
+}
+
+
+/// @brief Returns `x` clamped to [low, high].
+/// @pre `low <= high`; for floating types none of `x`, `low`, or `high` is NaN.
+/// @note Named-argument overload using `Value`, `Low`, and `High` wrappers.
+template <Real T>
+constexpr Strict<T> clamps(const Value<T> x, const Low<T> low, const High<T> high) {
+   return clamps(x.get(), low.get(), high.get());
+}
+
+
+/// @brief Returns the greatest common divisor of |x| and |y|; returns 0 if both are zero.
+/// @pre Both |x| and |y| are representable in T.
+template <Integer T>
+STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> gcds(Strict<T> x, Strict<T> y) {
+   if constexpr(SignedInteger<T>) {
+      ASSERT_STRICT_DEBUG(x.val() != std::numeric_limits<T>::lowest());
+      ASSERT_STRICT_DEBUG(y.val() != std::numeric_limits<T>::lowest());
+   }
+   return Strict<T>{std::gcd(x.val(), y.val())};
 }
 
 
