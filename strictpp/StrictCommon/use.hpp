@@ -11,7 +11,7 @@ namespace spp::use {
 
 
 template <typename T>
-using StrictPair = std::pair<T, T>;
+using Pair = std::pair<T, T>;
 
 
 }
