@@ -9,6 +9,7 @@
 #include "strict_constants.hpp"
 #include "strict_literals.hpp"
 #include "strict_math.hpp"
+#include "strict_numeric_checks.hpp"
 #include "strict_traits.hpp"
 #include "strict_val.hpp"
 #include "strict_val_ops.hpp"

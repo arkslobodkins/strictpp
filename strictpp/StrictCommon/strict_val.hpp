@@ -1,12 +1,17 @@
 // Arkadijs Slobodkins, 2023
 
 
+/// @file strict_val.hpp
+/// @brief `Strict<T>` class, and related operators and conversion utilities.
+/// @details Debug checks diagnose undefined behavior (UB) for integer operations and conversions.
+/// Operations that produce unsigned wrapping, floating-point infinity and NaN, and conversion
+/// losses that don't lead to UB are allowed.
+
+
 #pragma once
 
 
-#include "common_traits.hpp"
-#include "config.hpp"
-#include "error.hpp"
+#include "strict_numeric_checks.hpp"
 #include "strict_traits.hpp"
 
 #include <cstddef>
@@ -15,255 +20,194 @@
 namespace spp {
 
 
-// Forward declarations.
+/// @brief Type-safe wrapper for built-in type `T`.
+/// @details Copying and assignment require the same `Strict<T>` type. Construction from built-in
+/// values and conversion to built-in types require exactly `T` and are explicit. To convert it to
+/// another `Strict<U>` or built-in type `U`, use the provided member functions or conversion
+/// functions defined later in the file; for example, see `strict_cast`. Assignment, increment,
+/// decrement, and compound assignment operators are only allowed for lvalues. Integer types
+/// prevent undefined behavior in debug mode, such as protecting against division by 0.
 template <Builtin T>
-struct Strict;
-
-
-class ImplicitBool;
-
-
-template <Builtin T, Builtin U>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> strict_cast(U x);
-
-
-template <Builtin T, Builtin U>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> strict_cast(Strict<U> x);
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template <>
-struct STRICT_NODISCARD alignas(bool) Strict<bool> {
-public:
-   using value_type = bool;
-
-   // Special member functions.
-   STRICT_NODISCARD_CONSTEXPR Strict() = default;
-   STRICT_NODISCARD_CONSTEXPR Strict(const Strict&) = default;
-   STRICT_CONSTEXPR Strict& operator=(const Strict&) & = default;
-
-   // Other constructors.
-   STRICT_NODISCARD_CONSTEXPR_INLINE explicit Strict(bool x) : val_{x} {
-   }
-
-   STRICT_CONSTEXPR Strict(auto x) = delete;
-
-   // Conversions.
-   STRICT_NODISCARD_CONSTEXPR_INLINE bool val() const {
-      return val_;
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE operator bool() const {
-      return val_;
-   }
-
-   // ImplicitBool must be excluded from the deleted overload, otherwise this overload would be
-   // an equally good candidate as templated constructor for ImplicitBool(StrictBool).
-   template <typename T>
-      requires(!SameAs<ImplicitBool, T>)
-   STRICT_NODISCARD_CONSTEXPR_INLINE operator T() const = delete;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict operator!() const {
-      return Strict{!val_};
-   }
-
-   // Function definitions must be implemented outside of struct definition to avoid incomplete
-   // types.
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<bool> sb() const;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<int> si() const;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long int> sl() const;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<unsigned int> sui() const;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<unsigned long int> sul() const;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float> sf() const;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<double> sd() const;
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long double> sld() const;
-
-#ifdef STRICT_QUAD_PRECISION
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float128> sq() const;
-#endif
-
-private:
-   bool val_{};
-};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T>
-struct STRICT_NODISCARD alignas(T) Strict {
+struct [[nodiscard]] alignas(T) Strict {
 public:
    using value_type = T;
 
-   // Special member functions.
-   STRICT_NODISCARD_CONSTEXPR Strict() = default;
-
-   STRICT_NODISCARD_CONSTEXPR Strict(const Strict&) = default;
-
-   STRICT_CONSTEXPR Strict& operator=(const Strict&) & = default;
-
-   // Other constructors.
-   STRICT_NODISCARD_CONSTEXPR_INLINE explicit Strict(T x) : val_{x} {
+   constexpr Strict() = default;
+   constexpr Strict(const Strict&) = default;
+   constexpr explicit Strict(T x) noexcept : val_{x} {
    }
+   constexpr Strict(auto) = delete;
 
-   STRICT_CONSTEXPR Strict(auto x) = delete;
+   constexpr Strict& operator=(const Strict&) & = default;
+   constexpr Strict& operator=(auto) & = delete;
 
-   // Conversions.
-   STRICT_NODISCARD_CONSTEXPR_INLINE T val() const {
+   /// @brief Returns a value of the underlying built-in type.
+   [[nodiscard]] constexpr T val() const noexcept {
       return val_;
    }
 
-   STRICT_NODISCARD_CONSTEXPR_INLINE explicit operator T() const {
+   /// @copybrief val()
+   [[nodiscard]] constexpr explicit operator T() const noexcept {
       return val_;
    }
 
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict operator+() const {
+   constexpr Strict operator+() const noexcept {
       return *this;
    }
 
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict operator-() const {
-      static_assert(!UnsignedInteger<T>);
-      // -val_ should not change the type of val_ but T is used to be safe.
-      return Strict{T{-val_}};
+   /// @pre For signed integers, the current value is not `std::numeric_limits<T>::min()`.
+   constexpr Strict operator-() const noexcept(!SignedInteger<T>)
+      requires(!UnsignedInteger<T>)
+   {
+      if constexpr(SignedInteger<T>) {
+         detail::assert_valid_integer_negation(val_);
+      }
+      // Unary minus preserves T for the supported signed integer and floating-point types.
+      return Strict{-val_};
    }
 
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict operator~() const {
-      static_assert(Integer<T>);
+   constexpr Strict operator~() const noexcept
+      requires(Integer<T>)
+   {
       return Strict<T>{~val_};
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator++() & {
+   /// @pre For signed integers, the current value is not `std::numeric_limits<T>::max()`.
+   constexpr Strict& operator++() & noexcept(!SignedInteger<T>) {
+      if constexpr(SignedInteger<T>) {
+         detail::assert_valid_integer_increment(val_);
+      }
       ++val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator--() & {
+   /// @pre For signed integers, the current value is not `std::numeric_limits<T>::min()`.
+   constexpr Strict& operator--() & noexcept(!SignedInteger<T>) {
+      if constexpr(SignedInteger<T>) {
+         detail::assert_valid_integer_decrement(val_);
+      }
       --val_;
       return *this;
    }
 
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict operator++(int) & {
-      Strict old{val_};
-      ++val_;
+   /// @pre For signed integers, the current value is not `std::numeric_limits<T>::max()`.
+   constexpr Strict operator++(int) & noexcept(!SignedInteger<T>) {
+      Strict old{*this};
+      ++*this;
       return old;
    }
 
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict operator--(int) & {
-      Strict old{val_};
-      --val_;
+   /// @pre For signed integers, the current value is not `std::numeric_limits<T>::min()`.
+   constexpr Strict operator--(int) & noexcept(!SignedInteger<T>) {
+      Strict old{*this};
+      --*this;
       return old;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator+=(Strict x) & {
+   /// @pre For signed integers, the result is representable in `T`.
+   constexpr Strict& operator+=(Strict x) & noexcept(!SignedInteger<T>) {
+      if constexpr(SignedInteger<T>) {
+         detail::assert_valid_integer_addition(val_, x.val_);
+      }
       val_ += x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator-=(Strict x) & {
+   /// @pre For signed integers, the result is representable in `T`.
+   constexpr Strict& operator-=(Strict x) & noexcept(!SignedInteger<T>) {
+      if constexpr(SignedInteger<T>) {
+         detail::assert_valid_integer_subtraction(val_, x.val_);
+      }
       val_ -= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator*=(Strict x) & {
+   /// @pre For signed integers, the result is representable in `T`.
+   constexpr Strict& operator*=(Strict x) & noexcept(!SignedInteger<T>) {
+      if constexpr(SignedInteger<T>) {
+         detail::assert_valid_integer_multiplication(val_, x.val_);
+      }
       val_ *= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator/=(Strict x) & {
+   /// @pre For integers, `x` is nonzero and the result is representable in `T`.
+   constexpr Strict& operator/=(Strict x) & noexcept(!Integer<T>) {
       if constexpr(Integer<T>) {
-         ASSERT_STRICT_DIVISION_DEBUG(x.val_ != 0);
+         detail::assert_valid_integer_division(val_, x.val_);
       }
 
       val_ /= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator%=(Strict x) & {
-      static_assert(Integer<T>);
-      ASSERT_STRICT_REMAINDER_DEBUG(x.val_ != 0);
+   /// @pre `x` is nonzero and the corresponding quotient is representable in `T`.
+   constexpr Strict& operator%=(Strict x) &
+      requires(Integer<T>)
+   {
+      detail::assert_valid_integer_division<true>(val_, x.val_);
       val_ %= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator<<=(Strict x) & {
-      static_assert(Integer<T>);
-      if constexpr(SignedInteger<T>) {
-         ASSERT_STRICT_SHIFT_FIRST_DEBUG(val_ > -1);
-         ASSERT_STRICT_SHIFT_SECOND_DEBUG(x.val_ > -1);
-      }
+   /// @pre The shift count is nonnegative and less than
+   /// `std::numeric_limits<T>::digits + SignedInteger<T>`.
+   /// Valid shift counts are `[0, 31]` for 32-bit integers and `[0, 63]` for 64-bit integers.
+   /// @note Since C++20, negative signed left operands are allowed and bits shifted beyond the
+   /// type's width are discarded. For a 32-bit `int`, `INT_MAX << 25` is defined and evaluates to
+   /// `-33554432`.
+   constexpr Strict& operator<<=(Strict x) &
+      requires(Integer<T>)
+   {
+      detail::assert_valid_shift_count(x.val_);
       val_ <<= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator>>=(Strict x) & {
-      static_assert(Integer<T>);
-      if constexpr(SignedInteger<T>) {
-         ASSERT_STRICT_SHIFT_FIRST_DEBUG(val_ > -1);
-         ASSERT_STRICT_SHIFT_SECOND_DEBUG(x.val_ > -1);
-      }
+   /// @pre The shift count is nonnegative and less than
+   /// `std::numeric_limits<T>::digits + SignedInteger<T>`.
+   /// Valid shift counts are `[0, 31]` for 32-bit integers and `[0, 63]` for 64-bit integers.
+   /// @note Since C++20, negative signed left operands are allowed; signed right shift rounds
+   /// toward negative infinity.
+   constexpr Strict& operator>>=(Strict x) &
+      requires(Integer<T>)
+   {
+      detail::assert_valid_shift_count(x.val_);
       val_ >>= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator&=(Strict x) & {
-      static_assert(Integer<T>);
+   constexpr Strict& operator&=(Strict x) & noexcept
+      requires(Integer<T>)
+   {
       val_ &= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator|=(Strict x) & {
-      static_assert(Integer<T>);
+   constexpr Strict& operator|=(Strict x) & noexcept
+      requires(Integer<T>)
+   {
       val_ |= x.val_;
       return *this;
    }
 
-   STRICT_CONSTEXPR_INLINE Strict& operator^=(Strict x) & {
-      static_assert(Integer<T>);
+   constexpr Strict& operator^=(Strict x) & noexcept
+      requires(Integer<T>)
+   {
       val_ ^= x.val_;
       return *this;
    }
 
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<bool> sb() const {
-      return strict_cast<bool>(val_);
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<int> si() const {
-      return strict_cast<int>(val_);
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long int> sl() const {
-      return strict_cast<long int>(val_);
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<unsigned int> sui() const {
-      return strict_cast<unsigned int>(val_);
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<unsigned long int> sul() const {
-      return strict_cast<unsigned long int>(val_);
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float> sf() const {
-      return strict_cast<float>(val_);
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<double> sd() const {
-      return strict_cast<double>(val_);
-   }
-
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long double> sld() const {
-      return strict_cast<long double>(val_);
-   }
-
+   constexpr Strict<bool> sb() const noexcept;
+   constexpr Strict<int> si() const noexcept(!Floating<T>);
+   constexpr Strict<long int> sl() const noexcept(!Floating<T>);
+   constexpr Strict<unsigned int> sui() const noexcept(!Floating<T>);
+   constexpr Strict<unsigned long int> sul() const noexcept(!Floating<T>);
+   constexpr Strict<float> sf() const noexcept;
+   constexpr Strict<double> sd() const noexcept;
+   constexpr Strict<long double> sld() const noexcept;
 #ifdef STRICT_QUAD_PRECISION
-   STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float128> sq() const {
-      return strict_cast<float128>(val_);
-   }
+   constexpr Strict<float128> sq() const noexcept;
 #endif
 
 private:
@@ -271,294 +215,423 @@ private:
 };
 
 
-namespace detail {
-template <typename T> concept CompatibleBuiltin = Builtin<T> && sizeof(T) == sizeof(Strict<T>);
+/// @brief Boolean specialization of `Strict<T>`. Unlike built-in `bool`, no arithmetic operations
+/// are allowed.
+/// @note Overloaded `&&` and `||` evaluate both operand expressions without short-circuiting.
+/// To support interoperability with the standard library, conversion to `bool` is implicit.
+template <>
+struct [[nodiscard]] alignas(bool) Strict<bool> {
+public:
+   using value_type = bool;
+
+   constexpr Strict() = default;
+   constexpr Strict(const Strict&) = default;
+   constexpr explicit Strict(bool x) noexcept : val_{x} {
+   }
+   constexpr Strict(auto) = delete;
+
+   constexpr Strict& operator=(const Strict&) & = default;
+   constexpr Strict& operator=(auto) & = delete;
+
+   /// @brief Returns the underlying Boolean value.
+   [[nodiscard]] constexpr bool val() const noexcept {
+      return val_;
+   }
+
+
+   /// @copybrief val()
+   /// @details Implicit conversion lets comparison results satisfy the syntactic requirements
+   /// of `boolean-testable` and supports standard library algorithms (e.g. `std::any_of`).
+   /// Constraining the conversion to `Boolean` prevents implicit numeric conversions.
+   /// @note `StrictBool` satisfies the compile-time checks of `boolean-testable`, but its
+   /// overloaded `&&` and `||` do not provide the required short-circuiting behavior.
+   template <Boolean T>
+   [[nodiscard]] constexpr operator T() const noexcept {
+      return val_;
+   }
+
+   constexpr Strict operator!() const noexcept {
+      return Strict{!val_};
+   }
+
+   constexpr Strict<bool> sb() const noexcept;
+   constexpr Strict<int> si() const noexcept;
+   constexpr Strict<long int> sl() const noexcept;
+   constexpr Strict<unsigned int> sui() const noexcept;
+   constexpr Strict<unsigned long int> sul() const noexcept;
+   constexpr Strict<float> sf() const noexcept;
+   constexpr Strict<double> sd() const noexcept;
+   constexpr Strict<long double> sld() const noexcept;
+#ifdef STRICT_QUAD_PRECISION
+   constexpr Strict<float128> sq() const noexcept;
+#endif
+
+private:
+   bool val_{};
+};
+
+
+// Conversion utilities for Strict types.
+
+/// @brief Converts a supported built-in value of type `U` to `T` using `static_cast` and
+/// detects conversions that cause UB in debug mode.
+/// @pre For a floating-point source and an `Integer` destination, the input is finite and its
+/// truncated value is representable in `T`.
+/// @note Converting a larger signed or unsigned integer to a smaller signed integer does not
+/// cause UB in C++20. These conversions are unchecked and may change the value or its sign.
+template <Builtin T, Builtin U>
+[[nodiscard]] constexpr T builtin_cast(U x) noexcept(!(Integer<T> && Floating<U>)) {
+   if constexpr(Integer<T> && Floating<U>) {
+      detail::assert_valid_integer_conversion<T>(x);
+   }
+   return static_cast<T>(x);
 }
 
 
+/// @copydoc builtin_cast(U)
+template <Builtin T, Builtin U>
+[[nodiscard]] constexpr T builtin_cast(Strict<U> x) noexcept(!(Integer<T> && Floating<U>)) {
+   return builtin_cast<T>(x.val());
+}
+
+
+/// @brief Converts between supported real types.
+/// @details Reuses `builtin_cast`.
+template <Real T, Real U>
+[[nodiscard]] constexpr T real_cast(U x) noexcept(!(Integer<T> && Floating<U>)) {
+   return builtin_cast<T>(x);
+}
+
+
+/// @copydoc real_cast(U)
+template <Real T, Real U>
+[[nodiscard]] constexpr T real_cast(Strict<U> x) noexcept(!(Integer<T> && Floating<U>)) {
+   return real_cast<T>(x.val());
+}
+
+
+/// @brief Converts a supported built-in value to `Strict<T>`.
+/// @details Equivalent to `Strict<T>{builtin_cast<T>(x)}`.
+template <Builtin T, Builtin U>
+constexpr Strict<T> strict_cast(U x) noexcept(!(Integer<T> && Floating<U>)) {
+   return Strict{builtin_cast<T>(x)};
+}
+
+
+/// @copydoc strict_cast(U)
+template <Builtin T, Builtin U>
+constexpr Strict<T> strict_cast(Strict<U> x) noexcept(!(Integer<T> && Floating<U>)) {
+   return strict_cast<T>(x.val());
+}
+
+
+/// @brief Converts a supported built-in value of type `T` to `std::size_t` using `static_cast` and
+/// detects conversions that cause UB in debug mode.
+/// @pre Floating-point inputs are finite and their truncated value is representable in
+/// `std::size_t`.
+/// @note Negative integer inputs wrap. Floating-point inputs in `(-1, 0)` truncate to zero.
 template <Builtin T>
-STRICT_CONSTEXPR_INLINE auto Zero = Strict<T>{T(0)};
-
-
-template <Builtin T>
-STRICT_CONSTEXPR_INLINE auto One = Strict<T>{T(1)};
-
-
-// Boolean and unsigned integers are not allowed.
-template <Real T>
-   requires(!UnsignedInteger<T>)
-STRICT_CONSTEXPR_INLINE auto NegOne = Strict<T>{T(-1)};
-
-
-template <Real T>
-STRICT_CONSTEXPR_INLINE auto Thousand = Strict<T>{T(1'000)};
-
-
-template <Real T>
-STRICT_CONSTEXPR_INLINE auto Million = Strict<T>{T(1'000'000)};
-
-
-template <Real T>
-STRICT_CONSTEXPR_INLINE auto Billion = Strict<T>{T(1'000'000'000)};
-
-
-STRICT_CONSTEXPR_INLINE auto true_sb = StrictBool{true};
-STRICT_CONSTEXPR_INLINE auto false_sb = StrictBool{false};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE std::size_t to_size_t(T x) {
+[[nodiscard]] constexpr std::size_t to_size_t(T x) noexcept(!Floating<T>) {
+   if constexpr(Floating<T>) {
+      detail::assert_valid_integer_conversion<std::size_t>(x);
+   }
    return static_cast<std::size_t>(x);
 }
 
 
+/// @copydoc to_size_t(T)
 template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE std::size_t to_size_t(Strict<T> x) {
-   return static_cast<std::size_t>(x.val());
+[[nodiscard]] constexpr std::size_t to_size_t(Strict<T> x) noexcept(!Floating<T>) {
+   return to_size_t(x.val());
 }
 
 
+/// @brief Converts a supported built-in value of type `T` to `index_t` and detects conversions that
+/// cause UB in debug mode.
+/// @pre Floating-point inputs are finite and their truncated value is representable in
+/// `index_t::value_type`.
+/// @details Uses the floating-to-integer debug checks of `strict_cast`.
+/// @note Negative values and defined conversion losses are allowed.
 template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE index_t to_index_t(T x) {
+constexpr index_t to_index_t(T x) noexcept(!Floating<T>) {
    return strict_cast<index_t::value_type>(x);
 }
 
 
+/// @copydoc to_index_t(T)
 template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE index_t to_index_t(Strict<T> x) {
-   return strict_cast<index_t::value_type>(x);
+constexpr index_t to_index_t(Strict<T> x) noexcept(!Floating<T>) {
+   return to_index_t(x.val());
 }
 
 
-template <Builtin T, Builtin U>
-STRICT_NODISCARD_CONSTEXPR_INLINE T builtin_cast(U x) {
-   return static_cast<T>(x);
-}
-
-
-template <Builtin T, Builtin U>
-STRICT_NODISCARD_CONSTEXPR_INLINE T builtin_cast(Strict<U> x) {
-   return static_cast<T>(U{x});
-}
-
-
-template <Real T, Real U>
-STRICT_NODISCARD_CONSTEXPR_INLINE T real_cast(U x) {
-   return static_cast<T>(x);
-}
-
-
-template <Real T, Real U>
-STRICT_NODISCARD_CONSTEXPR_INLINE T real_cast(Strict<U> x) {
-   return static_cast<T>(U{x});
-}
-
-
-template <Builtin T, Builtin U>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> strict_cast(U x) {
-   return Strict{builtin_cast<T>(x)};
-}
-
-
-template <Builtin T, Builtin U>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> strict_cast(Strict<U> x) {
-   return Strict{builtin_cast<T>(x)};
-}
-
-
+/// @brief Converts an integer value to `Strict<T>` for a floating-point type `T`.
+/// @note Uses unchecked `static_cast`; integer values not exactly representable in `T`
+/// may be rounded.
 template <Floating T, Integer U>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> whole(U x) {
+constexpr Strict<T> integer_to_floating(U x) noexcept {
    return strict_cast<T, U>(x);
 }
 
 
+/// @copydoc integer_to_floating(U)
 template <Floating T, Integer U>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> whole(Strict<U> x) {
-   return strict_cast<T, U>(x);
+constexpr Strict<T> integer_to_floating(Strict<U> x) noexcept {
+   return integer_to_floating<T>(x.val());
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator+(Strict<T> x, Strict<T> y) {
-   return Strict<T>{T{x} + T{y}};
-}
-
-
-template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator-(Strict<T> x, Strict<T> y) {
-   return Strict<T>{T{x} - T{y}};
-}
-
-
-template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator*(Strict<T> x, Strict<T> y) {
-   return Strict<T>{T{x} * T{y}};
-}
-
-
-template <Real T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator/(Strict<T> x, Strict<T> y) {
-   if constexpr(Integer<T>) {
-      ASSERT_STRICT_DIVISION_DEBUG(T{y} != 0);
-   }
-   return Strict<T>{T{x} / T{y}};
-}
-
-
-template <Integer T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator%(Strict<T> x, Strict<T> y) {
-   ASSERT_STRICT_REMAINDER_DEBUG(T{y} != 0);
-   return Strict<T>{T{x} % T{y}};
-}
-
-
-template <Integer T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator<<(Strict<T> x, Strict<T> y) {
-   if constexpr(SignedInteger<T>) {
-      ASSERT_STRICT_SHIFT_FIRST_DEBUG(T{x} > -1);
-      ASSERT_STRICT_SHIFT_SECOND_DEBUG(T{y} > -1);
-   }
-   return Strict<T>{T{x} << T{y}};
-}
-
-
-template <Integer T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator>>(Strict<T> x, Strict<T> y) {
-   if constexpr(SignedInteger<T>) {
-      ASSERT_STRICT_SHIFT_FIRST_DEBUG(T{x} > -1);
-      ASSERT_STRICT_SHIFT_SECOND_DEBUG(T{y} > -1);
-   }
-   return Strict<T>{T{x} >> T{y}};
-}
-
-
-template <Integer T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator&(Strict<T> x, Strict<T> y) {
-   return Strict<T>{T{x} & T{y}};
-}
-
-
-template <Integer T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator|(Strict<T> x, Strict<T> y) {
-   return Strict<T>{T{x} | T{y}};
-}
-
-
-template <Integer T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator^(Strict<T> x, Strict<T> y) {
-   return Strict<T>{T{x} ^ T{y}};
-}
-
-
-template <Boolean T>
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<T> operator^(Strict<T> x, Strict<T> y) {
-   return strict_cast<bool>(bool{x} ^ bool{y});
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Boolean T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator&&(Strict<T> x, Strict<T> y) {
-   return StrictBool{bool{x} && bool{y}};
-}
-
-
-template <Boolean T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator||(Strict<T> x, Strict<T> y) {
-   return StrictBool{bool{x} || bool{y}};
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator==(Strict<T> x, Strict<T> y) {
-   return StrictBool{T{x} == T{y}};
-}
-
+// Conversion members for primary template types.
 
 template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool equal(Strict<T> x, Strict<T> y) {
-   return StrictBool{T{x} == T{y}};
-}
-
-
-template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator!=(Strict<T> x, Strict<T> y) {
-   return StrictBool{T{x} != T{y}};
-}
-
-
-template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator<(Strict<T> x, Strict<T> y) {
-   return StrictBool{T{x} < T{y}};
-}
-
-
-template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator<=(Strict<T> x, Strict<T> y) {
-   return StrictBool{T{x} <= T{y}};
-}
-
-
-template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator>(Strict<T> x, Strict<T> y) {
-   return StrictBool{T{x} > T{y}};
-}
-
-
-template <Builtin T>
-STRICT_NODISCARD_CONSTEXPR_INLINE StrictBool operator>=(Strict<T> x, Strict<T> y) {
-   return StrictBool{T{x} >= T{y}};
-}
-
-
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<bool> Strict<bool>::sb() const {
+constexpr Strict<bool> Strict<T>::sb() const noexcept {
    return strict_cast<bool>(val_);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<int> Strict<bool>::si() const {
+template <Builtin T>
+constexpr Strict<int> Strict<T>::si() const noexcept(!Floating<T>) {
    return strict_cast<int>(val_);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long int> Strict<bool>::sl() const {
+template <Builtin T>
+constexpr Strict<long int> Strict<T>::sl() const noexcept(!Floating<T>) {
    return strict_cast<long int>(val_);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<unsigned int> Strict<bool>::sui() const {
+template <Builtin T>
+constexpr Strict<unsigned int> Strict<T>::sui() const noexcept(!Floating<T>) {
    return strict_cast<unsigned int>(val_);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<unsigned long int> Strict<bool>::sul() const {
+template <Builtin T>
+constexpr Strict<unsigned long int> Strict<T>::sul() const noexcept(!Floating<T>) {
    return strict_cast<unsigned long int>(val_);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float> Strict<bool>::sf() const {
+template <Builtin T>
+constexpr Strict<float> Strict<T>::sf() const noexcept {
    return strict_cast<float>(val_);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<double> Strict<bool>::sd() const {
+template <Builtin T>
+constexpr Strict<double> Strict<T>::sd() const noexcept {
    return strict_cast<double>(val_);
 }
 
 
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<long double> Strict<bool>::sld() const {
+template <Builtin T>
+constexpr Strict<long double> Strict<T>::sld() const noexcept {
    return strict_cast<long double>(val_);
 }
 
 
 #ifdef STRICT_QUAD_PRECISION
-STRICT_NODISCARD_CONSTEXPR_INLINE Strict<float128> Strict<bool>::sq() const {
+template <Builtin T>
+constexpr Strict<float128> Strict<T>::sq() const noexcept {
    return strict_cast<float128>(val_);
 }
 #endif
+
+
+// Conversion members for boolean template specialization.
+
+constexpr Strict<bool> Strict<bool>::sb() const noexcept {
+   return strict_cast<bool>(val_);
+}
+
+
+constexpr Strict<int> Strict<bool>::si() const noexcept {
+   return strict_cast<int>(val_);
+}
+
+
+constexpr Strict<long int> Strict<bool>::sl() const noexcept {
+   return strict_cast<long int>(val_);
+}
+
+
+constexpr Strict<unsigned int> Strict<bool>::sui() const noexcept {
+   return strict_cast<unsigned int>(val_);
+}
+
+
+constexpr Strict<unsigned long int> Strict<bool>::sul() const noexcept {
+   return strict_cast<unsigned long int>(val_);
+}
+
+
+constexpr Strict<float> Strict<bool>::sf() const noexcept {
+   return strict_cast<float>(val_);
+}
+
+
+constexpr Strict<double> Strict<bool>::sd() const noexcept {
+   return strict_cast<double>(val_);
+}
+
+
+constexpr Strict<long double> Strict<bool>::sld() const noexcept {
+   return strict_cast<long double>(val_);
+}
+
+
+#ifdef STRICT_QUAD_PRECISION
+constexpr Strict<float128> Strict<bool>::sq() const noexcept {
+   return strict_cast<float128>(val_);
+}
+#endif
+
+
+// Arithmetic operators.
+
+/// @pre For signed integers, the result is representable in `T`.
+/// @details Reuses `Strict<T>::operator+=`.
+template <Real T>
+constexpr Strict<T> operator+(Strict<T> x, Strict<T> y) noexcept(!SignedInteger<T>) {
+   return x += y;
+}
+
+
+/// @pre For signed integers, the result is representable in `T`.
+/// @details Reuses `Strict<T>::operator-=`.
+template <Real T>
+constexpr Strict<T> operator-(Strict<T> x, Strict<T> y) noexcept(!SignedInteger<T>) {
+   return x -= y;
+}
+
+
+/// @pre For signed integers, the result is representable in `T`.
+/// @details Reuses `Strict<T>::operator*=`.
+template <Real T>
+constexpr Strict<T> operator*(Strict<T> x, Strict<T> y) noexcept(!SignedInteger<T>) {
+   return x *= y;
+}
+
+
+/// @pre For integers, `y` is nonzero and the result is representable in `T`.
+/// @details Reuses `Strict<T>::operator/=`.
+template <Real T>
+constexpr Strict<T> operator/(Strict<T> x, Strict<T> y) noexcept(!Integer<T>) {
+   return x /= y;
+}
+
+
+/// @pre `y` is nonzero and the corresponding quotient is representable in `T`.
+/// @details Reuses `Strict<T>::operator%=`.
+template <Integer T>
+constexpr Strict<T> operator%(Strict<T> x, Strict<T> y) {
+   return x %= y;
+}
+
+
+/// @copydoc Strict<T>::operator<<=
+/// @details Reuses `Strict<T>::operator<<=`.
+template <Integer T>
+constexpr Strict<T> operator<<(Strict<T> x, Strict<T> y) {
+   return x <<= y;
+}
+
+
+/// @copydoc Strict<T>::operator>>=
+/// @details Reuses `Strict<T>::operator>>=`.
+template <Integer T>
+constexpr Strict<T> operator>>(Strict<T> x, Strict<T> y) {
+   return x >>= y;
+}
+
+
+template <Integer T>
+constexpr Strict<T> operator&(Strict<T> x, Strict<T> y) noexcept {
+   return x &= y;
+}
+
+
+template <Integer T>
+constexpr Strict<T> operator|(Strict<T> x, Strict<T> y) noexcept {
+   return x |= y;
+}
+
+
+template <Integer T>
+constexpr Strict<T> operator^(Strict<T> x, Strict<T> y) noexcept {
+   return x ^= y;
+}
+
+
+/// @brief Returns logical XOR as `StrictBool`.
+template <Boolean T>
+constexpr Strict<T> operator^(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{x.val() != y.val()};
+}
+
+
+/// @brief Returns logical AND as `StrictBool`.
+/// @note Unlike the built-in `&&` operator, this overload does not short-circuit:
+/// both operand expressions are evaluated before the function is called.
+template <Boolean T>
+constexpr StrictBool operator&&(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{bool{x} && bool{y}};
+}
+
+
+/// @brief Returns logical OR as `StrictBool`.
+/// @note Unlike the built-in `||` operator, this overload does not short-circuit:
+/// both operand expressions are evaluated before the function is called.
+template <Boolean T>
+constexpr StrictBool operator||(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{bool{x} || bool{y}};
+}
+
+
+// Comparison operators.
+
+template <Builtin T>
+constexpr StrictBool operator==(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{T{x} == T{y}};
+}
+
+
+/// @brief Named equality comparison, equivalent to `x == y`.
+template <Builtin T>
+constexpr StrictBool equal(Strict<T> x, Strict<T> y) noexcept {
+   return x == y;
+}
+
+
+template <Builtin T>
+constexpr StrictBool operator!=(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{T{x} != T{y}};
+}
+
+
+template <Builtin T>
+constexpr StrictBool operator<(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{T{x} < T{y}};
+}
+
+
+template <Builtin T>
+constexpr StrictBool operator<=(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{T{x} <= T{y}};
+}
+
+
+template <Builtin T>
+constexpr StrictBool operator>(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{T{x} > T{y}};
+}
+
+
+template <Builtin T>
+constexpr StrictBool operator>=(Strict<T> x, Strict<T> y) noexcept {
+   return StrictBool{T{x} >= T{y}};
+}
 
 
 } // namespace spp
