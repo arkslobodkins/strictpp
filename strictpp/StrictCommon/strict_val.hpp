@@ -42,11 +42,15 @@ public:
    constexpr Strict& operator=(auto) & = delete;
 
    /// @brief Returns a value of the underlying built-in type.
+   /// @note In general, prefer `val()` over the explicit conversion operator in non-templated
+   /// contexts (e.g. `x.val()` over `double{x}`) and in expressions such as `x.get().val()`.
+   /// Prefer explicit conversion in templated contexts when it makes expressions shorter,
+   /// for example `T{x} >= T{y}`.
    [[nodiscard]] constexpr T val() const noexcept {
       return val_;
    }
 
-   /// @copybrief val()
+   /// @copydoc val()
    [[nodiscard]] constexpr explicit operator T() const noexcept {
       return val_;
    }
@@ -234,6 +238,7 @@ public:
    constexpr Strict& operator=(auto) & = delete;
 
    /// @brief Returns the underlying Boolean value.
+   /// @see Strict<T>::val() for guidance on choosing between `val()` and conversion.
    [[nodiscard]] constexpr bool val() const noexcept {
       return val_;
    }
@@ -245,6 +250,7 @@ public:
    /// Constraining the conversion to `Boolean` prevents implicit numeric conversions.
    /// @note `StrictBool` satisfies the compile-time checks of `boolean-testable`, but its
    /// overloaded `&&` and `||` do not provide the required short-circuiting behavior.
+   /// @see Strict<T>::val() for guidance on choosing between `val()` and conversion.
    template <Boolean T>
    [[nodiscard]] constexpr operator T() const noexcept {
       return val_;
@@ -567,7 +573,7 @@ constexpr Strict<T> operator^(Strict<T> x, Strict<T> y) noexcept {
 /// @brief Returns logical XOR as `StrictBool`.
 template <Boolean T>
 constexpr Strict<T> operator^(Strict<T> x, Strict<T> y) noexcept {
-   return StrictBool{x.val() != y.val()};
+   return StrictBool{T{x} != T{y}};
 }
 
 
