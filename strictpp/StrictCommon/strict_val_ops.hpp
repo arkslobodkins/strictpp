@@ -176,11 +176,11 @@ STRICT_CONSTEXPR_2026 Strict<T> exps_int(const ImplicitInt p) {
 /// intermediate overflow, r + s equals the exact sum in real arithmetic.
 template <Floating T>
 [[nodiscard]] use::Pair<Strict<T>> two_sums(const Strict<T> x, const Strict<T> y) {
-   volatile T r = x.val() + y.val();
-   volatile T y_approx = r - x.val();
+   volatile T r = T{x} + T{y};
+   volatile T y_approx = r - T{x};
    volatile T x_approx = r - y_approx;
-   volatile T y_error = y.val() - y_approx;
-   volatile T x_error = x.val() - x_approx;
+   volatile T y_error = T{y} - y_approx;
+   volatile T x_error = T{x} - x_approx;
    T s = x_error + y_error;
    return use::Pair<Strict<T>>{r, s};
 }
@@ -195,7 +195,7 @@ template <Floating T>
 /// Underflow can prevent exact recovery of e.
 template <Floating T>
 [[nodiscard]] STRICT_CONSTEXPR_2023 use::Pair<Strict<T>> two_prods(const Strict<T> x,
-                                                                         const Strict<T> y) {
+                                                                   const Strict<T> y) {
    Strict<T> r = x * y;
    Strict<T> s = fmas(x, y, -r);
    return use::Pair<Strict<T>>{r, s};
@@ -221,7 +221,7 @@ template <Floating T>
 /// O(p) time and O(p) temporary storage for `p >= 6`; no allocation for smaller `p`.
 template <Floating T>
 [[nodiscard]] STRICT_CONSTEXPR_2023 use::Pair<Strict<T>> pow_prods(const Strict<T> x,
-                                                                         const ImplicitInt p) {
+                                                                   const ImplicitInt p) {
    using Pair = use::Pair<Strict<T>>;
 
    ASSERT_STRICT_DEBUG(p.get() >= 0_sl);
